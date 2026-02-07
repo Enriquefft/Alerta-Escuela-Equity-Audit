@@ -145,17 +145,31 @@ def _find_module_file(year_dir: Path, prefix: str, module: str) -> Path:
     separators = ["-", "_"]
     case_variants = [prefix, prefix.lower(), prefix.upper()]
 
-    # Prefer CSV, fall back to DTA
+    # Prefer exact module match first (e.g., "300.dta" not "300a.dta"),
+    # then fall back to wildcard (e.g., "300*.dta").
     for ext in ("csv", "dta"):
         for sep in separators:
             for variant in case_variants:
+                # Exact match: prefix-year-module.ext
+                exact = year_dir / f"{variant}{sep}{year}{sep}{module}.{ext}"
+                if exact.exists():
+                    return exact
+        for sep in separators:
+            for variant in case_variants:
+                # Wildcard match: prefix-year-module*.ext (e.g., 300-extra.ext)
                 pattern = f"{variant}{sep}{year}{sep}{module}*.{ext}"
                 matches = list(year_dir.glob(pattern))
                 if matches:
                     return matches[0]
 
-    # Case-insensitive fallback on all data files
+    # Case-insensitive fallback on all data files.
+    # Match module number at a word boundary (e.g., "300." not "300a").
     for ext in ("csv", "dta"):
+        for data_file in year_dir.glob(f"*.{ext}"):
+            name_lower = data_file.name.lower()
+            if prefix.lower() in name_lower and f"{module}.{ext}" in name_lower:
+                return data_file
+        # Looser fallback: module anywhere in filename
         for data_file in year_dir.glob(f"*.{ext}"):
             name_lower = data_file.name.lower()
             if module in name_lower and prefix.lower() in name_lower:

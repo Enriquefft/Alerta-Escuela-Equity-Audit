@@ -7,7 +7,14 @@ UBIGEO validation, and null detection without requiring real ENAHO CSVs.
 import polars as pl
 import pytest
 
-from data.enaho import ENAHOResult, _validate_critical_nulls, _validate_ubigeo_length
+from data.enaho import (
+    ENAHOResult,
+    PooledENAHOResult,
+    _DISAGG_CODES,
+    _validate_critical_nulls,
+    _validate_ubigeo_length,
+    harmonize_p300a,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -205,3 +212,80 @@ class TestCriticalNullDetection:
         })
         with pytest.raises(ValueError, match="UBIGEO"):
             _validate_critical_nulls(df)
+
+
+# ---------------------------------------------------------------------------
+# P300A harmonization
+# ---------------------------------------------------------------------------
+
+
+class TestHarmonizeP300A:
+    """Tests for the P300A mother tongue harmonization function."""
+
+    def test_codes_10_to_15_collapse_to_3(self):
+        """Disaggregated indigenous codes 10-15 should collapse to 3."""
+        df = pl.DataFrame({"P300A": [10, 11, 12, 13, 14, 15]})
+        result = harmonize_p300a(df)
+        assert result["p300a_harmonized"].to_list() == [3, 3, 3, 3, 3, 3]
+
+    def test_original_codes_preserved(self):
+        """p300a_original should keep the raw INEI codes."""
+        df = pl.DataFrame({"P300A": [10, 11, 12, 13, 14, 15]})
+        result = harmonize_p300a(df)
+        assert result["p300a_original"].to_list() == [10, 11, 12, 13, 14, 15]
+
+    def test_non_disagg_codes_unchanged(self):
+        """Codes 1, 2, 3, 4 should pass through harmonization unchanged."""
+        df = pl.DataFrame({"P300A": [1, 2, 3, 4]})
+        result = harmonize_p300a(df)
+        assert result["p300a_harmonized"].to_list() == [1, 2, 3, 4]
+
+    def test_mixed_codes(self):
+        """Mixed bag of old and new codes produces correct harmonization."""
+        df = pl.DataFrame({"P300A": [4, 1, 10, 3, 15, 2]})
+        result = harmonize_p300a(df)
+        assert result["p300a_harmonized"].to_list() == [4, 1, 3, 3, 3, 2]
+        assert result["p300a_original"].to_list() == [4, 1, 10, 3, 15, 2]
+
+    def test_harmonized_column_is_int64(self):
+        """p300a_harmonized should be Int64 dtype."""
+        df = pl.DataFrame({"P300A": [1, 10, 4]})
+        result = harmonize_p300a(df)
+        assert result["p300a_harmonized"].dtype == pl.Int64
+
+    def test_null_p300a_preserved(self):
+        """Null P300A values should remain null in both columns."""
+        df = pl.DataFrame({"P300A": [1, None, 10]}, schema={"P300A": pl.Int64})
+        result = harmonize_p300a(df)
+        assert result["p300a_harmonized"][1] is None
+        assert result["p300a_original"][1] is None
+
+    def test_disagg_codes_constant_complete(self):
+        """_DISAGG_CODES should contain exactly codes 10-15."""
+        assert sorted(_DISAGG_CODES) == [10, 11, 12, 13, 14, 15]
+
+
+# ---------------------------------------------------------------------------
+# PooledENAHOResult dataclass
+# ---------------------------------------------------------------------------
+
+
+class TestPooledENAHOResult:
+    """Tests for the PooledENAHOResult container."""
+
+    def test_defaults(self):
+        """PooledENAHOResult has sensible defaults."""
+        df = pl.DataFrame({"x": [1, 2, 3]})
+        result = PooledENAHOResult(df=df)
+        assert isinstance(result.df, pl.DataFrame)
+        assert result.per_year_stats == []
+        assert result.warnings == []
+
+    def test_with_stats_and_warnings(self):
+        """PooledENAHOResult stores provided stats and warnings."""
+        df = pl.DataFrame({"x": [1]})
+        stats = [{"year": 2023, "total_rows": 100}]
+        warnings = ["[2023] test warning"]
+        result = PooledENAHOResult(df=df, per_year_stats=stats, warnings=warnings)
+        assert len(result.per_year_stats) == 1
+        assert result.warnings[0].startswith("[2023]")
