@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 0: Environment Setup** - Nix flake, pyproject.toml, download script, directory structure, .gitignore
 - [x] **Phase 1: ENAHO Single-Year Loader** - Load 2023 ENAHO with delimiter detection, dropout target, UBIGEO padding
-- [ ] **Phase 2: Multi-Year Loader + Harmonization** - Load 7 years (2018-2024), P300A mother tongue harmonization
+- [ ] **Phase 2: Multi-Year Loader + Harmonization** - Load 6 years (2018-2023), P300A mother tongue harmonization
 - [ ] **Phase 3: Spatial + Supplementary Data Merges** - Admin dropout rates, Census 2017, VIIRS nightlights, LEFT JOIN on UBIGEO
 - [ ] **Phase 4: Feature Engineering + Descriptive Statistics** - 19+ model features, survey-weighted descriptive gaps, first export
 - [ ] **Phase 5: Baseline Model + Temporal Splits** - Temporal split discipline, logistic regression baseline, evaluation patterns
@@ -59,19 +59,19 @@ Plans:
 - [x] 01-01-PLAN.md -- Utils (find_project_root, pad_ubigeo, sniff_delimiter) + ENAHO module loaders + load_enaho_year() + unit tests + gate test 1.1 + human review (Wave 1)
 
 ### Phase 2: Multi-Year Loader + Harmonization
-**Goal**: All 7 years of ENAHO data (2018-2024) stack into one consistent dataset with P300A mother tongue harmonization preserving both cross-year and disaggregated codes
+**Goal**: All 6 years of ENAHO data (2018-2023) stack into one consistent dataset with P300A mother tongue harmonization preserving both cross-year and disaggregated codes
 **Depends on**: Phase 1
 **Requirements**: DATA-03, DATA-04
 **Success Criteria** (what must be TRUE):
-  1. `load_all_years()` returns a pooled polars DataFrame with ~150K-180K rows, ~20K+ unweighted dropouts, and a `year` column spanning 2018-2024
+  1. `load_all_years()` returns a pooled polars DataFrame with ~150K-160K rows, ~22K+ unweighted dropouts, and a `year` column spanning 2018-2023
   2. `p300a_harmonized` column collapses codes 10-15 back to code 3; `p300a_original` preserves disaggregated codes for 2020+ analysis
-  3. Sum of codes 3+10+11+12+13+14+15 is stable across years (within 30% of each other) -- confirming harmonization not masking real population shifts
+  3. Harmonized code 3 proportion is stable across years (max/min ratio < 2.0x) -- confirming harmonization not masking real population shifts
   4. Gate test 1.2 passes all assertions (year coverage, column consistency, harmonization stability, pooled counts)
 **Human Gate**: No
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 02-01: Multi-year loader + P300A harmonization + gate test 1.2
+- [ ] 02-01-PLAN.md -- Multi-year loader with P303-null handling + P300A harmonization + unit tests + gate test 1.2 (Wave 1)
 
 ### Phase 3: Spatial + Supplementary Data Merges
 **Goal**: ENAHO microdata is enriched with district-level admin dropout rates, Census 2017 indicators, and VIIRS nightlights via LEFT JOIN on UBIGEO without losing or duplicating any ENAHO rows
@@ -227,7 +227,7 @@ Note: Phases 8 and 9 are independent (both depend on Phase 7); Phase 10 depends 
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
 | 0. Environment Setup | 2/2 | Complete | 2026-02-07 |
-| 1. ENAHO Single-Year Loader | 0/1 | Not started | - |
+| 1. ENAHO Single-Year Loader | 1/1 | Complete | 2026-02-07 |
 | 2. Multi-Year Loader + Harmonization | 0/1 | Not started | - |
 | 3. Spatial + Supplementary Data Merges | 0/1 | Not started | - |
 | 4. Feature Engineering + Descriptive Statistics | 0/2 | Not started | - |
