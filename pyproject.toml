@@ -1,0 +1,35 @@
+[project]
+name = "alerta-escuela-audit"
+version = "0.1.0"
+description = "Independent equity audit of Peru's Alerta Escuela dropout prediction system"
+requires-python = ">=3.12"
+license = "MIT"
+
+dependencies = [
+    "polars>=1.0",
+    "scikit-learn>=1.5",
+    "lightgbm>=4.0",
+    "xgboost>=2.0",
+    "fairlearn>=0.11",
+    "shap>=0.45",
+    "statsmodels",
+    "matplotlib",
+    "seaborn",
+    "plotly",
+    "onnx",
+    "onnxmltools",
+    "onnxruntime",
+    "pytest",
+    "jupyterlab",
+    "optuna",
+    "enahodata",
+    "requests",
+    "tqdm",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/alerta_escuela_audit"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
