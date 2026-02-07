@@ -53,10 +53,10 @@ Plans:
   3. Gate test 1.1 passes all assertions (row count, dropout count, weighted rate, null checks, UBIGEO length)
   4. 10 random dropout rows print for human inspection and look like real student records
 **Human Gate**: Yes -- review 10 printed dropout rows before proceeding
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 01-01: ENAHO single-year loader + utils + gate test 1.1 + unit tests
+- [ ] 01-01-PLAN.md -- Utils (find_project_root, pad_ubigeo, sniff_delimiter) + ENAHO module loaders + load_enaho_year() + unit tests + gate test 1.1 + human review (Wave 1)
 
 ### Phase 2: Multi-Year Loader + Harmonization
 **Goal**: All 7 years of ENAHO data (2018-2024) stack into one consistent dataset with P300A mother tongue harmonization preserving both cross-year and disaggregated codes
