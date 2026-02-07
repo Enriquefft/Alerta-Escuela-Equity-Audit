@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-02-07)
 Phase: 0 of 11 (Environment Setup)
 Plan: 2 of 2 in current phase
 Status: Phase complete
-Last activity: 2026-02-07 -- Completed 00-02-PLAN.md
+Last activity: 2026-02-07 -- Completed 00-01-PLAN.md (Nix flake + pyproject.toml)
 
 Progress: [█░░░░░░░░░] 14%
 
@@ -20,17 +20,17 @@ Progress: [█░░░░░░░░░] 14%
 
 **Velocity:**
 - Total plans completed: 2
-- Average duration: ~8 min
-- Total execution time: ~16 min
+- Average duration: ~10 min
+- Total execution time: ~20 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 00-environment-setup | 2/2 | ~16 min | ~8 min |
+| 00-environment-setup | 2/2 | ~20 min | ~10 min |
 
 **Recent Trend:**
-- Last 5 plans: 00-01 (8 min), 00-02 (8 min)
+- Last 5 plans: 00-02 (~8 min), 00-01 (12 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -46,6 +46,10 @@ Recent decisions affecting current work:
 - [Roadmap]: Phase structure follows spec Section 9 (Phases 1-11) plus Phase 0 for environment
 - [Roadmap]: Gate tests are integral to each phase, not a separate phase
 - [Roadmap]: DATA-10 (parquet saves) assigned to Phase 4; TEST-01/02/03 assigned to Phase 1
+- [00-01]: nixos-25.05 pinned as nixpkgs input; Python 3.12.12 via Nix
+- [00-01]: hatchling build backend with src layout (src/alerta_escuela_audit/)
+- [00-01]: LD_LIBRARY_PATH includes libgcc.lib + stdenv.cc.cc.lib + zlib for NixOS wheel compat
+- [00-01]: uv sync --python python3.12 needed to avoid uv selecting newer managed Python
 - [00-02]: PROJECT_ROOT uses pyproject.toml walk-up instead of hardcoded parent.parent
 - [00-02]: .envrc tracked in git (not gitignored) for direnv team integration
 - [00-02]: data/exports/ tracked (not gitignored) for M4 site export artifacts
@@ -64,5 +68,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-07
-Stopped at: Completed 00-02-PLAN.md
+Stopped at: Completed 00-01-PLAN.md (Phase 0 fully complete)
 Resume file: None
