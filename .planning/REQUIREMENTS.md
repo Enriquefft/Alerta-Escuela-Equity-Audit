@@ -126,8 +126,8 @@
 | ENV-03 | Phase 0 | Complete |
 | ENV-04 | Phase 0 | Complete |
 | ENV-05 | Phase 0 | Complete |
-| DATA-01 | Phase 1 | Pending |
-| DATA-02 | Phase 1 | Pending |
+| DATA-01 | Phase 1 | Complete |
+| DATA-02 | Phase 1 | Complete |
 | DATA-03 | Phase 2 | Pending |
 | DATA-04 | Phase 2 | Pending |
 | DATA-05 | Phase 3 | Pending |
@@ -171,9 +171,9 @@
 | EXPO-03 | Phase 11 | Pending |
 | EXPO-04 | Phase 11 | Pending |
 | EXPO-05 | Phase 11 | Pending |
-| TEST-01 | Phase 1 | Pending |
-| TEST-02 | Phase 1 | Pending |
-| TEST-03 | Phase 1 | Pending |
+| TEST-01 | Phase 1 | Complete |
+| TEST-02 | Phase 1 | Complete |
+| TEST-03 | Phase 1 | Complete |
 
 **Coverage:**
 - v1 requirements: 53 total
