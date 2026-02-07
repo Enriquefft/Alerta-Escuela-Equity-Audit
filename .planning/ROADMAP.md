@@ -13,7 +13,7 @@ This roadmap delivers the first independent equity audit of Peru's Alerta Escuel
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 0: Environment Setup** - Nix flake, pyproject.toml, download script, directory structure, .gitignore
-- [ ] **Phase 1: ENAHO Single-Year Loader** - Load 2023 ENAHO with delimiter detection, dropout target, UBIGEO padding
+- [x] **Phase 1: ENAHO Single-Year Loader** - Load 2023 ENAHO with delimiter detection, dropout target, UBIGEO padding
 - [ ] **Phase 2: Multi-Year Loader + Harmonization** - Load 7 years (2018-2024), P300A mother tongue harmonization
 - [ ] **Phase 3: Spatial + Supplementary Data Merges** - Admin dropout rates, Census 2017, VIIRS nightlights, LEFT JOIN on UBIGEO
 - [ ] **Phase 4: Feature Engineering + Descriptive Statistics** - 19+ model features, survey-weighted descriptive gaps, first export
@@ -56,7 +56,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 01-01-PLAN.md -- Utils (find_project_root, pad_ubigeo, sniff_delimiter) + ENAHO module loaders + load_enaho_year() + unit tests + gate test 1.1 + human review (Wave 1)
+- [x] 01-01-PLAN.md -- Utils (find_project_root, pad_ubigeo, sniff_delimiter) + ENAHO module loaders + load_enaho_year() + unit tests + gate test 1.1 + human review (Wave 1)
 
 ### Phase 2: Multi-Year Loader + Harmonization
 **Goal**: All 7 years of ENAHO data (2018-2024) stack into one consistent dataset with P300A mother tongue harmonization preserving both cross-year and disaggregated codes

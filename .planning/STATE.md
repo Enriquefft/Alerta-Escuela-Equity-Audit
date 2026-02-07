@@ -5,32 +5,33 @@
 See: .planning/PROJECT.md (updated 2026-02-07)
 
 **Core value:** The fairness audit is the product. Models exist to be audited, not to achieve SOTA.
-**Current focus:** Phase 0 complete — ready for Phase 1
+**Current focus:** Phase 1 complete — ready for Phase 2
 
 ## Current Position
 
-Phase: 0 of 11 (Environment Setup) — COMPLETE
-Plan: 2 of 2 in current phase
-Status: Phase complete, verified (11/11 must-haves)
-Last activity: 2026-02-07 -- Phase 0 execution complete, verified
+Phase: 1 of 11 (ENAHO Single-Year Loader) — COMPLETE
+Plan: 1 of 1 in current phase
+Status: Phase complete, verified
+Last activity: 2026-02-07 -- Phase 1 execution complete, human-approved gate test
 
-Progress: [█░░░░░░░░░] 14%
+Progress: [██░░░░░░░░] 23%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: ~10 min
-- Total execution time: ~20 min
+- Total plans completed: 3
+- Average duration: ~12 min
+- Total execution time: ~35 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 00-environment-setup | 2/2 | ~20 min | ~10 min |
+| 01-enaho-single-year-loader | 1/1 | ~15 min | ~15 min |
 
 **Recent Trend:**
-- Last 5 plans: 00-02 (~8 min), 00-01 (12 min)
+- Last 5 plans: 01-01 (~15 min), 00-02 (~8 min), 00-01 (12 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -54,6 +55,10 @@ Recent decisions affecting current work:
 - [00-02]: .envrc tracked in git (not gitignored) for direnv team integration
 - [00-02]: data/exports/ tracked (not gitignored) for M4 site export artifacts
 - [00-02]: Replaced GitHub Python template .gitignore with focused project-specific rules
+- [01-01]: INEI provides DTA (Stata) files, not CSVs -- added _read_data_file() with pandas DTA support
+- [01-01]: 2.59% of school-age rows have no Module 300 match (dropped, not filled)
+- [01-01]: pyarrow + pandas added as dependencies for DTA→polars conversion
+- [01-01]: P303/P306 arrive as Float64 from DTA files, cast to Int64
 
 ### Pending Todos
 
@@ -61,12 +66,13 @@ None yet.
 
 ### Blockers/Concerns
 
-- Phase 0: ENAHO raw data must be manually downloaded or fetched via download.py before Phase 1 can proceed
+- Phase 2: ENAHO 2024 not available on INEI portal (enahodata reports "no está en la tabla corte transversal") — may need to adjust to 2018-2023 only
+- Phase 3: Admin dropout rate URLs from datosabiertos.gob.pe return 404 — need updated URLs
 - Phase 7: ONNX float32 tolerance may need relaxing to 1e-4 (research flag from SUMMARY.md)
 - Phase 8: fairlearn sample_params API needs careful testing (nested dict, not flat dict)
 
 ## Session Continuity
 
 Last session: 2026-02-07
-Stopped at: Phase 0 complete and verified. Ready for Phase 1.
+Stopped at: Phase 1 complete and verified. Ready for Phase 2.
 Resume file: None
