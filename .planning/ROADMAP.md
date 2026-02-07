@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 0: Environment Setup** - Nix flake, pyproject.toml, download script, directory structure, .gitignore
 - [x] **Phase 1: ENAHO Single-Year Loader** - Load 2023 ENAHO with delimiter detection, dropout target, UBIGEO padding
-- [ ] **Phase 2: Multi-Year Loader + Harmonization** - Load 6 years (2018-2023), P300A mother tongue harmonization
+- [x] **Phase 2: Multi-Year Loader + Harmonization** - Load 6 years (2018-2023), P300A mother tongue harmonization
 - [ ] **Phase 3: Spatial + Supplementary Data Merges** - Admin dropout rates, Census 2017, VIIRS nightlights, LEFT JOIN on UBIGEO
 - [ ] **Phase 4: Feature Engineering + Descriptive Statistics** - 19+ model features, survey-weighted descriptive gaps, first export
 - [ ] **Phase 5: Baseline Model + Temporal Splits** - Temporal split discipline, logistic regression baseline, evaluation patterns
@@ -71,7 +71,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 02-01-PLAN.md -- Multi-year loader with P303-null handling + P300A harmonization + unit tests + gate test 1.2 (Wave 1)
+- [x] 02-01-PLAN.md -- Multi-year loader with P303-null handling + P300A harmonization + unit tests + gate test 1.2 (Wave 1)
 
 ### Phase 3: Spatial + Supplementary Data Merges
 **Goal**: ENAHO microdata is enriched with district-level admin dropout rates, Census 2017 indicators, and VIIRS nightlights via LEFT JOIN on UBIGEO without losing or duplicating any ENAHO rows
