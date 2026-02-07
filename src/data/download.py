@@ -7,8 +7,7 @@ to download from INEI's microdatos portal, then reorganizes files into the
 expected project directory structure.
 
 Usage:
-    pip install enahodata requests tqdm
-    python scripts/download_data.py
+    uv run python src/data/download.py
 
 Output structure:
     data/raw/
@@ -34,21 +33,32 @@ from pathlib import Path
 YEARS = ["2018", "2019", "2020", "2021", "2022", "2023", "2024"]
 
 # ENAHO module codes (cross-sectional):
-# 02 = Características de los Miembros del Hogar (Module 200 — demographics, age, sex, UBIGEO)
-# 03 = Educación (Module 300 — P300A mother tongue, P303/P306 enrollment, FACTOR07)
-# 05 = Empleo e Ingresos (Module 500 — employment status, income)
-# 34 = Sumarias (calculated variables — household income/expenditure, poverty)
+# 02 = Caracteristicas de los Miembros del Hogar (Module 200 -- demographics, age, sex, UBIGEO)
+# 03 = Educacion (Module 300 -- P300A mother tongue, P303/P306 enrollment, FACTOR07)
+# 05 = Empleo e Ingresos (Module 500 -- employment status, income)
+# 34 = Sumarias (calculated variables -- household income/expenditure, poverty)
 # 37 = Programas Sociales (JUNTOS participation)
 MODULES = ["02", "03", "05", "34", "37"]
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+def _find_project_root():
+    """Walk up from this file to find the project root (directory with pyproject.toml)."""
+    path = Path(__file__).resolve().parent
+    while path != path.parent:
+        if (path / "pyproject.toml").exists():
+            return path
+        path = path.parent
+    raise RuntimeError("Could not find project root (no pyproject.toml found)")
+
+
+PROJECT_ROOT = _find_project_root()
 DATA_RAW = PROJECT_ROOT / "data" / "raw"
 ENAHO_DIR = DATA_RAW / "enaho"
 ADMIN_DIR = DATA_RAW / "admin"
 TEMP_DIR = PROJECT_ROOT / ".tmp_enaho_download"
 
 # datosabiertos.gob.pe URLs for district dropout rates
-# These may change — verify at https://www.datosabiertos.gob.pe if 404
+# These may change -- verify at https://www.datosabiertos.gob.pe if 404
 ADMIN_URLS = {
     "primaria_2023": "https://www.datosabiertos.gob.pe/sites/default/files/Tasa%20y%20N%C3%BAmero%20de%20desertores%20de%20EBR%20primaria%202023.csv",
     "secundaria_2023": "https://www.datosabiertos.gob.pe/sites/default/files/Tasa%20y%20N%C3%BAmero%20de%20desertores%20de%20EBR%20secundaria%202023.csv",
@@ -136,7 +146,7 @@ def reorganize_enaho():
                 for filepath in extract_dir.rglob(ext):
                     dest = year_dir / filepath.name
                     if not dest.exists():
-                        print(f"  {filepath.name} → {year}/")
+                        print(f"  {filepath.name} -> {year}/")
                         shutil.copy2(filepath, dest)
 
         # Verify key files exist
@@ -144,9 +154,9 @@ def reorganize_enaho():
         dta_files = list(year_dir.glob("*.dta")) + list(year_dir.glob("*.DTA"))
 
         if csv_files or dta_files:
-            print(f"  ✓ {year}: {len(csv_files)} CSVs, {len(dta_files)} DTAs")
+            print(f"  OK {year}: {len(csv_files)} CSVs, {len(dta_files)} DTAs")
         else:
-            print(f"  ✗ {year}: NO DATA FILES FOUND — check manually")
+            print(f"  FAIL {year}: NO DATA FILES FOUND -- check manually")
 
     return True
 
@@ -165,11 +175,11 @@ def verify_enaho():
     for year in YEARS:
         year_dir = ENAHO_DIR / year
         if not year_dir.exists():
-            print(f"  ✗ {year}: directory missing")
+            print(f"  FAIL {year}: directory missing")
             all_ok = False
             continue
 
-        # Look for education module (Module 300) — could be various name patterns
+        # Look for education module (Module 300) -- could be various name patterns
         mod300_patterns = [
             f"Enaho01a-{year}-300*",
             f"enaho01a-{year}-300*",
@@ -192,21 +202,21 @@ def verify_enaho():
             matches = list(year_dir.glob(pattern))
             if matches:
                 found_300 = True
-                print(f"  ✓ {year} Module 300 (Education): {matches[0].name}")
+                print(f"  OK {year} Module 300 (Education): {matches[0].name}")
                 break
 
         for pattern in mod200_patterns:
             matches = list(year_dir.glob(pattern))
             if matches:
                 found_200 = True
-                print(f"  ✓ {year} Module 200 (Members):   {matches[0].name}")
+                print(f"  OK {year} Module 200 (Members):   {matches[0].name}")
                 break
 
         if not found_300:
-            print(f"  ✗ {year} Module 300 (Education): NOT FOUND")
+            print(f"  FAIL {year} Module 300 (Education): NOT FOUND")
             all_ok = False
         if not found_200:
-            print(f"  ✗ {year} Module 200 (Members):   NOT FOUND")
+            print(f"  FAIL {year} Module 200 (Members):   NOT FOUND")
             all_ok = False
 
     # Also list all files per year for debugging
@@ -239,7 +249,7 @@ def download_admin_data():
     for name, url in ADMIN_URLS.items():
         dest = ADMIN_DIR / f"{name}.csv"
         if dest.exists():
-            print(f"  ✓ {name}.csv already exists, skipping")
+            print(f"  OK {name}.csv already exists, skipping")
             continue
 
         print(f"  Downloading {name}...")
@@ -247,9 +257,9 @@ def download_admin_data():
             resp = requests.get(url, timeout=60)
             resp.raise_for_status()
             dest.write_bytes(resp.content)
-            print(f"  ✓ {name}.csv ({len(resp.content) // 1024} KB)")
+            print(f"  OK {name}.csv ({len(resp.content) // 1024} KB)")
         except requests.RequestException as e:
-            print(f"  ✗ {name}: {e}")
+            print(f"  FAIL {name}: {e}")
             print(f"    Download manually from: {url}")
             print(f"    Place in: {dest}")
 
@@ -266,10 +276,10 @@ def cleanup():
         response = input(f"\nRemove temp directory {TEMP_DIR}? (y/N): ").strip().lower()
         if response == "y":
             shutil.rmtree(TEMP_DIR)
-            print("  ✓ Temp directory removed")
+            print("  Temp directory removed")
         else:
             print(f"  Temp files preserved at {TEMP_DIR}")
-            print("  (Contains original ZIPs — useful if you need to re-extract)")
+            print("  (Contains original ZIPs -- useful if you need to re-extract)")
 
 
 # ---------------------------------------------------------------------------
@@ -278,12 +288,12 @@ def cleanup():
 
 def main():
     print("""
-╔══════════════════════════════════════════════════════════╗
-║  Alerta Escuela Audit — Data Download Script            ║
-║                                                          ║
-║  Downloads ENAHO 2018-2024 (Modules 02, 03, 05, 34, 37) ║
-║  + district dropout rates from datosabiertos             ║
-╚══════════════════════════════════════════════════════════╝
+==========================================================
+  Alerta Escuela Audit -- Data Download Script
+
+  Downloads ENAHO 2018-2024 (Modules 02, 03, 05, 34, 37)
+  + district dropout rates from datosabiertos
+==========================================================
     """)
 
     # Create directory structure
@@ -318,9 +328,9 @@ def main():
     # Summary
     print("\n" + "=" * 60)
     if all_ok:
-        print("✓ ALL DATA READY. You can proceed with GSD Phase 1.")
+        print("ALL DATA READY. You can proceed with GSD Phase 1.")
     else:
-        print("✗ SOME FILES MISSING. Check the output above.")
+        print("SOME FILES MISSING. Check the output above.")
         print("  You may need to download missing years manually from:")
         print("  https://proyectos.inei.gob.pe/microdatos/")
         print(f"  Place files in: {ENAHO_DIR}/{{YEAR}}/")
@@ -331,13 +341,13 @@ def main():
 NOTE: This script downloads ENAHO + admin dropout rates only.
 You still need to manually obtain:
 
-  1. Census 2017 district-level data → data/raw/census/
+  1. Census 2017 district-level data -> data/raw/census/
      Source: INEI (https://censos2017.inei.gob.pe/redatam/)
 
-  2. VIIRS Nighttime Lights (pre-aggregated) → data/raw/nightlights/
+  2. VIIRS Nighttime Lights (pre-aggregated) -> data/raw/nightlights/
      Source: Jiaxiong Yao's research site or Google Earth Engine
 
-  3. Censo Escolar aggregates → data/raw/escolar/
+  3. Censo Escolar aggregates -> data/raw/escolar/
      Source: https://www.datosabiertos.gob.pe/dataset/censo-escolar
 
 These are supplementary enrichment data (M1.4). You can start
