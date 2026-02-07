@@ -1,9 +1,12 @@
-"""ENAHO single-year data loader.
+"""ENAHO data loader (single-year and multi-year).
 
 Reads ENAHO Module 200 (demographics) and Module 300 (education) CSVs for a
 given year, joins them on household/person composite keys, filters to
 school-age children (6-17), constructs the binary dropout target, and returns
 a validated :class:`ENAHOResult`.
+
+For multi-year analysis, :func:`load_all_years` pools multiple years into a
+single :class:`PooledENAHOResult` with P300A mother tongue harmonization.
 
 Usage::
 
@@ -12,6 +15,11 @@ Usage::
     result = load_enaho_year(2023)
     print(result.stats)
     print(result.df.head())
+
+    from data.enaho import load_all_years
+
+    pooled = load_all_years()
+    print(pooled.df.height, pooled.per_year_stats)
 """
 
 from __future__ import annotations
@@ -42,6 +50,31 @@ _KEY_OVERRIDES: dict[str, pl.DataType] = {
     "CODPERSO": pl.Utf8,
 }
 
+# Columns selected for the pooled multi-year DataFrame.
+# Only these ~20 columns are kept before vertical concatenation to ensure
+# identical schemas across years (raw merged DataFrames have 512-548 columns).
+POOLED_COLUMNS = [
+    # Identifiers
+    "CONGLOME", "VIVIENDA", "HOGAR", "CODPERSO",
+    # Geographic
+    "UBIGEO", "DOMINIO", "ESTRATO",
+    # Demographics (Module 200)
+    "P207",     # Sex (1=Male, 2=Female)
+    "P208A",    # Age
+    # Education (Module 300)
+    "P300A",    # Mother tongue (original code)
+    "P301A",    # Education level
+    "P303",     # Enrolled last year
+    "P306",     # Enrolled this year
+    "P307",     # Currently attending
+    # Survey weight
+    "FACTOR07",
+    # Constructed
+    "dropout",  # Binary dropout target
+    # Year identifier
+    "year",     # Added by load_all_years
+]
+
 
 @dataclass
 class ENAHOResult:
@@ -59,6 +92,25 @@ class ENAHOResult:
 
     df: pl.DataFrame
     stats: dict = field(default_factory=dict)
+    warnings: list[str] = field(default_factory=list)
+
+
+@dataclass
+class PooledENAHOResult:
+    """Container for pooled multi-year ENAHO data.
+
+    Attributes
+    ----------
+    df : pl.DataFrame
+        Pooled DataFrame with year column and harmonized P300A.
+    per_year_stats : list[dict]
+        Stats dict from each load_enaho_year() call.
+    warnings : list[str]
+        All warnings, prefixed with [year].
+    """
+
+    df: pl.DataFrame
+    per_year_stats: list[dict] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
 
 
@@ -361,6 +413,24 @@ def load_enaho_year(year: int) -> ENAHOResult:
             len(df),
         )
 
+    # 3c. Drop rows where P303 is null (COVID reduced questionnaire)
+    # These rows cannot contribute to dropout analysis (no prior enrollment info).
+    # Affects 2020 (~52.3% of school-age) and 2021 (~4.6%).
+    p303_null_count = df["P303"].null_count()
+    if p303_null_count > 0:
+        pre_p303 = len(df)
+        df = df.filter(pl.col("P303").is_not_null())
+        n_p303_dropped = pre_p303 - len(df)
+        frac_p303 = n_p303_dropped / pre_p303 if pre_p303 > 0 else 0
+        warnings.append(
+            f"Dropped {n_p303_dropped} rows ({frac_p303:.1%}) with P303 null "
+            f"(COVID reduced questionnaire / phone interview)"
+        )
+        logger.info(
+            "Dropped %d P303-null rows (%.1f%%), %d remaining",
+            n_p303_dropped, frac_p303 * 100, len(df),
+        )
+
     # 4. Handle nulls in P303/P306 among school-age rows
     for col_name in ("P303", "P306"):
         if col_name in df.columns:
@@ -431,3 +501,106 @@ def load_enaho_year(year: int) -> ENAHOResult:
     )
 
     return ENAHOResult(df=df, stats=stats, warnings=warnings)
+
+
+# Disaggregated indigenous language codes introduced in ENAHO 2020+.
+# These were previously aggregated under code 3 ("Otra lengua nativa").
+_DISAGG_CODES = [10, 11, 12, 13, 14, 15]
+
+
+def harmonize_p300a(df: pl.DataFrame) -> pl.DataFrame:
+    """Add harmonized and original P300A mother tongue columns.
+
+    - p300a_original: raw code from INEI (preserves 10-15 for 2020+ analysis)
+    - p300a_harmonized: codes 10-15 collapsed to 3 for cross-year comparison
+
+    P300A code reference (verified from Stata value labels):
+        1 = Quechua
+        2 = Aymara
+        3 = Otra lengua nativa (aggregate pre-2020; residual 2020+)
+        4 = Castellano (~80% of respondents)
+        6 = Portugues
+        7 = Otra lengua extranjera
+        8 = No escucha/no habla
+        9 = Lengua de senas peruanas
+       10 = Ashaninka (2020+)
+       11 = Awajun/Aguarun (2020+)
+       12 = Shipibo-Konibo (2020+)
+       13 = Shawi/Chayahuita (2020+)
+       14 = Matsigenka/Machiguenga (2020+)
+       15 = Achuar (2020+)
+    """
+    return df.with_columns([
+        pl.col("P300A").alias("p300a_original"),
+        pl.when(pl.col("P300A").is_in(_DISAGG_CODES))
+        .then(pl.lit(3))
+        .otherwise(pl.col("P300A"))
+        .cast(pl.Int64)
+        .alias("p300a_harmonized"),
+    ])
+
+
+def load_all_years(
+    years: list[int] | None = None,
+) -> PooledENAHOResult:
+    """Load and pool ENAHO data across multiple years.
+
+    Calls :func:`load_enaho_year` for each year, selects a fixed column set
+    (POOLED_COLUMNS) for schema consistency, concatenates vertically, and
+    applies P300A harmonization.
+
+    Parameters
+    ----------
+    years : list[int] | None
+        Years to load. Defaults to 2018-2023 (2024 not yet available).
+
+    Returns
+    -------
+    PooledENAHOResult
+        Pooled DataFrame with year column and p300a_harmonized/p300a_original.
+    """
+    if years is None:
+        years = list(range(2018, 2024))  # 2018-2023
+
+    frames: list[pl.DataFrame] = []
+    all_stats: list[dict] = []
+    all_warnings: list[str] = []
+
+    for year in years:
+        logger.info("Loading ENAHO year %d...", year)
+        result = load_enaho_year(year)
+
+        # Add year column
+        df = result.df.with_columns(pl.lit(year).alias("year"))
+
+        # Select only columns needed by downstream phases
+        available = [c for c in POOLED_COLUMNS if c in df.columns]
+        df = df.select(available)
+
+        frames.append(df)
+        all_stats.append(result.stats)
+        all_warnings.extend(
+            [f"[{year}] {w}" for w in result.warnings]
+        )
+        logger.info(
+            "Year %d: %d rows selected (%d columns)",
+            year, len(df), len(available),
+        )
+
+    # Vertical concat (enforces identical schemas)
+    pooled = pl.concat(frames, how="vertical")
+    logger.info("Pooled DataFrame: %d rows, %d columns", len(pooled), len(pooled.columns))
+
+    # Apply P300A harmonization on the pooled data
+    pooled = harmonize_p300a(pooled)
+
+    logger.info(
+        "Harmonization complete. Columns: %s",
+        sorted(pooled.columns),
+    )
+
+    return PooledENAHOResult(
+        df=pooled,
+        per_year_stats=all_stats,
+        warnings=all_warnings,
+    )
