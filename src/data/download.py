@@ -26,6 +26,8 @@ import glob
 import requests
 from pathlib import Path
 
+from utils import find_project_root
+
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
@@ -41,17 +43,7 @@ YEARS = ["2018", "2019", "2020", "2021", "2022", "2023", "2024"]
 MODULES = ["02", "03", "05", "34", "37"]
 
 
-def _find_project_root():
-    """Walk up from this file to find the project root (directory with pyproject.toml)."""
-    path = Path(__file__).resolve().parent
-    while path != path.parent:
-        if (path / "pyproject.toml").exists():
-            return path
-        path = path.parent
-    raise RuntimeError("Could not find project root (no pyproject.toml found)")
-
-
-PROJECT_ROOT = _find_project_root()
+PROJECT_ROOT = find_project_root()
 DATA_RAW = PROJECT_ROOT / "data" / "raw"
 ENAHO_DIR = DATA_RAW / "enaho"
 ADMIN_DIR = DATA_RAW / "admin"
