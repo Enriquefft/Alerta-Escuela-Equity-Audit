@@ -126,7 +126,9 @@ def reorganize_enaho():
         year_dir.mkdir(parents=True, exist_ok=True)
 
         # Find all extracted directories for this year
-        year_patterns = list(source_base.glob(f"*_{year}_extract"))
+        # enahodata creates: modulo_XX_YYYY/ (e.g., modulo_02_2023/)
+        year_patterns = list(source_base.glob(f"*_{year}"))
+        year_patterns += list(source_base.glob(f"*_{year}_extract"))
         year_patterns += list(source_base.glob(f"*_{year}_dta_only"))
 
         for extract_dir in year_patterns:

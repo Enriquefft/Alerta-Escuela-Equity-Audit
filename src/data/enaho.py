@@ -68,7 +68,7 @@ class ENAHOResult:
 
 
 def _find_module_file(year_dir: Path, prefix: str, module: str) -> Path:
-    """Locate an ENAHO module CSV with case- and separator-insensitive search.
+    """Locate an ENAHO module file (CSV or DTA) with case-insensitive search.
 
     Parameters
     ----------
@@ -82,7 +82,7 @@ def _find_module_file(year_dir: Path, prefix: str, module: str) -> Path:
     Returns
     -------
     Path
-        Path to the matching CSV file.
+        Path to the matching file (CSV preferred, DTA as fallback).
 
     Raises
     ------
@@ -90,28 +90,81 @@ def _find_module_file(year_dir: Path, prefix: str, module: str) -> Path:
         If no matching file is found.
     """
     year = year_dir.name
-    # Generate candidate patterns with hyphen and underscore separators,
-    # across common case variations.
     separators = ["-", "_"]
     case_variants = [prefix, prefix.lower(), prefix.upper()]
 
-    for sep in separators:
-        for variant in case_variants:
-            pattern = f"{variant}{sep}{year}{sep}{module}*.csv"
-            matches = list(year_dir.glob(pattern))
-            if matches:
-                return matches[0]
+    # Prefer CSV, fall back to DTA
+    for ext in ("csv", "dta"):
+        for sep in separators:
+            for variant in case_variants:
+                pattern = f"{variant}{sep}{year}{sep}{module}*.{ext}"
+                matches = list(year_dir.glob(pattern))
+                if matches:
+                    return matches[0]
 
-    # Also try case-insensitive search on all CSV files as last resort
-    for csv_file in year_dir.glob("*.csv"):
-        name_lower = csv_file.name.lower()
-        if module in name_lower and prefix.lower().replace("enaho", "enaho") in name_lower:
-            return csv_file
+    # Case-insensitive fallback on all data files
+    for ext in ("csv", "dta"):
+        for data_file in year_dir.glob(f"*.{ext}"):
+            name_lower = data_file.name.lower()
+            if module in name_lower and prefix.lower() in name_lower:
+                return data_file
 
     raise FileNotFoundError(
         f"Module {module} not found in {year_dir}. "
         "Run 'uv run python src/data/download.py' first."
     )
+
+
+def _read_data_file(
+    filepath: Path,
+    schema_overrides: dict[str, pl.DataType],
+) -> pl.DataFrame:
+    """Read an ENAHO data file (CSV or DTA) into a polars DataFrame.
+
+    DTA (Stata) files are read via pandas and converted to polars.
+    Column names are uppercased to normalize DTA lowercase names.
+
+    Parameters
+    ----------
+    filepath : Path
+        Path to the data file.
+    schema_overrides : dict
+        Column type overrides (applied after reading).
+
+    Returns
+    -------
+    pl.DataFrame
+    """
+    suffix = filepath.suffix.lower()
+
+    if suffix == ".dta":
+        import pandas as pd
+
+        pdf = pd.read_stata(filepath, convert_categoricals=False)
+        # DTA files have lowercase column names — normalize to uppercase
+        pdf.columns = [c.upper() for c in pdf.columns]
+        # Rename AÑO -> ANIO if present (common in ENAHO DTA files)
+        if "AÑO" in pdf.columns:
+            pdf = pdf.rename(columns={"AÑO": "ANIO"})
+        df = pl.from_pandas(pdf)
+    else:
+        # CSV path
+        delimiter = sniff_delimiter(filepath)
+        logger.info("Reading CSV: %s (delimiter=%r)", filepath.name, delimiter)
+        df = pl.read_csv(
+            filepath,
+            separator=delimiter,
+            encoding="utf8-lossy",
+            schema_overrides=schema_overrides,
+            infer_schema_length=10_000,
+        )
+
+    # Apply schema overrides for key columns (ensure string types for joins)
+    for col_name, dtype in schema_overrides.items():
+        if col_name in df.columns and df[col_name].dtype != dtype:
+            df = df.with_columns(pl.col(col_name).cast(dtype))
+
+    return df
 
 
 def _validate_ubigeo_length(df: pl.DataFrame) -> None:
@@ -206,16 +259,9 @@ def load_module_200(year: int) -> pl.DataFrame:
     year_dir = root / "data" / "raw" / "enaho" / str(year)
     filepath = _find_module_file(year_dir, "Enaho01", "200")
 
-    delimiter = sniff_delimiter(filepath)
-    logger.info("Module 200 [%d]: %s (delimiter=%r)", year, filepath.name, delimiter)
+    logger.info("Module 200 [%d]: %s", year, filepath.name)
 
-    df = pl.read_csv(
-        filepath,
-        separator=delimiter,
-        encoding="utf8-lossy",
-        schema_overrides=_KEY_OVERRIDES,
-        infer_schema_length=10_000,
-    )
+    df = _read_data_file(filepath, _KEY_OVERRIDES)
 
     # Zero-pad UBIGEO
     df = df.with_columns(pad_ubigeo(pl.col("UBIGEO")).alias("UBIGEO"))
@@ -241,19 +287,12 @@ def load_module_300(year: int) -> pl.DataFrame:
     year_dir = root / "data" / "raw" / "enaho" / str(year)
     filepath = _find_module_file(year_dir, "Enaho01a", "300")
 
-    delimiter = sniff_delimiter(filepath)
-    logger.info("Module 300 [%d]: %s (delimiter=%r)", year, filepath.name, delimiter)
+    logger.info("Module 300 [%d]: %s", year, filepath.name)
 
     # Include join keys as Utf8 to match Module 200
     overrides = {**_KEY_OVERRIDES}
 
-    df = pl.read_csv(
-        filepath,
-        separator=delimiter,
-        encoding="utf8-lossy",
-        schema_overrides=overrides,
-        infer_schema_length=10_000,
-    )
+    df = _read_data_file(filepath, overrides)
 
     return df
 
@@ -304,6 +343,24 @@ def load_enaho_year(year: int) -> ENAHOResult:
 
     logger.info("After school-age filter (6-17): %d rows", len(df))
 
+    # 3b. Drop rows not matched in Module 300 (left-join mismatches).
+    # These are children in Module 200 (demographics) who have no education
+    # module record — all Module 300 columns are null, including FACTOR07.
+    # They cannot contribute to dropout analysis (no enrollment status, no weight).
+    pre_drop = len(df)
+    df = df.filter(pl.col("FACTOR07").is_not_null())
+    n_dropped = pre_drop - len(df)
+    if n_dropped > 0:
+        warnings.append(
+            f"Dropped {n_dropped} school-age rows ({n_dropped/pre_drop:.2%}) "
+            f"with no Module 300 match (FACTOR07 null)"
+        )
+        logger.info(
+            "Dropped %d unmatched rows (no Module 300 data), %d remaining",
+            n_dropped,
+            len(df),
+        )
+
     # 4. Handle nulls in P303/P306 among school-age rows
     for col_name in ("P303", "P306"):
         if col_name in df.columns:
@@ -325,11 +382,12 @@ def load_enaho_year(year: int) -> ENAHOResult:
                         f"({frac:.2%}). Sample rows:\n{sample_rows}"
                     )
 
-    # 5. Cast P303, P306 to Int64 (may arrive as Utf8 from some years)
+    # 5. Cast P303, P306 to Int64 (may arrive as Utf8 or Float64 from some years)
     for col_name in ("P303", "P306"):
         if col_name in df.columns and df[col_name].dtype != pl.Int64:
+            original_dtype = df[col_name].dtype
             df = df.with_columns(pl.col(col_name).cast(pl.Int64))
-            warnings.append(f"Cast {col_name} from {df[col_name].dtype} to Int64")
+            warnings.append(f"Cast {col_name} from {original_dtype} to Int64")
 
     # 6. Construct dropout target: enrolled last year AND not enrolled this year
     df = df.with_columns(
