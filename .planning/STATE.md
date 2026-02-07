@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-07)
 ## Current Position
 
 Phase: 0 of 11 (Environment Setup)
-Plan: 0 of 2 in current phase
-Status: Ready to plan
-Last activity: 2026-02-07 -- Roadmap created (12 phases, 53 requirements mapped)
+Plan: 2 of 2 in current phase
+Status: Phase complete
+Last activity: 2026-02-07 -- Completed 00-02-PLAN.md
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█░░░░░░░░░] 14%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
-- Average duration: -
-- Total execution time: 0 hours
+- Total plans completed: 2
+- Average duration: ~8 min
+- Total execution time: ~16 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| 00-environment-setup | 2/2 | ~16 min | ~8 min |
 
 **Recent Trend:**
-- Last 5 plans: -
-- Trend: -
+- Last 5 plans: 00-01 (8 min), 00-02 (8 min)
+- Trend: Stable
 
 *Updated after each plan completion*
 
@@ -46,6 +46,10 @@ Recent decisions affecting current work:
 - [Roadmap]: Phase structure follows spec Section 9 (Phases 1-11) plus Phase 0 for environment
 - [Roadmap]: Gate tests are integral to each phase, not a separate phase
 - [Roadmap]: DATA-10 (parquet saves) assigned to Phase 4; TEST-01/02/03 assigned to Phase 1
+- [00-02]: PROJECT_ROOT uses pyproject.toml walk-up instead of hardcoded parent.parent
+- [00-02]: .envrc tracked in git (not gitignored) for direnv team integration
+- [00-02]: data/exports/ tracked (not gitignored) for M4 site export artifacts
+- [00-02]: Replaced GitHub Python template .gitignore with focused project-specific rules
 
 ### Pending Todos
 
@@ -60,5 +64,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-07
-Stopped at: Roadmap created, ready to plan Phase 0
+Stopped at: Completed 00-02-PLAN.md
 Resume file: None
