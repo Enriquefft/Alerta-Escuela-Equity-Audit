@@ -37,11 +37,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. The directory structure matches spec Section 3 exactly (src/data/, src/models/, src/fairness/, tests/gates/, tests/unit/, data/raw/, data/processed/, data/exports/)
   4. Running `python src/data/download.py` fetches ENAHO modules and admin dropout CSVs into data/raw/
   5. data/raw/ and data/processed/ are gitignored; data/exports/ is tracked
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 00-01: Nix flake + pyproject.toml + uv environment
-- [ ] 00-02: Directory scaffolding + download script + .gitignore
+- [ ] 00-01-PLAN.md -- Nix flake + .envrc + pyproject.toml + uv environment (Wave 1)
+- [ ] 00-02-PLAN.md -- Directory scaffolding + download script relocation + .gitignore + notebooks + justfile (Wave 1)
 
 ### Phase 1: ENAHO Single-Year Loader
 **Goal**: A single year of ENAHO survey data loads correctly with proper delimiter detection, UBIGEO padding, dropout target construction, and school-age filtering
