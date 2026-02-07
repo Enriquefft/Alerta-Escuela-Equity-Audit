@@ -15,10 +15,10 @@
 
 ### Data Pipeline
 
-- [ ] **DATA-01**: Load single-year ENAHO with auto-detected delimiter (pipe ≤2019, comma ≥2020)
+- [ ] **DATA-01**: Load single-year ENAHO with auto-detected delimiter (pipe <=2019, comma >=2020)
 - [ ] **DATA-02**: Construct dropout target as (P303==1 & P306==2) with FACTOR07 survey weight preserved
 - [ ] **DATA-03**: Load all 7 years (2018–2024) with consistent schema and year column
-- [ ] **DATA-04**: Harmonize P300A mother tongue codes (collapse 10–15 → 3 for cross-year; preserve originals)
+- [ ] **DATA-04**: Harmonize P300A mother tongue codes (collapse 10–15 -> 3 for cross-year; preserve originals)
 - [ ] **DATA-05**: Load and zero-pad district admin dropout rates from datosabiertos
 - [ ] **DATA-06**: Load Census 2017 district-level enrichment data
 - [ ] **DATA-07**: Load VIIRS nightlights district-level economic proxy
@@ -28,10 +28,10 @@
 
 ### Descriptive Analysis
 
-- [ ] **DESC-01**: Compute survey-weighted dropout rates by mother tongue (harmonized + Awajún disaggregated)
-- [ ] **DESC-02**: Compute survey-weighted dropout rates by sex × education level
+- [ ] **DESC-01**: Compute survey-weighted dropout rates by mother tongue (harmonized + Awajun disaggregated)
+- [ ] **DESC-02**: Compute survey-weighted dropout rates by sex x education level
 - [ ] **DESC-03**: Compute survey-weighted dropout rates by rural/urban, region, poverty quintile
-- [ ] **DESC-04**: Generate heatmap data for language × rurality interaction
+- [ ] **DESC-04**: Generate heatmap data for language x rurality interaction
 - [ ] **DESC-05**: Generate choropleth prep data (district-level weighted dropout rates)
 - [ ] **DESC-06**: Export descriptive tables to data/exports/descriptive_tables.json matching M4 schema
 
@@ -43,7 +43,7 @@
 - [ ] **MODL-04**: Train XGBoost for algorithm-independence comparison
 - [ ] **MODL-05**: Calibrate best model (isotonic vs sigmoid, keep lower Brier) on validation set
 - [ ] **MODL-06**: Tune threshold per model using F1 on validation; report at 0.3, 0.4, 0.5, 0.6, 0.7
-- [ ] **MODL-07**: Evaluate calibrated model on test set (2024) exactly once — final evaluation
+- [ ] **MODL-07**: Evaluate calibrated model on test set (2024) exactly once -- final evaluation
 - [ ] **MODL-08**: Export model results to data/exports/model_results.json matching M4 schema
 - [ ] **MODL-09**: All metrics survey-weighted via FACTOR07; also compute unweighted and assert they differ
 
@@ -51,7 +51,7 @@
 
 - [ ] **FAIR-01**: Compute TPR, FPR, FNR, precision, PR-AUC per subgroup across all 6 dimensions
 - [ ] **FAIR-02**: Compute calibration per group (actual dropout rate among predicted-high-risk >0.7)
-- [ ] **FAIR-03**: Analyze 3 intersections: language×rurality, sex×poverty, language×region
+- [ ] **FAIR-03**: Analyze 3 intersections: language x rurality, sex x poverty, language x region
 - [ ] **FAIR-04**: Flag intersectional groups with <50 unweighted observations
 - [ ] **FAIR-05**: Compute equalized odds gap and predictive parity gap per dimension
 - [ ] **FAIR-06**: Export fairness metrics to data/exports/fairness_metrics.json matching M4 schema
@@ -94,7 +94,7 @@
 
 ### Extended Analysis
 
-- **V2-03**: Causal analysis (mediation/moderation) of language → dropout pathway
+- **V2-03**: Causal analysis (mediation/moderation) of language -> dropout pathway
 - **V2-04**: Bias mitigation experiments (reweighting, constraint optimization)
 - **V2-05**: Comparison with other Latin American education prediction systems
 
@@ -107,13 +107,13 @@
 
 | Feature | Reason |
 |---------|--------|
-| Replicating Alerta Escuela's exact model | No SIAGIE access — we use ENAHO proxy |
-| Web application / M4 site | Separate repo — we only produce export JSON |
+| Replicating Alerta Escuela's exact model | No SIAGIE access -- we use ENAHO proxy |
+| Web application / M4 site | Separate repo -- we only produce export JSON |
 | Real-time prediction or deployment | Audit, not production system |
 | Deep learning (TabNet, neural networks) | Spec-locked to 3 models: LogReg, LightGBM, XGBoost |
 | Experiment tracking (MLflow, DVC, W&B) | Export metrics as JSON instead |
 | Geospatial processing (geopandas, GDAL) | All geo data is pre-aggregated CSV/JSON |
-| Bias mitigation / debiasing | Audit scope only — document gaps, don't fix them |
+| Bias mitigation / debiasing | Audit scope only -- document gaps, don't fix them |
 | Causal inference | Observational audit, not causal study |
 | pandas for data processing | Polars-first; pandas only at sklearn/fairlearn/shap boundary |
 
@@ -135,7 +135,7 @@
 | DATA-07 | Phase 3 | Pending |
 | DATA-08 | Phase 3 | Pending |
 | DATA-09 | Phase 4 | Pending |
-| DATA-10 | Phase 1–4 | Pending |
+| DATA-10 | Phase 4 | Pending |
 | DESC-01 | Phase 4 | Pending |
 | DESC-02 | Phase 4 | Pending |
 | DESC-03 | Phase 4 | Pending |
@@ -147,10 +147,10 @@
 | MODL-03 | Phase 6 | Pending |
 | MODL-04 | Phase 6 | Pending |
 | MODL-05 | Phase 7 | Pending |
-| MODL-06 | Phase 5–6 | Pending |
+| MODL-06 | Phase 5 | Pending |
 | MODL-07 | Phase 7 | Pending |
-| MODL-08 | Phase 5–7 | Pending |
-| MODL-09 | Phase 5–7 | Pending |
+| MODL-08 | Phase 7 | Pending |
+| MODL-09 | Phase 5 | Pending |
 | FAIR-01 | Phase 8 | Pending |
 | FAIR-02 | Phase 8 | Pending |
 | FAIR-03 | Phase 8 | Pending |
@@ -171,15 +171,15 @@
 | EXPO-03 | Phase 11 | Pending |
 | EXPO-04 | Phase 11 | Pending |
 | EXPO-05 | Phase 11 | Pending |
-| TEST-01 | Phase 1–11 | Pending |
-| TEST-02 | Phase 1–2 | Pending |
-| TEST-03 | Phase 1–11 | Pending |
+| TEST-01 | Phase 1 | Pending |
+| TEST-02 | Phase 1 | Pending |
+| TEST-03 | Phase 1 | Pending |
 
 **Coverage:**
 - v1 requirements: 53 total
 - Mapped to phases: 53
-- Unmapped: 0 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-07*
-*Last updated: 2026-02-07 after initial definition*
+*Last updated: 2026-02-07 after roadmap creation*
