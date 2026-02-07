@@ -7,11 +7,11 @@
 
 ### Environment
 
-- [ ] **ENV-01**: Nix flake provides Python 3.12, uv, and system dependencies (OpenMP, cmake for LightGBM)
-- [ ] **ENV-02**: pyproject.toml declares all Python dependencies with version constraints per spec
-- [ ] **ENV-03**: download.py fetches ENAHO modules (02, 03, 05, 34, 37) for 2018–2024 and admin dropout CSVs
-- [ ] **ENV-04**: Directory structure matches spec Section 3 exactly (src/data/, src/models/, src/fairness/, etc.)
-- [ ] **ENV-05**: .gitignore excludes data/raw/, data/processed/, __pycache__/, .ipynb_checkpoints/
+- [x] **ENV-01**: Nix flake provides Python 3.12, uv, and system dependencies (OpenMP, cmake for LightGBM)
+- [x] **ENV-02**: pyproject.toml declares all Python dependencies with version constraints per spec
+- [x] **ENV-03**: download.py fetches ENAHO modules (02, 03, 05, 34, 37) for 2018–2024 and admin dropout CSVs
+- [x] **ENV-04**: Directory structure matches spec Section 3 exactly (src/data/, src/models/, src/fairness/, etc.)
+- [x] **ENV-05**: .gitignore excludes data/raw/, data/processed/, __pycache__/, .ipynb_checkpoints/
 
 ### Data Pipeline
 
@@ -121,11 +121,11 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ENV-01 | Phase 0 | Pending |
-| ENV-02 | Phase 0 | Pending |
-| ENV-03 | Phase 0 | Pending |
-| ENV-04 | Phase 0 | Pending |
-| ENV-05 | Phase 0 | Pending |
+| ENV-01 | Phase 0 | Complete |
+| ENV-02 | Phase 0 | Complete |
+| ENV-03 | Phase 0 | Complete |
+| ENV-04 | Phase 0 | Complete |
+| ENV-05 | Phase 0 | Complete |
 | DATA-01 | Phase 1 | Pending |
 | DATA-02 | Phase 1 | Pending |
 | DATA-03 | Phase 2 | Pending |

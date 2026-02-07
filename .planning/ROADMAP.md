@@ -12,7 +12,7 @@ This roadmap delivers the first independent equity audit of Peru's Alerta Escuel
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 0: Environment Setup** - Nix flake, pyproject.toml, download script, directory structure, .gitignore
+- [x] **Phase 0: Environment Setup** - Nix flake, pyproject.toml, download script, directory structure, .gitignore
 - [ ] **Phase 1: ENAHO Single-Year Loader** - Load 2023 ENAHO with delimiter detection, dropout target, UBIGEO padding
 - [ ] **Phase 2: Multi-Year Loader + Harmonization** - Load 7 years (2018-2024), P300A mother tongue harmonization
 - [ ] **Phase 3: Spatial + Supplementary Data Merges** - Admin dropout rates, Census 2017, VIIRS nightlights, LEFT JOIN on UBIGEO
@@ -40,8 +40,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] 00-01-PLAN.md -- Nix flake + .envrc + pyproject.toml + uv environment (Wave 1)
-- [ ] 00-02-PLAN.md -- Directory scaffolding + download script relocation + .gitignore + notebooks + justfile (Wave 1)
+- [x] 00-01-PLAN.md -- Nix flake + .envrc + pyproject.toml + uv environment (Wave 1)
+- [x] 00-02-PLAN.md -- Directory scaffolding + download script relocation + .gitignore + notebooks + justfile (Wave 1)
 
 ### Phase 1: ENAHO Single-Year Loader
 **Goal**: A single year of ENAHO survey data loads correctly with proper delimiter detection, UBIGEO padding, dropout target construction, and school-age filtering
@@ -226,7 +226,7 @@ Note: Phases 8 and 9 are independent (both depend on Phase 7); Phase 10 depends 
 
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
-| 0. Environment Setup | 0/2 | Not started | - |
+| 0. Environment Setup | 2/2 | Complete | 2026-02-07 |
 | 1. ENAHO Single-Year Loader | 0/1 | Not started | - |
 | 2. Multi-Year Loader + Harmonization | 0/1 | Not started | - |
 | 3. Spatial + Supplementary Data Merges | 0/1 | Not started | - |
