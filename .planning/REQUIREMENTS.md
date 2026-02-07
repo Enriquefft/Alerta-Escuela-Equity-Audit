@@ -128,8 +128,8 @@
 | ENV-05 | Phase 0 | Complete |
 | DATA-01 | Phase 1 | Complete |
 | DATA-02 | Phase 1 | Complete |
-| DATA-03 | Phase 2 | Pending |
-| DATA-04 | Phase 2 | Pending |
+| DATA-03 | Phase 2 | Complete |
+| DATA-04 | Phase 2 | Complete |
 | DATA-05 | Phase 3 | Pending |
 | DATA-06 | Phase 3 | Pending |
 | DATA-07 | Phase 3 | Pending |

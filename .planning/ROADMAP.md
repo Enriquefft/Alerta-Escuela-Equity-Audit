@@ -228,7 +228,7 @@ Note: Phases 8 and 9 are independent (both depend on Phase 7); Phase 10 depends 
 |-------|---------------|--------|-----------|
 | 0. Environment Setup | 2/2 | Complete | 2026-02-07 |
 | 1. ENAHO Single-Year Loader | 1/1 | Complete | 2026-02-07 |
-| 2. Multi-Year Loader + Harmonization | 0/1 | Not started | - |
+| 2. Multi-Year Loader + Harmonization | 1/1 | Complete | 2026-02-07 |
 | 3. Spatial + Supplementary Data Merges | 0/1 | Not started | - |
 | 4. Feature Engineering + Descriptive Statistics | 0/2 | Not started | - |
 | 5. Baseline Model + Temporal Splits | 0/1 | Not started | - |
