@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Feature Engineering + Descriptive Statistics** - 19+ model features, survey-weighted descriptive gaps, first export
 - [x] **Phase 5: Baseline Model + Temporal Splits** - Temporal split discipline, logistic regression baseline, evaluation patterns
 - [x] **Phase 6: LightGBM + XGBoost** - Optuna-tuned LightGBM, XGBoost comparison, algorithm-independence check
-- [ ] **Phase 7: Calibration + ONNX Export + Final Test** - Calibrate best model, ONNX export, test set (2024) touched once
+- [ ] **Phase 7: Calibration + ONNX Export + Final Test** - Calibrate best model, ONNX export, test set (2023) touched once
 - [ ] **Phase 8: Subgroup Fairness Metrics** - fairlearn MetricFrame across 6 dimensions + 3 intersections
 - [ ] **Phase 9: SHAP Interpretability Analysis** - Global/regional/interaction SHAP, ES_PERUANO + ES_MUJER quantification
 - [ ] **Phase 10: Cross-Validation with Admin Data** - District-level prediction vs admin rates, spatial error patterns
@@ -139,20 +139,20 @@ Plans:
 - [x] 06-01-PLAN.md -- Optuna-tuned LightGBM (100 trials) + XGBoost (50 trials) + feature importances + model_results.json merge + gate test 2.2 + human review (Wave 1)
 
 ### Phase 7: Calibration + ONNX Export + Final Test
-**Goal**: The best model is calibrated, exported to ONNX for browser inference, and evaluated on the 2024 test set exactly once -- the only time test data is touched
+**Goal**: The best model is calibrated, exported to ONNX for browser inference, and evaluated on the 2023 test set exactly once -- the only time test data is touched
 **Depends on**: Phase 6
 **Requirements**: MODL-05, MODL-07, EXPO-01
 **Success Criteria** (what must be TRUE):
   1. Calibrated model has lower Brier score than uncalibrated on validation set
-  2. Test set (2024) PR-AUC is within 0.07 of validation PR-AUC (no extreme overfitting)
+  2. Test set (2023) PR-AUC is within 0.07 of validation PR-AUC (no extreme overfitting)
   3. ONNX file exists at `data/exports/onnx/lightgbm_dropout.onnx`, is under 50MB, and predictions match Python model within 1e-4 absolute difference on 100 random samples
-  4. `model_results.json` updated with `test_2024_final` and `test_2024_calibrated` entries plus Alerta Escuela comparison
+  4. `model_results.json` updated with `test_2023_final` and `test_2023_calibrated` entries plus Alerta Escuela comparison
   5. Gate test 2.3 passes; comparison table with Alerta Escuela published metrics printed for human review
 **Human Gate**: Yes -- review calibration plot and metrics vs Alerta Escuela comparison
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 07-01: Calibration + ONNX export + final test evaluation + gate test 2.3
+- [ ] 07-01-PLAN.md -- Calibration (Platt scaling via FrozenEstimator) + ONNX export + final 2023 test evaluation + Alerta Escuela comparison + gate test 2.3 + human review (Wave 1)
 
 ### Phase 8: Subgroup Fairness Metrics
 **Goal**: Comprehensive fairness metrics are computed across all 6 protected dimensions and 3 intersections, quantifying where the model systematically fails different student populations
