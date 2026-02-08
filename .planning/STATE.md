@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-07)
 
 **Core value:** The fairness audit is the product. Models exist to be audited, not to achieve SOTA.
-**Current focus:** Phase 5 complete -- ready for Phase 6
+**Current focus:** Phase 6 complete -- ready for Phase 7
 
 ## Current Position
 
-Phase: 5 of 11 (Baseline Model + Temporal Splits) -- COMPLETE
+Phase: 6 of 11 (LightGBM + XGBoost) -- COMPLETE
 Plan: 1 of 1 in current phase
 Status: Phase complete, verified
-Last activity: 2026-02-08 -- Completed 05-01-PLAN.md
+Last activity: 2026-02-08 -- Completed 06-01-PLAN.md
 
-Progress: [███████░░░░░] 62%
+Progress: [████████░░░░] 69%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
+- Total plans completed: 9
 - Average duration: ~9 min
-- Total execution time: ~83 min
+- Total execution time: ~93 min
 
 **By Phase:**
 
@@ -33,10 +33,11 @@ Progress: [███████░░░░░] 62%
 | 03-spatial-supplementary-data-merges | 1/1 | ~15 min | ~15 min |
 | 04-feature-engineering-descriptive-statistics | 2/2 | ~13 min | ~7 min |
 | 05-baseline-model-temporal-splits | 1/1 | ~5 min | ~5 min |
+| 06-lightgbm-xgboost | 1/1 | ~10 min | ~10 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-01 (~5 min), 04-02 (~6 min), 04-01 (~7 min), 03-01 (~15 min), 02-01 (~8 min)
-- Trend: Accelerating
+- Last 5 plans: 06-01 (~10 min), 05-01 (~5 min), 04-02 (~6 min), 04-01 (~7 min), 03-01 (~15 min)
+- Trend: Stable
 
 *Updated after each plan completion*
 
@@ -74,6 +75,9 @@ Recent decisions affecting current work:
 - [05-01]: class_weight='balanced' + FACTOR07 multiplicative interaction documented
 - [05-01]: freq_weights p-values all 0.0 (effective n ~25M); use odds ratios for interpretation
 - [05-01]: poverty_quintile negative sign = multicollinearity with poverty_index_z (expected)
+- [06-01]: LightGBM early_stopping defaults to monitoring last metric (binary_logloss); must use first_metric_only=True for average_precision
+- [06-01]: LightGBM and XGBoost val PR-AUC nearly identical (0.2611 vs 0.2612); algorithm-independence ratio = 1.0006
+- [06-01]: age dominates feature importance (25.85%) but well under 50% threshold; poverty_index_z (#4) and nightlights (#2) confirm equity-relevant signal
 
 ### Pending Todos
 
@@ -88,5 +92,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-08
-Stopped at: Phase 5 complete and verified. Ready for Phase 6.
+Stopped at: Phase 6 complete and verified. Ready for Phase 7.
 Resume file: None

@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Spatial + Supplementary Data Merges** - Admin dropout rates, Census 2017, VIIRS nightlights, LEFT JOIN on UBIGEO
 - [x] **Phase 4: Feature Engineering + Descriptive Statistics** - 19+ model features, survey-weighted descriptive gaps, first export
 - [x] **Phase 5: Baseline Model + Temporal Splits** - Temporal split discipline, logistic regression baseline, evaluation patterns
-- [ ] **Phase 6: LightGBM + XGBoost** - Optuna-tuned LightGBM, XGBoost comparison, algorithm-independence check
+- [x] **Phase 6: LightGBM + XGBoost** - Optuna-tuned LightGBM, XGBoost comparison, algorithm-independence check
 - [ ] **Phase 7: Calibration + ONNX Export + Final Test** - Calibrate best model, ONNX export, test set (2024) touched once
 - [ ] **Phase 8: Subgroup Fairness Metrics** - fairlearn MetricFrame across 6 dimensions + 3 intersections
 - [ ] **Phase 9: SHAP Interpretability Analysis** - Global/regional/interaction SHAP, ES_PERUANO + ES_MUJER quantification
@@ -136,7 +136,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 06-01-PLAN.md -- Optuna-tuned LightGBM (100 trials) + XGBoost (50 trials) + feature importances + model_results.json merge + gate test 2.2 + human review (Wave 1)
+- [x] 06-01-PLAN.md -- Optuna-tuned LightGBM (100 trials) + XGBoost (50 trials) + feature importances + model_results.json merge + gate test 2.2 + human review (Wave 1)
 
 ### Phase 7: Calibration + ONNX Export + Final Test
 **Goal**: The best model is calibrated, exported to ONNX for browser inference, and evaluated on the 2024 test set exactly once -- the only time test data is touched
