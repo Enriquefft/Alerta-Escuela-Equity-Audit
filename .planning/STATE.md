@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-07)
 
 **Core value:** The fairness audit is the product. Models exist to be audited, not to achieve SOTA.
-**Current focus:** Phase 4 complete -- ready for Phase 5
+**Current focus:** Phase 5 complete -- ready for Phase 6
 
 ## Current Position
 
-Phase: 4 of 11 (Feature Engineering + Descriptive Statistics) -- COMPLETE
-Plan: 2 of 2 in current phase
+Phase: 5 of 11 (Baseline Model + Temporal Splits) -- COMPLETE
+Plan: 1 of 1 in current phase
 Status: Phase complete, verified
-Last activity: 2026-02-08 -- Completed 04-02-PLAN.md
+Last activity: 2026-02-08 -- Completed 05-01-PLAN.md
 
-Progress: [██████░░░░░░] 58%
+Progress: [███████░░░░░] 62%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
-- Average duration: ~10 min
-- Total execution time: ~78 min
+- Total plans completed: 8
+- Average duration: ~9 min
+- Total execution time: ~83 min
 
 **By Phase:**
 
@@ -32,9 +32,10 @@ Progress: [██████░░░░░░] 58%
 | 02-multi-year-loader-harmonization | 1/1 | ~8 min | ~8 min |
 | 03-spatial-supplementary-data-merges | 1/1 | ~15 min | ~15 min |
 | 04-feature-engineering-descriptive-statistics | 2/2 | ~13 min | ~7 min |
+| 05-baseline-model-temporal-splits | 1/1 | ~5 min | ~5 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-02 (~6 min), 04-01 (~7 min), 03-01 (~15 min), 02-01 (~8 min), 01-01 (~15 min)
+- Last 5 plans: 05-01 (~5 min), 04-02 (~6 min), 04-01 (~7 min), 03-01 (~15 min), 02-01 (~8 min)
 - Trend: Accelerating
 
 *Updated after each plan completion*
@@ -69,6 +70,10 @@ Recent decisions affecting current work:
 - [04-01]: Parent education = max(head, spouse) P301A mapped to years; 12 rows median-imputed
 - [04-02]: DescrStatsW (linearization) for survey-weighted confidence intervals
 - [04-02]: Awajun rate = 0.2047 (>0.18), Castellano = 0.1526, confirming language equity gap
+- [05-01]: Max weighted F1 as threshold optimization target (optimal=0.5168)
+- [05-01]: class_weight='balanced' + FACTOR07 multiplicative interaction documented
+- [05-01]: freq_weights p-values all 0.0 (effective n ~25M); use odds ratios for interpretation
+- [05-01]: poverty_quintile negative sign = multicollinearity with poverty_index_z (expected)
 
 ### Pending Todos
 
@@ -83,5 +88,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-08
-Stopped at: Phase 4 complete and verified. Ready for Phase 5.
+Stopped at: Phase 5 complete and verified. Ready for Phase 6.
 Resume file: None
