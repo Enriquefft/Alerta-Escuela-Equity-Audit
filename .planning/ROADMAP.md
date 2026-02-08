@@ -196,10 +196,10 @@ Plans:
   3. `data/exports/choropleth.json` exists with >1,500 districts, each having ubigeo, predicted_dropout_rate, admin_dropout_rate, model_error, indigenous_language_pct, and poverty_index
   4. Gate test 3.3 passes; correlation, p-value, and mean error by indigenous % group printed for human review
 **Human Gate**: Yes -- review whether indigenous-majority districts have higher error, spatial patterns
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 10-01: District-level cross-validation + choropleth export + gate test 3.3
+- [ ] 10-01-PLAN.md -- District-level cross-validation pipeline + choropleth.json export + gate test 3.3 + human review (Wave 1)
 
 ### Phase 11: Findings Distillation + Final Exports
 **Goal**: All analysis is synthesized into 5-7 bilingual media-ready findings ordered by impact, and all 7 JSON export files are validated against M4 site contracts
