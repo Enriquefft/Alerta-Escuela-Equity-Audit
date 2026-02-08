@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 0: Environment Setup** - Nix flake, pyproject.toml, download script, directory structure, .gitignore
 - [x] **Phase 1: ENAHO Single-Year Loader** - Load 2023 ENAHO with delimiter detection, dropout target, UBIGEO padding
 - [x] **Phase 2: Multi-Year Loader + Harmonization** - Load 6 years (2018-2023), P300A mother tongue harmonization
-- [ ] **Phase 3: Spatial + Supplementary Data Merges** - Admin dropout rates, Census 2017, VIIRS nightlights, LEFT JOIN on UBIGEO
+- [x] **Phase 3: Spatial + Supplementary Data Merges** - Admin dropout rates, Census 2017, VIIRS nightlights, LEFT JOIN on UBIGEO
 - [ ] **Phase 4: Feature Engineering + Descriptive Statistics** - 19+ model features, survey-weighted descriptive gaps, first export
 - [ ] **Phase 5: Baseline Model + Temporal Splits** - Temporal split discipline, logistic regression baseline, evaluation patterns
 - [ ] **Phase 6: LightGBM + XGBoost** - Optuna-tuned LightGBM, XGBoost comparison, algorithm-independence check
@@ -87,7 +87,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 03-01-PLAN.md -- Admin, Census, nightlights loaders + spatial merge + gate tests 1.3/1.4 (Wave 1)
+- [x] 03-01-PLAN.md -- Admin, Census, nightlights loaders + spatial merge + gate tests 1.3/1.4 (Wave 1)
 
 ### Phase 4: Feature Engineering + Descriptive Statistics
 **Goal**: All 19+ model features are engineered per spec Section 5 and survey-weighted descriptive statistics quantify dropout gaps across all 6 fairness dimensions, producing the first export JSON
@@ -229,7 +229,7 @@ Note: Phases 8 and 9 are independent (both depend on Phase 7); Phase 10 depends 
 | 0. Environment Setup | 2/2 | Complete | 2026-02-07 |
 | 1. ENAHO Single-Year Loader | 1/1 | Complete | 2026-02-07 |
 | 2. Multi-Year Loader + Harmonization | 1/1 | Complete | 2026-02-07 |
-| 3. Spatial + Supplementary Data Merges | 0/1 | Planned | - |
+| 3. Spatial + Supplementary Data Merges | 1/1 | Complete | 2026-02-07 |
 | 4. Feature Engineering + Descriptive Statistics | 0/2 | Not started | - |
 | 5. Baseline Model + Temporal Splits | 0/1 | Not started | - |
 | 6. LightGBM + XGBoost | 0/1 | Not started | - |

@@ -19,10 +19,10 @@
 - [ ] **DATA-02**: Construct dropout target as (P303==1 & P306==2) with FACTOR07 survey weight preserved
 - [ ] **DATA-03**: Load all 7 years (2018–2024) with consistent schema and year column
 - [ ] **DATA-04**: Harmonize P300A mother tongue codes (collapse 10–15 -> 3 for cross-year; preserve originals)
-- [ ] **DATA-05**: Load and zero-pad district admin dropout rates from datosabiertos
-- [ ] **DATA-06**: Load Census 2017 district-level enrichment data
-- [ ] **DATA-07**: Load VIIRS nightlights district-level economic proxy
-- [ ] **DATA-08**: Merge all sources via LEFT JOIN on UBIGEO preserving ENAHO row count
+- [x] **DATA-05**: Load and zero-pad district admin dropout rates from datosabiertos
+- [x] **DATA-06**: Load Census 2017 district-level enrichment data
+- [x] **DATA-07**: Load VIIRS nightlights district-level economic proxy
+- [x] **DATA-08**: Merge all sources via LEFT JOIN on UBIGEO preserving ENAHO row count
 - [ ] **DATA-09**: Engineer all 19+ model features per spec Section 5 (exact column names)
 - [ ] **DATA-10**: Save intermediate datasets as parquet (enaho_merged, enaho_with_features, full_dataset)
 
@@ -130,10 +130,10 @@
 | DATA-02 | Phase 1 | Complete |
 | DATA-03 | Phase 2 | Complete |
 | DATA-04 | Phase 2 | Complete |
-| DATA-05 | Phase 3 | Pending |
-| DATA-06 | Phase 3 | Pending |
-| DATA-07 | Phase 3 | Pending |
-| DATA-08 | Phase 3 | Pending |
+| DATA-05 | Phase 3 | Complete |
+| DATA-06 | Phase 3 | Complete |
+| DATA-07 | Phase 3 | Complete |
+| DATA-08 | Phase 3 | Complete |
 | DATA-09 | Phase 4 | Pending |
 | DATA-10 | Phase 4 | Pending |
 | DESC-01 | Phase 4 | Pending |
@@ -182,4 +182,4 @@
 
 ---
 *Requirements defined: 2026-02-07*
-*Last updated: 2026-02-07 after roadmap creation*
+*Last updated: 2026-02-07 after Phase 3 completion*
