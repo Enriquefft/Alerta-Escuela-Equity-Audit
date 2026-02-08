@@ -133,10 +133,10 @@ Plans:
   4. `model_results.json` updated with lightgbm and xgboost entries including Optuna best hyperparameters, validation metrics, and threshold analysis
   5. Gate test 2.2 passes; top-10 feature importances printed for human review
 **Human Gate**: Yes -- review feature importances (age, poverty, rurality should be top-5)
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 06-01: LightGBM Optuna tuning + XGBoost training + gate test 2.2
+- [ ] 06-01-PLAN.md -- Optuna-tuned LightGBM (100 trials) + XGBoost (50 trials) + feature importances + model_results.json merge + gate test 2.2 + human review (Wave 1)
 
 ### Phase 7: Calibration + ONNX Export + Final Test
 **Goal**: The best model is calibrated, exported to ONNX for browser inference, and evaluated on the 2024 test set exactly once -- the only time test data is touched
