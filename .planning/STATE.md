@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-07)
 
 **Core value:** The fairness audit is the product. Models exist to be audited, not to achieve SOTA.
-**Current focus:** Phase 3 complete -- ready for Phase 4
+**Current focus:** Phase 4 Plan 01 complete -- ready for Plan 02 (Descriptive Statistics)
 
 ## Current Position
 
-Phase: 3 of 11 (Spatial + Supplementary Data Merges) -- COMPLETE
-Plan: 1 of 1 in current phase
-Status: Phase complete, verified
-Last activity: 2026-02-07 -- Completed 03-01-PLAN.md
+Phase: 4 of 11 (Feature Engineering + Descriptive Statistics) -- In progress
+Plan: 1 of 2 in current phase
+Status: In progress
+Last activity: 2026-02-08 -- Completed 04-01-PLAN.md
 
-Progress: [█████░░░░░░░] 42%
+Progress: [██████░░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: ~12 min
-- Total execution time: ~58 min
+- Total plans completed: 6
+- Average duration: ~11 min
+- Total execution time: ~65 min
 
 **By Phase:**
 
@@ -31,10 +31,11 @@ Progress: [█████░░░░░░░] 42%
 | 01-enaho-single-year-loader | 1/1 | ~15 min | ~15 min |
 | 02-multi-year-loader-harmonization | 1/1 | ~8 min | ~8 min |
 | 03-spatial-supplementary-data-merges | 1/1 | ~15 min | ~15 min |
+| 04-feature-engineering-descriptive-statistics | 1/2 | ~7 min | ~7 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-01 (~15 min), 02-01 (~8 min), 01-01 (~15 min), 00-02 (~8 min), 00-01 (12 min)
-- Trend: Stable
+- Last 5 plans: 04-01 (~7 min), 03-01 (~15 min), 02-01 (~8 min), 01-01 (~15 min), 00-02 (~8 min)
+- Trend: Accelerating
 
 *Updated after each plan completion*
 
@@ -62,6 +63,10 @@ Recent decisions affecting current work:
 - [03-01]: Loaders have graceful placeholder behavior for missing supplementary files
 - [03-01]: 44 districts have primaria but no secundaria admin data (minor gap)
 - [03-01]: Uppercase column names maintained through merge pipeline (UBIGEO not ubigeo)
+- [04-01]: 25 model features (exceeding spec's 19 minimum) with 4 census z-score features added
+- [04-01]: P209 birthplace only for ages 12+; ages 6-11 default to es_peruano=1
+- [04-01]: Nightlight z-score nulls imputed with 0.0 (distribution mean)
+- [04-01]: Parent education = max(head, spouse) P301A mapped to years; 12 rows median-imputed
 
 ### Pending Todos
 
@@ -75,6 +80,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-07
-Stopped at: Phase 3 complete and verified. Ready for Phase 4.
+Last session: 2026-02-08
+Stopped at: Completed 04-01-PLAN.md. Ready for 04-02-PLAN.md (Descriptive Statistics).
 Resume file: None
