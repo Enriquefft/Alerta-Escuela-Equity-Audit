@@ -1,0 +1,395 @@
+{
+  "logistic_regression": {
+    "metadata": {
+      "model_type": "LogisticRegression",
+      "train_years": [
+        2018,
+        2019,
+        2020,
+        2021
+      ],
+      "validate_year": 2022,
+      "test_year": 2023,
+      "n_train": 98023,
+      "n_validate": 26477,
+      "n_test": 25635,
+      "n_features": 25,
+      "feature_names": [
+        "age",
+        "is_secundaria_age",
+        "es_mujer",
+        "lang_castellano",
+        "lang_quechua",
+        "lang_aimara",
+        "lang_other_indigenous",
+        "lang_foreign",
+        "rural",
+        "is_sierra",
+        "is_selva",
+        "district_dropout_rate_admin_z",
+        "nightlight_intensity_z",
+        "poverty_index_z",
+        "poverty_quintile",
+        "es_peruano",
+        "has_disability",
+        "is_working",
+        "juntos_participant",
+        "log_income",
+        "parent_education_years",
+        "census_indigenous_lang_pct_z",
+        "census_literacy_rate_z",
+        "census_electricity_pct_z",
+        "census_water_access_pct_z"
+      ],
+      "class_weight": "balanced",
+      "solver": "lbfgs",
+      "max_iter": 1000,
+      "C": 1.0,
+      "n_iter_actual": 307,
+      "convergence": true,
+      "year_shift_note": "ENAHO 2024 unavailable; train/val/test shifted back by 1 year from spec",
+      "covid_note": "2020 has reduced sample (~13,755 rows) due to COVID phone interviews",
+      "weight_note": "freq_weights inflates effective n to ~25M; all p-values are effectively 0. Use odds ratios and coefficient signs for interpretation.",
+      "generated_at": "2026-02-08T08:01:40.796327+00:00"
+    },
+    "metrics": {
+      "validate_2022": {
+        "weighted": {
+          "pr_auc": 0.210316,
+          "roc_auc": 0.604089,
+          "f1": 0.287655,
+          "precision": 0.206469,
+          "recall": 0.47406,
+          "brier": 0.238672,
+          "log_loss": 0.670755
+        },
+        "unweighted": {
+          "pr_auc": 0.207701,
+          "roc_auc": 0.607024,
+          "f1": 0.288733,
+          "precision": 0.198313,
+          "recall": 0.530709,
+          "brier": 0.24923,
+          "log_loss": 0.692769
+        }
+      },
+      "test_2023": {
+        "weighted": {
+          "pr_auc": 0.19269,
+          "roc_auc": 0.598371,
+          "f1": 0.270491,
+          "precision": 0.194087,
+          "recall": 0.446101,
+          "brier": 0.237229,
+          "log_loss": 0.667752
+        },
+        "unweighted": {
+          "pr_auc": 0.195059,
+          "roc_auc": 0.600727,
+          "f1": 0.272932,
+          "precision": 0.187533,
+          "recall": 0.501143,
+          "brier": 0.247346,
+          "log_loss": 0.688766
+        }
+      }
+    },
+    "threshold_analysis": {
+      "optimal_threshold": 0.516815,
+      "optimization_target": "max_weighted_f1",
+      "thresholds": [
+        {
+          "threshold": 0.3,
+          "weighted_f1": 0.24823395678436225,
+          "weighted_precision": 0.14176091896785625,
+          "weighted_recall": 0.9972226352114602,
+          "unweighted_f1": 0.25168673104908057,
+          "unweighted_precision": 0.1439869825172179,
+          "unweighted_recall": 0.9986876640419947
+        },
+        {
+          "threshold": 0.4,
+          "weighted_f1": 0.2561536704619681,
+          "weighted_precision": 0.14984150477203917,
+          "weighted_recall": 0.8817604917570832,
+          "unweighted_f1": 0.2585435009700045,
+          "unweighted_precision": 0.1506914847351483,
+          "unweighted_recall": 0.9094488188976378
+        },
+        {
+          "threshold": 0.5,
+          "weighted_f1": 0.28129326746397165,
+          "weighted_precision": 0.19160113696567818,
+          "weighted_recall": 0.5288650310229124,
+          "unweighted_f1": 0.28461197900196067,
+          "unweighted_precision": 0.18748437630197484,
+          "unweighted_recall": 0.5905511811023622
+        },
+        {
+          "threshold": 0.6,
+          "weighted_f1": 0.22891932113780697,
+          "weighted_precision": 0.26030827003969725,
+          "weighted_recall": 0.2042857750933075,
+          "unweighted_f1": 0.24678529679179115,
+          "unweighted_precision": 0.24427873489328877,
+          "unweighted_recall": 0.24934383202099739
+        },
+        {
+          "threshold": 0.7,
+          "weighted_f1": 0.06359364601802964,
+          "weighted_precision": 0.30780731142314954,
+          "weighted_recall": 0.035459864798751524,
+          "unweighted_f1": 0.0865128660159716,
+          "unweighted_precision": 0.2793696275071633,
+          "unweighted_recall": 0.051181102362204724
+        },
+        {
+          "threshold": 0.516815,
+          "is_optimal": true,
+          "weighted_f1": 0.2876547664657711,
+          "weighted_precision": 0.20646898819120424,
+          "weighted_recall": 0.47406024015575454,
+          "unweighted_f1": 0.2887333999714408,
+          "unweighted_precision": 0.19831306394664575,
+          "unweighted_recall": 0.5307086614173229
+        }
+      ]
+    },
+    "coefficients": [
+      {
+        "feature": "intercept",
+        "coefficient": -1.540998,
+        "std_error": 0.026339,
+        "odds_ratio": 0.214167,
+        "p_value": 0.0,
+        "ci_lower": -1.592621,
+        "ci_upper": -1.489375
+      },
+      {
+        "feature": "age",
+        "coefficient": 0.120129,
+        "std_error": 0.000333,
+        "odds_ratio": 1.127642,
+        "p_value": 0.0,
+        "ci_lower": 0.119477,
+        "ci_upper": 0.12078
+      },
+      {
+        "feature": "is_secundaria_age",
+        "coefficient": -0.437803,
+        "std_error": 0.002289,
+        "odds_ratio": 0.645453,
+        "p_value": 0.0,
+        "ci_lower": -0.442289,
+        "ci_upper": -0.433316
+      },
+      {
+        "feature": "es_mujer",
+        "coefficient": -0.043797,
+        "std_error": 0.001078,
+        "odds_ratio": 0.957148,
+        "p_value": 0.0,
+        "ci_lower": -0.04591,
+        "ci_upper": -0.041684
+      },
+      {
+        "feature": "lang_castellano",
+        "coefficient": 0.295223,
+        "std_error": 0.013153,
+        "odds_ratio": 1.343425,
+        "p_value": 0.0,
+        "ci_lower": 0.269443,
+        "ci_upper": 0.321002
+      },
+      {
+        "feature": "lang_quechua",
+        "coefficient": 0.471329,
+        "std_error": 0.013316,
+        "odds_ratio": 1.602122,
+        "p_value": 0.0,
+        "ci_lower": 0.445231,
+        "ci_upper": 0.497427
+      },
+      {
+        "feature": "lang_aimara",
+        "coefficient": 0.346508,
+        "std_error": 0.01534,
+        "odds_ratio": 1.414121,
+        "p_value": 0.0,
+        "ci_lower": 0.316443,
+        "ci_upper": 0.376574
+      },
+      {
+        "feature": "lang_other_indigenous",
+        "coefficient": 0.788016,
+        "std_error": 0.013719,
+        "odds_ratio": 2.199029,
+        "p_value": 0.0,
+        "ci_lower": 0.761127,
+        "ci_upper": 0.814905
+      },
+      {
+        "feature": "lang_foreign",
+        "coefficient": 0.575964,
+        "std_error": 0.016696,
+        "odds_ratio": 1.778845,
+        "p_value": 0.0,
+        "ci_lower": 0.543241,
+        "ci_upper": 0.608688
+      },
+      {
+        "feature": "rural",
+        "coefficient": -0.009975,
+        "std_error": 0.001601,
+        "odds_ratio": 0.990074,
+        "p_value": 0.0,
+        "ci_lower": -0.013113,
+        "ci_upper": -0.006838
+      },
+      {
+        "feature": "is_sierra",
+        "coefficient": -0.072235,
+        "std_error": 0.001695,
+        "odds_ratio": 0.930312,
+        "p_value": 0.0,
+        "ci_lower": -0.075558,
+        "ci_upper": -0.068912
+      },
+      {
+        "feature": "is_selva",
+        "coefficient": -0.077228,
+        "std_error": 0.002075,
+        "odds_ratio": 0.925679,
+        "p_value": 0.0,
+        "ci_lower": -0.081294,
+        "ci_upper": -0.073161
+      },
+      {
+        "feature": "district_dropout_rate_admin_z",
+        "coefficient": -0.003094,
+        "std_error": 0.000865,
+        "odds_ratio": 0.996911,
+        "p_value": 0.00035,
+        "ci_lower": -0.00479,
+        "ci_upper": -0.001398
+      },
+      {
+        "feature": "nightlight_intensity_z",
+        "coefficient": -0.107377,
+        "std_error": 0.000652,
+        "odds_ratio": 0.898187,
+        "p_value": 0.0,
+        "ci_lower": -0.108655,
+        "ci_upper": -0.106099
+      },
+      {
+        "feature": "poverty_index_z",
+        "coefficient": 0.252479,
+        "std_error": 0.001704,
+        "odds_ratio": 1.287212,
+        "p_value": 0.0,
+        "ci_lower": 0.249138,
+        "ci_upper": 0.255819
+      },
+      {
+        "feature": "poverty_quintile",
+        "coefficient": -0.210036,
+        "std_error": 0.001226,
+        "odds_ratio": 0.810555,
+        "p_value": 0.0,
+        "ci_lower": -0.21244,
+        "ci_upper": -0.207632
+      },
+      {
+        "feature": "es_peruano",
+        "coefficient": 0.298483,
+        "std_error": 0.020422,
+        "odds_ratio": 1.347813,
+        "p_value": 0.0,
+        "ci_lower": 0.258456,
+        "ci_upper": 0.33851
+      },
+      {
+        "feature": "has_disability",
+        "coefficient": 0.114813,
+        "std_error": 0.001708,
+        "odds_ratio": 1.121664,
+        "p_value": 0.0,
+        "ci_lower": 0.111465,
+        "ci_upper": 0.118161
+      },
+      {
+        "feature": "is_working",
+        "coefficient": 0.346023,
+        "std_error": 0.001814,
+        "odds_ratio": 1.413436,
+        "p_value": 0.0,
+        "ci_lower": 0.342469,
+        "ci_upper": 0.349578
+      },
+      {
+        "feature": "juntos_participant",
+        "coefficient": -0.033495,
+        "std_error": 0.001581,
+        "odds_ratio": 0.96706,
+        "p_value": 0.0,
+        "ci_lower": -0.036593,
+        "ci_upper": -0.030397
+      },
+      {
+        "feature": "log_income",
+        "coefficient": -0.107299,
+        "std_error": 0.000861,
+        "odds_ratio": 0.898257,
+        "p_value": 0.0,
+        "ci_lower": -0.108987,
+        "ci_upper": -0.105611
+      },
+      {
+        "feature": "parent_education_years",
+        "coefficient": -0.001809,
+        "std_error": 0.000154,
+        "odds_ratio": 0.998193,
+        "p_value": 0.0,
+        "ci_lower": -0.00211,
+        "ci_upper": -0.001508
+      },
+      {
+        "feature": "census_indigenous_lang_pct_z",
+        "coefficient": 0.021599,
+        "std_error": 0.000898,
+        "odds_ratio": 1.021834,
+        "p_value": 0.0,
+        "ci_lower": 0.019839,
+        "ci_upper": 0.023358
+      },
+      {
+        "feature": "census_literacy_rate_z",
+        "coefficient": -0.051628,
+        "std_error": 0.000931,
+        "odds_ratio": 0.949682,
+        "p_value": 0.0,
+        "ci_lower": -0.053453,
+        "ci_upper": -0.049803
+      },
+      {
+        "feature": "census_electricity_pct_z",
+        "coefficient": 0.091742,
+        "std_error": 0.00097,
+        "odds_ratio": 1.096082,
+        "p_value": 0.0,
+        "ci_lower": 0.089841,
+        "ci_upper": 0.093644
+      },
+      {
+        "feature": "census_water_access_pct_z",
+        "coefficient": -0.053554,
+        "std_error": 0.000833,
+        "odds_ratio": 0.947854,
+        "p_value": 0.0,
+        "ci_lower": -0.055187,
+        "ci_upper": -0.051922
+      }
+    ]
+  }
+}
