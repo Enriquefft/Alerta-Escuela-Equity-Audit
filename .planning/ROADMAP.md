@@ -100,11 +100,11 @@ Plans:
   4. `enaho_with_features.parquet` saved with complete feature matrix
   5. Gate test 1.5 passes all assertions (feature count, binary validation, quintile balance, dropout rates, correlation check, export validation)
 **Human Gate**: Yes -- review weighted dropout rates by subgroup, 7 visualizations, and Awajun gap
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 04-01: Feature engineering pipeline (all 19+ features)
-- [ ] 04-02: Descriptive statistics + descriptive_tables.json export + gate test 1.5
+- [ ] 04-01-PLAN.md -- Feature engineering pipeline: all 19+ features, z-score standardization, supplementary module loading, enaho_with_features.parquet (Wave 1)
+- [ ] 04-02-PLAN.md -- Descriptive statistics + 7 visualizations + descriptive_tables.json export + gate test 1.5 + human review (Wave 2)
 
 ### Phase 5: Baseline Model + Temporal Splits
 **Goal**: Temporal split discipline is established and a logistic regression baseline validates the modeling pipeline with survey-weighted evaluation, setting patterns for gradient boosting phases
