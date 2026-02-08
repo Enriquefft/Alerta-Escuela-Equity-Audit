@@ -655,7 +655,27 @@
         "feature": "es_peruano",
         "importance": 0.0
       }
-    ]
+    ],
+    "test_2023_final": {
+      "weighted": {
+        "pr_auc": 0.23781,
+        "roc_auc": 0.631401,
+        "f1": 0.299348,
+        "precision": 0.248704,
+        "recall": 0.375893,
+        "brier": 0.211071,
+        "log_loss": 0.613788
+      },
+      "unweighted": {
+        "pr_auc": 0.230583,
+        "roc_auc": 0.62621,
+        "f1": 0.286632,
+        "precision": 0.224878,
+        "recall": 0.395143,
+        "brier": 0.21978,
+        "log_loss": 0.632012
+      }
+    }
   },
   "xgboost": {
     "metadata": {
@@ -921,5 +941,137 @@
         "importance": 0.00804
       }
     ]
+  },
+  "test_2023_calibrated": {
+    "metadata": {
+      "calibration_method": "platt_sigmoid",
+      "platt_a": -5.278337,
+      "platt_b": 4.276521,
+      "brier_uncalibrated": 0.211542,
+      "brier_calibrated": 0.115647,
+      "brier_improvement_pct": 45.33,
+      "onnx_path": "data/exports/onnx/lightgbm_dropout.onnx",
+      "onnx_size_bytes": 101955,
+      "onnx_max_abs_diff": 1.026e-07,
+      "optimal_threshold": 0.165716,
+      "base_model": "lightgbm",
+      "frozen_estimator": true,
+      "year_note": "Test year is 2023 (ENAHO 2024 unavailable)",
+      "generated_at": "2026-02-08T17:57:52.321036+00:00"
+    },
+    "metrics": {
+      "validate_2022": {
+        "weighted": {
+          "pr_auc": 0.261064,
+          "roc_auc": 0.650491,
+          "f1": 0.31673,
+          "precision": 0.264599,
+          "recall": 0.394444,
+          "brier": 0.115647,
+          "log_loss": 0.387781
+        },
+        "unweighted": {
+          "pr_auc": 0.257999,
+          "roc_auc": 0.646491,
+          "f1": 0.317558,
+          "precision": 0.251222,
+          "recall": 0.431496,
+          "brier": 0.117414,
+          "log_loss": 0.392385
+        }
+      },
+      "test_2023": {
+        "weighted": {
+          "pr_auc": 0.23781,
+          "roc_auc": 0.631401,
+          "f1": 0.299333,
+          "precision": 0.248683,
+          "recall": 0.375893,
+          "brier": 0.111753,
+          "log_loss": 0.38031
+        },
+        "unweighted": {
+          "pr_auc": 0.230583,
+          "roc_auc": 0.62621,
+          "f1": 0.286602,
+          "precision": 0.224841,
+          "recall": 0.395143,
+          "brier": 0.113946,
+          "log_loss": 0.38507
+        }
+      }
+    },
+    "threshold_analysis": {
+      "optimal_threshold": 0.165716,
+      "optimization_target": "max_weighted_f1",
+      "thresholds": [
+        {
+          "threshold": 0.3,
+          "weighted_f1": 0.2747256715069237,
+          "weighted_precision": 0.3654097699073768,
+          "weighted_recall": 0.2201025959534286,
+          "unweighted_f1": 0.273972602739726,
+          "unweighted_precision": 0.36175710594315247,
+          "unweighted_recall": 0.2204724409448819
+        },
+        {
+          "threshold": 0.4,
+          "weighted_f1": 0.005892035077178277,
+          "weighted_precision": 0.6956744169841171,
+          "weighted_recall": 0.0029585462862839374,
+          "unweighted_f1": 0.004707112970711297,
+          "unweighted_precision": 0.6428571428571429,
+          "unweighted_recall": 0.002362204724409449
+        },
+        {
+          "threshold": 0.5,
+          "weighted_f1": 0.0,
+          "weighted_precision": 0.0,
+          "weighted_recall": 0.0,
+          "unweighted_f1": 0.0,
+          "unweighted_precision": 0.0,
+          "unweighted_recall": 0.0
+        },
+        {
+          "threshold": 0.6,
+          "weighted_f1": 0.0,
+          "weighted_precision": 0.0,
+          "weighted_recall": 0.0,
+          "unweighted_f1": 0.0,
+          "unweighted_precision": 0.0,
+          "unweighted_recall": 0.0
+        },
+        {
+          "threshold": 0.7,
+          "weighted_f1": 0.0,
+          "weighted_precision": 0.0,
+          "weighted_recall": 0.0,
+          "unweighted_f1": 0.0,
+          "unweighted_precision": 0.0,
+          "unweighted_recall": 0.0
+        },
+        {
+          "threshold": 0.165716,
+          "is_optimal": true,
+          "weighted_f1": 0.31673037259399067,
+          "weighted_precision": 0.26459898346182326,
+          "weighted_recall": 0.3944438439389667,
+          "unweighted_f1": 0.31755843152404867,
+          "unweighted_precision": 0.25122249388753054,
+          "unweighted_recall": 0.431496062992126
+        }
+      ]
+    },
+    "alerta_escuela_comparison": {
+      "model": "Alerta Escuela (MINEDU)",
+      "algorithm": "LightGBM",
+      "data_source": "SIAGIE administrative",
+      "roc_auc_range": "0.84-0.89",
+      "fnr_range": "57-64%",
+      "features": 31,
+      "fairness_analysis": "None published",
+      "notes": "Uses 5 administrative data sources; trained on SIAGIE records",
+      "comparison_caveats": "ROC-AUC is not directly comparable due to different data sources and base rates (~14% ENAHO survey vs ~2% SIAGIE admin). FNR comparison is more meaningful."
+    }
   }
 }
