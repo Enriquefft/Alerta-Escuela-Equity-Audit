@@ -131,7 +131,7 @@ def _lgbm_objective(
         eval_set=[(X_val, y_val)],
         eval_sample_weight=[w_val],
         eval_metric="average_precision",
-        callbacks=[early_stopping(50), log_evaluation(0)],
+        callbacks=[early_stopping(50, first_metric_only=True), log_evaluation(0)],
     )
     y_prob = model.predict_proba(X_val)[:, 1]
     return average_precision_score(y_val, y_prob, sample_weight=w_val)
@@ -549,7 +549,7 @@ def run_lgbm_xgb_pipeline() -> dict:
         eval_set=[(X_val, y_val)],
         eval_sample_weight=[w_val],
         eval_metric="average_precision",
-        callbacks=[early_stopping(50), log_evaluation(0)],
+        callbacks=[early_stopping(50, first_metric_only=True), log_evaluation(0)],
     )
     print(f"LightGBM best iteration: {best_lgbm.best_iteration_}")
 
