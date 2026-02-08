@@ -165,10 +165,10 @@ Plans:
   4. `data/exports/fairness_metrics.json` exists, is valid JSON, matches M4 schema (Section 11.2 of spec) including gaps (equalized odds, predictive parity)
   5. Gate test 3.1 passes; FNR by language group and calibration table printed for human review
 **Human Gate**: Yes -- review FNR gap direction, calibration by group, intersectional findings
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 08-01: Subgroup fairness metrics (6 dimensions + 3 intersections) + gate test 3.1
+- [ ] 08-01-PLAN.md -- Fairness metrics pipeline (7 dimensions + 3 intersections) + calibration-by-group + gaps + fairness_metrics.json export + gate test 3.1 + human review (Wave 1)
 
 ### Phase 9: SHAP Interpretability Analysis
 **Goal**: Global, regional, and interaction SHAP values quantify each feature's contribution to dropout predictions, with specific attention to ES_PERUANO (nationality) and ES_MUJER (gender) effects
