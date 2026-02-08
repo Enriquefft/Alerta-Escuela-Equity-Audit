@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-07)
 
 **Core value:** The fairness audit is the product. Models exist to be audited, not to achieve SOTA.
-**Current focus:** Phase 7 complete -- ready for Phase 8
+**Current focus:** Phase 8 complete -- ready for Phase 9
 
 ## Current Position
 
-Phase: 7 of 11 (Calibration + ONNX Export + Final Test) -- COMPLETE
+Phase: 8 of 11 (Subgroup Fairness Metrics) -- COMPLETE
 Plan: 1 of 1 in current phase
 Status: Phase complete, verified
-Last activity: 2026-02-08 -- Completed 07-01-PLAN.md
+Last activity: 2026-02-08 -- Completed 08-01-PLAN.md
 
-Progress: [█████████░░░] 77%
+Progress: [██████████░░] 83%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
+- Total plans completed: 11
 - Average duration: ~10 min
-- Total execution time: ~98 min
+- Total execution time: ~106 min
 
 **By Phase:**
 
@@ -35,9 +35,10 @@ Progress: [█████████░░░] 77%
 | 05-baseline-model-temporal-splits | 1/1 | ~5 min | ~5 min |
 | 06-lightgbm-xgboost | 1/1 | ~10 min | ~10 min |
 | 07-calibration-onnx-export-final-test | 1/1 | ~5 min | ~5 min |
+| 08-subgroup-fairness-metrics | 1/1 | ~8 min | ~8 min |
 
 **Recent Trend:**
-- Last 5 plans: 07-01 (~5 min), 06-01 (~10 min), 05-01 (~5 min), 04-02 (~6 min), 04-01 (~7 min)
+- Last 5 plans: 08-01 (~8 min), 07-01 (~5 min), 06-01 (~10 min), 05-01 (~5 min), 04-02 (~6 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -83,6 +84,10 @@ Recent decisions affecting current work:
 - [07-01]: Platt A=-5.278337, B=4.276521; Brier 0.2115→0.1156 (45.3% reduction)
 - [07-01]: ONNX 0.10 MB, max diff 1.03e-07 vs Python; raw model exported, Platt applied in JS
 - [07-01]: Test 2023 PR-AUC=0.2378, FNR=62.4% (matches Alerta Escuela 57-64% range)
+- [08-01]: Two-MetricFrame pattern for binary (y_pred) vs proba (y_pred_proba) fairness metrics
+- [08-01]: Uncalibrated >0.7 for calibration-by-group (calibrated max=0.431, 0 obs above 0.7)
+- [08-01]: FNR-FPR trade-off: indigenous low FNR/high FPR (surveillance bias) vs castellano high FNR/low FPR (invisibility bias)
+- [08-01]: Nationality dim flagged (n=27), user requested minimal mention in findings
 
 ### Pending Todos
 
@@ -92,10 +97,11 @@ None yet.
 
 - Phase 3: Admin/census/nightlights data is synthetic -- findings should note data provenance (resolved with synthetic data)
 - Phase 7: ONNX float32 tolerance verified at 1.03e-07 (well within 1e-4, resolved)
-- Phase 8: fairlearn sample_params API needs careful testing (nested dict, not flat dict)
+- Phase 8: fairlearn sample_params API verified working (nested dict pattern, resolved)
+- Phase 8: Nationality dimension unreliable (n=27) -- barely mention in Phase 11
 
 ## Session Continuity
 
 Last session: 2026-02-08
-Stopped at: Phase 7 complete and verified. Ready for Phase 8.
+Stopped at: Phase 8 complete and verified. Ready for Phase 9.
 Resume file: None
