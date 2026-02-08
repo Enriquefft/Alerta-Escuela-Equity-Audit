@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: ENAHO Single-Year Loader** - Load 2023 ENAHO with delimiter detection, dropout target, UBIGEO padding
 - [x] **Phase 2: Multi-Year Loader + Harmonization** - Load 6 years (2018-2023), P300A mother tongue harmonization
 - [x] **Phase 3: Spatial + Supplementary Data Merges** - Admin dropout rates, Census 2017, VIIRS nightlights, LEFT JOIN on UBIGEO
-- [ ] **Phase 4: Feature Engineering + Descriptive Statistics** - 19+ model features, survey-weighted descriptive gaps, first export
+- [x] **Phase 4: Feature Engineering + Descriptive Statistics** - 19+ model features, survey-weighted descriptive gaps, first export
 - [ ] **Phase 5: Baseline Model + Temporal Splits** - Temporal split discipline, logistic regression baseline, evaluation patterns
 - [ ] **Phase 6: LightGBM + XGBoost** - Optuna-tuned LightGBM, XGBoost comparison, algorithm-independence check
 - [ ] **Phase 7: Calibration + ONNX Export + Final Test** - Calibrate best model, ONNX export, test set (2024) touched once
@@ -117,10 +117,10 @@ Plans:
   4. `data/exports/model_results.json` exists with `logistic_regression` entry including validate_2023 metrics and threshold analysis at 0.3/0.4/0.5/0.6/0.7
   5. Gate test 2.1 passes; LR coefficients printed for human review showing sensible odds ratios
 **Human Gate**: Yes -- review LR coefficients (poverty increases risk, urban decreases risk, age effects)
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 05-01: Temporal splits + logistic regression + evaluate + gate test 2.1
+- [ ] 05-01-PLAN.md -- Temporal splits + LR training (sklearn + statsmodels) + survey-weighted evaluation + threshold analysis + model_results.json + predictions parquet + PR curve + gate test 2.1 + human review (Wave 1)
 
 ### Phase 6: LightGBM + XGBoost
 **Goal**: The primary LightGBM model (matching Alerta Escuela's algorithm) and XGBoost comparison model are trained and Optuna-tuned, establishing algorithm-independence of fairness findings
@@ -231,7 +231,7 @@ Note: Phases 8 and 9 are independent (both depend on Phase 7); Phase 10 depends 
 | 2. Multi-Year Loader + Harmonization | 1/1 | Complete | 2026-02-07 |
 | 3. Spatial + Supplementary Data Merges | 1/1 | Complete | 2026-02-07 |
 | 4. Feature Engineering + Descriptive Statistics | 2/2 | Complete | 2026-02-08 |
-| 5. Baseline Model + Temporal Splits | 0/1 | Not started | - |
+| 5. Baseline Model + Temporal Splits | 0/1 | Planned | - |
 | 6. LightGBM + XGBoost | 0/1 | Not started | - |
 | 7. Calibration + ONNX Export + Final Test | 0/1 | Not started | - |
 | 8. Subgroup Fairness Metrics | 0/1 | Not started | - |
