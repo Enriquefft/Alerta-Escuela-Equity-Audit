@@ -1,8 +1,8 @@
 """Data loading and merging modules for the Alerta Escuela Equity Audit.
 
 Provides loaders for ENAHO microdata, administrative dropout rates,
-Census 2017 district indicators, VIIRS nightlights, and a merge
-pipeline that combines all sources.
+Census 2017 district indicators, VIIRS nightlights, a merge
+pipeline that combines all sources, and a feature engineering pipeline.
 
 Usage::
 
@@ -11,6 +11,7 @@ Usage::
     from data.census import load_census_2017
     from data.nightlights import load_viirs_nightlights
     from data.merge import merge_spatial_data
+    from data.features import build_features, MODEL_FEATURES
 """
 
 from data.enaho import (
@@ -23,6 +24,7 @@ from data.admin import AdminResult, load_admin_dropout_rates
 from data.census import CensusResult, load_census_2017
 from data.nightlights import NightlightsResult, load_viirs_nightlights
 from data.merge import MergeResult, merge_spatial_data, validate_merge_pipeline
+from data.features import FeatureResult, build_features, MODEL_FEATURES, META_COLUMNS
 
 __all__ = [
     # ENAHO
@@ -43,4 +45,9 @@ __all__ = [
     "MergeResult",
     "merge_spatial_data",
     "validate_merge_pipeline",
+    # Features
+    "FeatureResult",
+    "build_features",
+    "MODEL_FEATURES",
+    "META_COLUMNS",
 ]
