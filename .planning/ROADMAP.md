@@ -175,16 +175,16 @@ Plans:
 **Depends on**: Phase 7
 **Requirements**: SHAP-01, SHAP-02, SHAP-03, SHAP-04, SHAP-05, SHAP-06
 **Success Criteria** (what must be TRUE):
-  1. Global SHAP values computed on 2024 test set; top-5 SHAP features overlap with top-5 LR coefficient magnitudes (at least 3 in common)
+  1. Global SHAP values computed on 2023 test set; top-5 SHAP features overlap with top-5 LR coefficient magnitudes (at least 3 in common)
   2. Regional SHAP computed separately for Costa, Sierra, Selva -- revealing where features like mother tongue matter more
   3. ES_PERUANO and ES_MUJER average SHAP magnitudes quantified specifically; 10 representative student profiles exported with feature values + SHAP values + predicted probability
   4. `data/exports/shap_values.json` exists, matches M4 schema (Section 11.3 of spec) with global_importance, regional, and profiles sections
   5. Gate test 3.2 passes; top-5 global SHAP features and ES_PERUANO/ES_MUJER magnitudes printed for human review
 **Human Gate**: Yes -- review feature intuition, nationality magnitude, gender in secundaria, regional differences
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 09-01: Global + regional + interaction SHAP + 10 profiles + gate test 3.2
+- [ ] 09-01-PLAN.md -- Global + regional + interaction SHAP + ES_PERUANO/ES_MUJER quantification + 10 profiles + 5 figures + shap_values.json export + gate test 3.2 + human review (Wave 1)
 
 ### Phase 10: Cross-Validation with Admin Data
 **Goal**: Model predictions aggregated to district level correlate positively with administrative dropout rates, and prediction error patterns by indigenous language prevalence reveal spatial equity gaps
