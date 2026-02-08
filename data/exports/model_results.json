@@ -391,5 +391,535 @@
         "ci_upper": -0.051922
       }
     ]
+  },
+  "lightgbm": {
+    "metadata": {
+      "model_type": "LGBMClassifier",
+      "train_years": [
+        2018,
+        2019,
+        2020,
+        2021
+      ],
+      "validate_year": 2022,
+      "test_year": 2023,
+      "n_train": 98023,
+      "n_validate": 26477,
+      "n_test": 25635,
+      "n_features": 25,
+      "feature_names": [
+        "age",
+        "is_secundaria_age",
+        "es_mujer",
+        "lang_castellano",
+        "lang_quechua",
+        "lang_aimara",
+        "lang_other_indigenous",
+        "lang_foreign",
+        "rural",
+        "is_sierra",
+        "is_selva",
+        "district_dropout_rate_admin_z",
+        "nightlight_intensity_z",
+        "poverty_index_z",
+        "poverty_quintile",
+        "es_peruano",
+        "has_disability",
+        "is_working",
+        "juntos_participant",
+        "log_income",
+        "parent_education_years",
+        "census_indigenous_lang_pct_z",
+        "census_literacy_rate_z",
+        "census_electricity_pct_z",
+        "census_water_access_pct_z"
+      ],
+      "best_iteration": 1,
+      "scale_pos_weight": 4.8019,
+      "optuna_n_trials": 100,
+      "optuna_best_trial": 74,
+      "optuna_best_params": {
+        "learning_rate": 0.18678397248634726,
+        "num_leaves": 50,
+        "max_depth": 11,
+        "min_child_samples": 59,
+        "subsample": 0.709364883262767,
+        "colsample_bytree": 0.5634099939427617,
+        "reg_alpha": 4.8505292107700594e-08,
+        "reg_lambda": 3.4097420657052434e-05
+      },
+      "calibration_note": "scale_pos_weight distorts probability estimates; Phase 7 handles calibration",
+      "generated_at": "2026-02-08T08:59:56.071259+00:00"
+    },
+    "metrics": {
+      "validate_2022": {
+        "weighted": {
+          "pr_auc": 0.24056,
+          "roc_auc": 0.63634,
+          "f1": 0.309482,
+          "precision": 0.304555,
+          "recall": 0.314571,
+          "brier": 0.12684,
+          "log_loss": 0.4251
+        },
+        "unweighted": {
+          "pr_auc": 0.236674,
+          "roc_auc": 0.628727,
+          "f1": 0.30352,
+          "precision": 0.288484,
+          "recall": 0.32021,
+          "brier": 0.128947,
+          "log_loss": 0.430421
+        }
+      },
+      "test_2023": {
+        "weighted": {
+          "pr_auc": 0.223324,
+          "roc_auc": 0.615564,
+          "f1": 0.292596,
+          "precision": 0.291763,
+          "recall": 0.293435,
+          "brier": 0.123643,
+          "log_loss": 0.418355
+        },
+        "unweighted": {
+          "pr_auc": 0.213134,
+          "roc_auc": 0.605259,
+          "f1": 0.277785,
+          "precision": 0.261682,
+          "recall": 0.296,
+          "brier": 0.125802,
+          "log_loss": 0.423782
+        }
+      }
+    },
+    "threshold_analysis": {
+      "optimal_threshold": 0.262907,
+      "optimization_target": "max_weighted_f1",
+      "thresholds": [
+        {
+          "threshold": 0.3,
+          "weighted_f1": 0.15019922872955918,
+          "weighted_precision": 0.3839883751441134,
+          "weighted_recall": 0.09335845959925454,
+          "unweighted_f1": 0.16608855335645786,
+          "unweighted_precision": 0.37305224564619616,
+          "unweighted_recall": 0.1068241469816273
+        },
+        {
+          "threshold": 0.4,
+          "weighted_f1": 0.0,
+          "weighted_precision": 0.0,
+          "weighted_recall": 0.0,
+          "unweighted_f1": 0.0,
+          "unweighted_precision": 0.0,
+          "unweighted_recall": 0.0
+        },
+        {
+          "threshold": 0.5,
+          "weighted_f1": 0.0,
+          "weighted_precision": 0.0,
+          "weighted_recall": 0.0,
+          "unweighted_f1": 0.0,
+          "unweighted_precision": 0.0,
+          "unweighted_recall": 0.0
+        },
+        {
+          "threshold": 0.6,
+          "weighted_f1": 0.0,
+          "weighted_precision": 0.0,
+          "weighted_recall": 0.0,
+          "unweighted_f1": 0.0,
+          "unweighted_precision": 0.0,
+          "unweighted_recall": 0.0
+        },
+        {
+          "threshold": 0.7,
+          "weighted_f1": 0.0,
+          "weighted_precision": 0.0,
+          "weighted_recall": 0.0,
+          "unweighted_f1": 0.0,
+          "unweighted_precision": 0.0,
+          "unweighted_recall": 0.0
+        },
+        {
+          "threshold": 0.262907,
+          "is_optimal": true,
+          "weighted_f1": 0.31737924401883916,
+          "weighted_precision": 0.29074109848408514,
+          "weighted_recall": 0.3493909818561895,
+          "unweighted_f1": 0.30860144451739985,
+          "unweighted_precision": 0.26463963963963966,
+          "unweighted_recall": 0.3700787401574803
+        }
+      ]
+    },
+    "feature_importances": [
+      {
+        "feature": "age",
+        "importance": 0.423871
+      },
+      {
+        "feature": "nightlight_intensity_z",
+        "importance": 0.281433
+      },
+      {
+        "feature": "census_water_access_pct_z",
+        "importance": 0.107124
+      },
+      {
+        "feature": "is_working",
+        "importance": 0.085072
+      },
+      {
+        "feature": "parent_education_years",
+        "importance": 0.037128
+      },
+      {
+        "feature": "district_dropout_rate_admin_z",
+        "importance": 0.033456
+      },
+      {
+        "feature": "lang_other_indigenous",
+        "importance": 0.020073
+      },
+      {
+        "feature": "rural",
+        "importance": 0.007637
+      },
+      {
+        "feature": "is_sierra",
+        "importance": 0.004205
+      },
+      {
+        "feature": "is_secundaria_age",
+        "importance": 0.0
+      },
+      {
+        "feature": "es_mujer",
+        "importance": 0.0
+      },
+      {
+        "feature": "lang_castellano",
+        "importance": 0.0
+      },
+      {
+        "feature": "lang_quechua",
+        "importance": 0.0
+      },
+      {
+        "feature": "lang_aimara",
+        "importance": 0.0
+      },
+      {
+        "feature": "lang_foreign",
+        "importance": 0.0
+      },
+      {
+        "feature": "is_selva",
+        "importance": 0.0
+      },
+      {
+        "feature": "poverty_index_z",
+        "importance": 0.0
+      },
+      {
+        "feature": "poverty_quintile",
+        "importance": 0.0
+      },
+      {
+        "feature": "es_peruano",
+        "importance": 0.0
+      },
+      {
+        "feature": "has_disability",
+        "importance": 0.0
+      },
+      {
+        "feature": "juntos_participant",
+        "importance": 0.0
+      },
+      {
+        "feature": "log_income",
+        "importance": 0.0
+      },
+      {
+        "feature": "census_indigenous_lang_pct_z",
+        "importance": 0.0
+      },
+      {
+        "feature": "census_literacy_rate_z",
+        "importance": 0.0
+      },
+      {
+        "feature": "census_electricity_pct_z",
+        "importance": 0.0
+      }
+    ]
+  },
+  "xgboost": {
+    "metadata": {
+      "model_type": "XGBClassifier",
+      "train_years": [
+        2018,
+        2019,
+        2020,
+        2021
+      ],
+      "validate_year": 2022,
+      "test_year": 2023,
+      "n_train": 98023,
+      "n_validate": 26477,
+      "n_test": 25635,
+      "n_features": 25,
+      "feature_names": [
+        "age",
+        "is_secundaria_age",
+        "es_mujer",
+        "lang_castellano",
+        "lang_quechua",
+        "lang_aimara",
+        "lang_other_indigenous",
+        "lang_foreign",
+        "rural",
+        "is_sierra",
+        "is_selva",
+        "district_dropout_rate_admin_z",
+        "nightlight_intensity_z",
+        "poverty_index_z",
+        "poverty_quintile",
+        "es_peruano",
+        "has_disability",
+        "is_working",
+        "juntos_participant",
+        "log_income",
+        "parent_education_years",
+        "census_indigenous_lang_pct_z",
+        "census_literacy_rate_z",
+        "census_electricity_pct_z",
+        "census_water_access_pct_z"
+      ],
+      "best_iteration": 52,
+      "scale_pos_weight": 4.8019,
+      "optuna_n_trials": 50,
+      "optuna_best_trial": 23,
+      "optuna_best_params": {
+        "learning_rate": 0.07917925737148579,
+        "max_depth": 4,
+        "min_child_weight": 13,
+        "gamma": 4.017216658479903e-07,
+        "subsample": 0.941812866290158,
+        "colsample_bytree": 0.7668456431934249,
+        "reg_alpha": 0.0031128334688502405,
+        "reg_lambda": 1.8121942789332435
+      },
+      "calibration_note": "scale_pos_weight distorts probability estimates; Phase 7 handles calibration",
+      "generated_at": "2026-02-08T09:01:07.598245+00:00"
+    },
+    "metrics": {
+      "validate_2022": {
+        "weighted": {
+          "pr_auc": 0.262599,
+          "roc_auc": 0.648184,
+          "f1": 0.317365,
+          "precision": 0.28241,
+          "recall": 0.362196,
+          "brier": 0.224236,
+          "log_loss": 0.641337
+        },
+        "unweighted": {
+          "pr_auc": 0.258963,
+          "roc_auc": 0.643209,
+          "f1": 0.320068,
+          "precision": 0.269148,
+          "recall": 0.394751,
+          "brier": 0.233329,
+          "log_loss": 0.660433
+        }
+      },
+      "test_2023": {
+        "weighted": {
+          "pr_auc": 0.237015,
+          "roc_auc": 0.628823,
+          "f1": 0.296601,
+          "precision": 0.263394,
+          "recall": 0.339389,
+          "brier": 0.224179,
+          "log_loss": 0.641576
+        },
+        "unweighted": {
+          "pr_auc": 0.231209,
+          "roc_auc": 0.624383,
+          "f1": 0.285714,
+          "precision": 0.238863,
+          "recall": 0.355429,
+          "brier": 0.233673,
+          "log_loss": 0.661213
+        }
+      }
+    },
+    "threshold_analysis": {
+      "optimal_threshold": 0.530452,
+      "optimization_target": "max_weighted_f1",
+      "thresholds": [
+        {
+          "threshold": 0.3,
+          "weighted_f1": 0.2501721214567255,
+          "weighted_precision": 0.14334418327795764,
+          "weighted_recall": 0.9820483549641856,
+          "unweighted_f1": 0.2522156327047378,
+          "unweighted_precision": 0.14444359639749657,
+          "unweighted_recall": 0.9934383202099738
+        },
+        {
+          "threshold": 0.4,
+          "weighted_f1": 0.26263259721849685,
+          "weighted_precision": 0.15386229711304658,
+          "weighted_recall": 0.8961513657954879,
+          "unweighted_f1": 0.2608056993867284,
+          "unweighted_precision": 0.15161607104735067,
+          "unweighted_recall": 0.9320209973753281
+        },
+        {
+          "threshold": 0.5,
+          "weighted_f1": 0.31543507417800265,
+          "weighted_precision": 0.24285236070433383,
+          "weighted_recall": 0.4498990492961944,
+          "unweighted_f1": 0.3091331012763136,
+          "unweighted_precision": 0.22589631782945738,
+          "unweighted_recall": 0.489501312335958
+        },
+        {
+          "threshold": 0.6,
+          "weighted_f1": 0.2961698399216092,
+          "weighted_precision": 0.34272238053657844,
+          "weighted_recall": 0.26075153333999385,
+          "unweighted_f1": 0.3008616912516431,
+          "unweighted_precision": 0.3391504774448469,
+          "unweighted_recall": 0.27034120734908135
+        },
+        {
+          "threshold": 0.7,
+          "weighted_f1": 0.18244362721283658,
+          "weighted_precision": 0.40563192649446234,
+          "weighted_recall": 0.11768858085256992,
+          "unweighted_f1": 0.17685411572942136,
+          "unweighted_precision": 0.39526411657559196,
+          "unweighted_recall": 0.11391076115485564
+        },
+        {
+          "threshold": 0.530452,
+          "is_optimal": true,
+          "weighted_f1": 0.3173653740730262,
+          "weighted_precision": 0.28240998501982706,
+          "weighted_recall": 0.36219634631422387,
+          "unweighted_f1": 0.32006809959565863,
+          "unweighted_precision": 0.2691481746599857,
+          "unweighted_recall": 0.394750656167979
+        }
+      ]
+    },
+    "feature_importances": [
+      {
+        "feature": "age",
+        "importance": 0.185749
+      },
+      {
+        "feature": "is_working",
+        "importance": 0.11854
+      },
+      {
+        "feature": "lang_other_indigenous",
+        "importance": 0.054512
+      },
+      {
+        "feature": "is_secundaria_age",
+        "importance": 0.054033
+      },
+      {
+        "feature": "nightlight_intensity_z",
+        "importance": 0.04743
+      },
+      {
+        "feature": "census_literacy_rate_z",
+        "importance": 0.042106
+      },
+      {
+        "feature": "lang_castellano",
+        "importance": 0.041359
+      },
+      {
+        "feature": "census_electricity_pct_z",
+        "importance": 0.040259
+      },
+      {
+        "feature": "poverty_quintile",
+        "importance": 0.0397
+      },
+      {
+        "feature": "census_water_access_pct_z",
+        "importance": 0.037312
+      },
+      {
+        "feature": "poverty_index_z",
+        "importance": 0.035144
+      },
+      {
+        "feature": "census_indigenous_lang_pct_z",
+        "importance": 0.033734
+      },
+      {
+        "feature": "is_selva",
+        "importance": 0.031107
+      },
+      {
+        "feature": "has_disability",
+        "importance": 0.029636
+      },
+      {
+        "feature": "rural",
+        "importance": 0.028931
+      },
+      {
+        "feature": "log_income",
+        "importance": 0.025782
+      },
+      {
+        "feature": "lang_quechua",
+        "importance": 0.023478
+      },
+      {
+        "feature": "es_mujer",
+        "importance": 0.022894
+      },
+      {
+        "feature": "district_dropout_rate_admin_z",
+        "importance": 0.021968
+      },
+      {
+        "feature": "lang_foreign",
+        "importance": 0.021126
+      },
+      {
+        "feature": "parent_education_years",
+        "importance": 0.020112
+      },
+      {
+        "feature": "is_sierra",
+        "importance": 0.016939
+      },
+      {
+        "feature": "juntos_participant",
+        "importance": 0.012768
+      },
+      {
+        "feature": "lang_aimara",
+        "importance": 0.007826
+      },
+      {
+        "feature": "es_peruano",
+        "importance": 0.007553
+      }
+    ]
   }
 }
