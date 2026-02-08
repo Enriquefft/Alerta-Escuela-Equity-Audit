@@ -84,10 +84,10 @@ Plans:
   4. Gate tests 1.3 and 1.4 pass all assertions (UBIGEO integrity, merge rates, no duplicates, null column report)
   5. Spot-check: Lima districts show low dropout rates, Amazonas districts show high -- directionally correct
 **Human Gate**: Yes -- review spot-checked districts and columns with >10% nulls
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 03-01: Admin, Census, nightlights loaders + spatial merge + gate tests 1.3/1.4
+- [ ] 03-01-PLAN.md -- Admin, Census, nightlights loaders + spatial merge + gate tests 1.3/1.4 (Wave 1)
 
 ### Phase 4: Feature Engineering + Descriptive Statistics
 **Goal**: All 19+ model features are engineered per spec Section 5 and survey-weighted descriptive statistics quantify dropout gaps across all 6 fairness dimensions, producing the first export JSON
@@ -229,7 +229,7 @@ Note: Phases 8 and 9 are independent (both depend on Phase 7); Phase 10 depends 
 | 0. Environment Setup | 2/2 | Complete | 2026-02-07 |
 | 1. ENAHO Single-Year Loader | 1/1 | Complete | 2026-02-07 |
 | 2. Multi-Year Loader + Harmonization | 1/1 | Complete | 2026-02-07 |
-| 3. Spatial + Supplementary Data Merges | 0/1 | Not started | - |
+| 3. Spatial + Supplementary Data Merges | 0/1 | Planned | - |
 | 4. Feature Engineering + Descriptive Statistics | 0/2 | Not started | - |
 | 5. Baseline Model + Temporal Splits | 0/1 | Not started | - |
 | 6. LightGBM + XGBoost | 0/1 | Not started | - |
