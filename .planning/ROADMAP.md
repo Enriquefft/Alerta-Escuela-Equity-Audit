@@ -20,7 +20,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: Baseline Model + Temporal Splits** - Temporal split discipline, logistic regression baseline, evaluation patterns
 - [x] **Phase 6: LightGBM + XGBoost** - Optuna-tuned LightGBM, XGBoost comparison, algorithm-independence check
 - [x] **Phase 7: Calibration + ONNX Export + Final Test** - Calibrate best model, ONNX export, test set (2023) touched once
-- [ ] **Phase 8: Subgroup Fairness Metrics** - fairlearn MetricFrame across 6 dimensions + 3 intersections
+- [x] **Phase 8: Subgroup Fairness Metrics** - fairlearn MetricFrame across 6 dimensions + 3 intersections
 - [ ] **Phase 9: SHAP Interpretability Analysis** - Global/regional/interaction SHAP, ES_PERUANO + ES_MUJER quantification
 - [ ] **Phase 10: Cross-Validation with Admin Data** - District-level prediction vs admin rates, spatial error patterns
 - [ ] **Phase 11: Findings Distillation + Final Exports** - 5-7 bilingual findings, all 7 JSON exports, export README
@@ -168,7 +168,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 08-01-PLAN.md -- Fairness metrics pipeline (7 dimensions + 3 intersections) + calibration-by-group + gaps + fairness_metrics.json export + gate test 3.1 + human review (Wave 1)
+- [x] 08-01-PLAN.md -- Fairness metrics pipeline (7 dimensions + 3 intersections) + calibration-by-group + gaps + fairness_metrics.json export + gate test 3.1 + human review (Wave 1)
 
 ### Phase 9: SHAP Interpretability Analysis
 **Goal**: Global, regional, and interaction SHAP values quantify each feature's contribution to dropout predictions, with specific attention to ES_PERUANO (nationality) and ES_MUJER (gender) effects
@@ -234,7 +234,7 @@ Note: Phases 8 and 9 are independent (both depend on Phase 7); Phase 10 depends 
 | 5. Baseline Model + Temporal Splits | 1/1 | Complete | 2026-02-08 |
 | 6. LightGBM + XGBoost | 1/1 | Complete | 2026-02-08 |
 | 7. Calibration + ONNX Export + Final Test | 1/1 | Complete | 2026-02-08 |
-| 8. Subgroup Fairness Metrics | 0/1 | Not started | - |
+| 8. Subgroup Fairness Metrics | 1/1 | Complete | 2026-02-08 |
 | 9. SHAP Interpretability Analysis | 0/1 | Not started | - |
 | 10. Cross-Validation with Admin Data | 0/1 | Not started | - |
 | 11. Findings Distillation + Final Exports | 0/1 | Not started | - |
