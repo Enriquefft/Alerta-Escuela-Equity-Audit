@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Feature Engineering + Descriptive Statistics** - 19+ model features, survey-weighted descriptive gaps, first export
 - [x] **Phase 5: Baseline Model + Temporal Splits** - Temporal split discipline, logistic regression baseline, evaluation patterns
 - [x] **Phase 6: LightGBM + XGBoost** - Optuna-tuned LightGBM, XGBoost comparison, algorithm-independence check
-- [ ] **Phase 7: Calibration + ONNX Export + Final Test** - Calibrate best model, ONNX export, test set (2023) touched once
+- [x] **Phase 7: Calibration + ONNX Export + Final Test** - Calibrate best model, ONNX export, test set (2023) touched once
 - [ ] **Phase 8: Subgroup Fairness Metrics** - fairlearn MetricFrame across 6 dimensions + 3 intersections
 - [ ] **Phase 9: SHAP Interpretability Analysis** - Global/regional/interaction SHAP, ES_PERUANO + ES_MUJER quantification
 - [ ] **Phase 10: Cross-Validation with Admin Data** - District-level prediction vs admin rates, spatial error patterns
@@ -152,7 +152,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 07-01-PLAN.md -- Calibration (Platt scaling via FrozenEstimator) + ONNX export + final 2023 test evaluation + Alerta Escuela comparison + gate test 2.3 + human review (Wave 1)
+- [x] 07-01-PLAN.md -- Calibration (Platt scaling via FrozenEstimator) + ONNX export + final 2023 test evaluation + Alerta Escuela comparison + gate test 2.3 + human review (Wave 1)
 
 ### Phase 8: Subgroup Fairness Metrics
 **Goal**: Comprehensive fairness metrics are computed across all 6 protected dimensions and 3 intersections, quantifying where the model systematically fails different student populations
@@ -232,8 +232,8 @@ Note: Phases 8 and 9 are independent (both depend on Phase 7); Phase 10 depends 
 | 3. Spatial + Supplementary Data Merges | 1/1 | Complete | 2026-02-07 |
 | 4. Feature Engineering + Descriptive Statistics | 2/2 | Complete | 2026-02-08 |
 | 5. Baseline Model + Temporal Splits | 1/1 | Complete | 2026-02-08 |
-| 6. LightGBM + XGBoost | 0/1 | Not started | - |
-| 7. Calibration + ONNX Export + Final Test | 0/1 | Not started | - |
+| 6. LightGBM + XGBoost | 1/1 | Complete | 2026-02-08 |
+| 7. Calibration + ONNX Export + Final Test | 1/1 | Complete | 2026-02-08 |
 | 8. Subgroup Fairness Metrics | 0/1 | Not started | - |
 | 9. SHAP Interpretability Analysis | 0/1 | Not started | - |
 | 10. Cross-Validation with Admin Data | 0/1 | Not started | - |
