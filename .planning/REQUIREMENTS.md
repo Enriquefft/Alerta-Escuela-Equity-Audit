@@ -23,17 +23,17 @@
 - [x] **DATA-06**: Load Census 2017 district-level enrichment data
 - [x] **DATA-07**: Load VIIRS nightlights district-level economic proxy
 - [x] **DATA-08**: Merge all sources via LEFT JOIN on UBIGEO preserving ENAHO row count
-- [ ] **DATA-09**: Engineer all 19+ model features per spec Section 5 (exact column names)
-- [ ] **DATA-10**: Save intermediate datasets as parquet (enaho_merged, enaho_with_features, full_dataset)
+- [x] **DATA-09**: Engineer all 19+ model features per spec Section 5 (exact column names)
+- [x] **DATA-10**: Save intermediate datasets as parquet (enaho_merged, enaho_with_features, full_dataset)
 
 ### Descriptive Analysis
 
-- [ ] **DESC-01**: Compute survey-weighted dropout rates by mother tongue (harmonized + Awajun disaggregated)
-- [ ] **DESC-02**: Compute survey-weighted dropout rates by sex x education level
-- [ ] **DESC-03**: Compute survey-weighted dropout rates by rural/urban, region, poverty quintile
-- [ ] **DESC-04**: Generate heatmap data for language x rurality interaction
-- [ ] **DESC-05**: Generate choropleth prep data (district-level weighted dropout rates)
-- [ ] **DESC-06**: Export descriptive tables to data/exports/descriptive_tables.json matching M4 schema
+- [x] **DESC-01**: Compute survey-weighted dropout rates by mother tongue (harmonized + Awajun disaggregated)
+- [x] **DESC-02**: Compute survey-weighted dropout rates by sex x education level
+- [x] **DESC-03**: Compute survey-weighted dropout rates by rural/urban, region, poverty quintile
+- [x] **DESC-04**: Generate heatmap data for language x rurality interaction
+- [x] **DESC-05**: Generate choropleth prep data (district-level weighted dropout rates)
+- [x] **DESC-06**: Export descriptive tables to data/exports/descriptive_tables.json matching M4 schema
 
 ### Modeling
 
@@ -134,14 +134,14 @@
 | DATA-06 | Phase 3 | Complete |
 | DATA-07 | Phase 3 | Complete |
 | DATA-08 | Phase 3 | Complete |
-| DATA-09 | Phase 4 | Pending |
-| DATA-10 | Phase 4 | Pending |
-| DESC-01 | Phase 4 | Pending |
-| DESC-02 | Phase 4 | Pending |
-| DESC-03 | Phase 4 | Pending |
-| DESC-04 | Phase 4 | Pending |
-| DESC-05 | Phase 4 | Pending |
-| DESC-06 | Phase 4 | Pending |
+| DATA-09 | Phase 4 | Complete |
+| DATA-10 | Phase 4 | Complete |
+| DESC-01 | Phase 4 | Complete |
+| DESC-02 | Phase 4 | Complete |
+| DESC-03 | Phase 4 | Complete |
+| DESC-04 | Phase 4 | Complete |
+| DESC-05 | Phase 4 | Complete |
+| DESC-06 | Phase 4 | Complete |
 | MODL-01 | Phase 5 | Pending |
 | MODL-02 | Phase 5 | Pending |
 | MODL-03 | Phase 6 | Pending |
@@ -182,4 +182,4 @@
 
 ---
 *Requirements defined: 2026-02-07*
-*Last updated: 2026-02-07 after Phase 3 completion*
+*Last updated: 2026-02-08 after Phase 4 completion*

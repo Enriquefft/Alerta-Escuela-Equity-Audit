@@ -103,8 +103,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md -- Feature engineering pipeline: all 19+ features, z-score standardization, supplementary module loading, enaho_with_features.parquet (Wave 1)
-- [ ] 04-02-PLAN.md -- Descriptive statistics + 7 visualizations + descriptive_tables.json export + gate test 1.5 + human review (Wave 2)
+- [x] 04-01-PLAN.md -- Feature engineering pipeline: all 19+ features, z-score standardization, supplementary module loading, enaho_with_features.parquet (Wave 1)
+- [x] 04-02-PLAN.md -- Descriptive statistics + 7 visualizations + descriptive_tables.json export + gate test 1.5 + human review (Wave 2)
 
 ### Phase 5: Baseline Model + Temporal Splits
 **Goal**: Temporal split discipline is established and a logistic regression baseline validates the modeling pipeline with survey-weighted evaluation, setting patterns for gradient boosting phases
@@ -230,7 +230,7 @@ Note: Phases 8 and 9 are independent (both depend on Phase 7); Phase 10 depends 
 | 1. ENAHO Single-Year Loader | 1/1 | Complete | 2026-02-07 |
 | 2. Multi-Year Loader + Harmonization | 1/1 | Complete | 2026-02-07 |
 | 3. Spatial + Supplementary Data Merges | 1/1 | Complete | 2026-02-07 |
-| 4. Feature Engineering + Descriptive Statistics | 0/2 | Not started | - |
+| 4. Feature Engineering + Descriptive Statistics | 2/2 | Complete | 2026-02-08 |
 | 5. Baseline Model + Temporal Splits | 0/1 | Not started | - |
 | 6. LightGBM + XGBoost | 0/1 | Not started | - |
 | 7. Calibration + ONNX Export + Final Test | 0/1 | Not started | - |

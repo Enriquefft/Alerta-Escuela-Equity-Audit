@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-07)
 
 **Core value:** The fairness audit is the product. Models exist to be audited, not to achieve SOTA.
-**Current focus:** Phase 4 Plan 01 complete -- ready for Plan 02 (Descriptive Statistics)
+**Current focus:** Phase 4 complete -- ready for Phase 5
 
 ## Current Position
 
-Phase: 4 of 11 (Feature Engineering + Descriptive Statistics) -- In progress
-Plan: 1 of 2 in current phase
-Status: In progress
-Last activity: 2026-02-08 -- Completed 04-01-PLAN.md
+Phase: 4 of 11 (Feature Engineering + Descriptive Statistics) -- COMPLETE
+Plan: 2 of 2 in current phase
+Status: Phase complete, verified
+Last activity: 2026-02-08 -- Completed 04-02-PLAN.md
 
-Progress: [██████░░░░░░] 50%
+Progress: [██████░░░░░░] 58%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: ~11 min
-- Total execution time: ~65 min
+- Total plans completed: 7
+- Average duration: ~10 min
+- Total execution time: ~78 min
 
 **By Phase:**
 
@@ -31,10 +31,10 @@ Progress: [██████░░░░░░] 50%
 | 01-enaho-single-year-loader | 1/1 | ~15 min | ~15 min |
 | 02-multi-year-loader-harmonization | 1/1 | ~8 min | ~8 min |
 | 03-spatial-supplementary-data-merges | 1/1 | ~15 min | ~15 min |
-| 04-feature-engineering-descriptive-statistics | 1/2 | ~7 min | ~7 min |
+| 04-feature-engineering-descriptive-statistics | 2/2 | ~13 min | ~7 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-01 (~7 min), 03-01 (~15 min), 02-01 (~8 min), 01-01 (~15 min), 00-02 (~8 min)
+- Last 5 plans: 04-02 (~6 min), 04-01 (~7 min), 03-01 (~15 min), 02-01 (~8 min), 01-01 (~15 min)
 - Trend: Accelerating
 
 *Updated after each plan completion*
@@ -67,6 +67,8 @@ Recent decisions affecting current work:
 - [04-01]: P209 birthplace only for ages 12+; ages 6-11 default to es_peruano=1
 - [04-01]: Nightlight z-score nulls imputed with 0.0 (distribution mean)
 - [04-01]: Parent education = max(head, spouse) P301A mapped to years; 12 rows median-imputed
+- [04-02]: DescrStatsW (linearization) for survey-weighted confidence intervals
+- [04-02]: Awajun rate = 0.2047 (>0.18), Castellano = 0.1526, confirming language equity gap
 
 ### Pending Todos
 
@@ -81,5 +83,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-08
-Stopped at: Completed 04-01-PLAN.md. Ready for 04-02-PLAN.md (Descriptive Statistics).
+Stopped at: Phase 4 complete and verified. Ready for Phase 5.
 Resume file: None
