@@ -21,7 +21,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 6: LightGBM + XGBoost** - Optuna-tuned LightGBM, XGBoost comparison, algorithm-independence check
 - [x] **Phase 7: Calibration + ONNX Export + Final Test** - Calibrate best model, ONNX export, test set (2023) touched once
 - [x] **Phase 8: Subgroup Fairness Metrics** - fairlearn MetricFrame across 6 dimensions + 3 intersections
-- [ ] **Phase 9: SHAP Interpretability Analysis** - Global/regional/interaction SHAP, ES_PERUANO + ES_MUJER quantification
+- [x] **Phase 9: SHAP Interpretability Analysis** - Global/regional/interaction SHAP, ES_PERUANO + ES_MUJER quantification
 - [ ] **Phase 10: Cross-Validation with Admin Data** - District-level prediction vs admin rates, spatial error patterns
 - [ ] **Phase 11: Findings Distillation + Final Exports** - 5-7 bilingual findings, all 7 JSON exports, export README
 
@@ -184,7 +184,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 09-01-PLAN.md -- Global + regional + interaction SHAP + ES_PERUANO/ES_MUJER quantification + 10 profiles + 5 figures + shap_values.json export + gate test 3.2 + human review (Wave 1)
+- [x] 09-01-PLAN.md -- Global + regional + interaction SHAP + ES_PERUANO/ES_MUJER quantification + 10 profiles + 5 figures + shap_values.json export + gate test 3.2 + human review (Wave 1)
 
 ### Phase 10: Cross-Validation with Admin Data
 **Goal**: Model predictions aggregated to district level correlate positively with administrative dropout rates, and prediction error patterns by indigenous language prevalence reveal spatial equity gaps
@@ -235,6 +235,6 @@ Note: Phases 8 and 9 are independent (both depend on Phase 7); Phase 10 depends 
 | 6. LightGBM + XGBoost | 1/1 | Complete | 2026-02-08 |
 | 7. Calibration + ONNX Export + Final Test | 1/1 | Complete | 2026-02-08 |
 | 8. Subgroup Fairness Metrics | 1/1 | Complete | 2026-02-08 |
-| 9. SHAP Interpretability Analysis | 0/1 | Not started | - |
+| 9. SHAP Interpretability Analysis | 1/1 | Complete | 2026-02-08 |
 | 10. Cross-Validation with Admin Data | 0/1 | Not started | - |
 | 11. Findings Distillation + Final Exports | 0/1 | Not started | - |
