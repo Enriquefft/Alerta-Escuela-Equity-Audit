@@ -1,0 +1,111 @@
+{
+  "generated_at": "2026-02-14T03:42:34.570104+00:00",
+  "n_findings": 7,
+  "findings": [
+    {
+      "id": "fnr_overall",
+      "stat": "FNR = 63.3% for Spanish-speaking students",
+      "headline_es": "6 de cada 10 estudiantes en riesgo no son detectados por Alerta Escuela",
+      "headline_en": "6 in 10 at-risk students are missed by Peru's Alerta Escuela early warning system",
+      "explanation_es": "El sistema de alerta temprana falla en detectar al 63.3% de los estudiantes hispanohablantes que efectivamente abandonan la escuela. Esta tasa de falsos negativos significa que la mayoria de los estudiantes en riesgo nunca reciben intervencion.",
+      "explanation_en": "The early warning system fails to flag 63.3% of Spanish-speaking students who actually drop out. This false negative rate means the majority of at-risk students never receive intervention.",
+      "metric_source": {
+        "path": "fairness_metrics.json#dimensions.language.groups.castellano.fnr",
+        "label": "FNR for Castellano (Spanish) language group"
+      },
+      "visualization_type": "bar_chart",
+      "data_key": "dimensions.language",
+      "severity": "critical"
+    },
+    {
+      "id": "surveillance_bias",
+      "stat": "FPR = 52.1% (indigenous) vs 17.5% (Spanish); FNR = 21.6% vs 63.3%",
+      "headline_es": "Sesgo de vigilancia: estudiantes indigenas son sobremarcados (52.1% FPR) mientras hispanohablantes son invisibilizados (63.3% FNR)",
+      "headline_en": "Surveillance bias: indigenous students are over-flagged (52.1% FPR) while Spanish-speakers are invisible (63.3% FNR)",
+      "explanation_es": "El modelo detecta mejor a estudiantes de lenguas indigenas (FNR=21.6%) pero los sobremarca como en riesgo cuando no lo estan (FPR=52.1%). Para hispanohablantes ocurre lo inverso: pasan desapercibidos con un FNR del 63.3%.",
+      "explanation_en": "The model catches more indigenous-language students (FNR=21.6%) but over-flags them when they are not at risk (FPR=52.1%). For Spanish-speakers, the pattern reverses: they go undetected at a 63.3% false negative rate.",
+      "metric_source": {
+        "path": "fairness_metrics.json#dimensions.language.groups.other_indigenous.fpr",
+        "label": "FPR for Other Indigenous language group"
+      },
+      "visualization_type": "grouped_bar",
+      "data_key": "dimensions.language",
+      "severity": "critical"
+    },
+    {
+      "id": "urban_indigenous_invisible",
+      "stat": "FNR = 75.3% for urban indigenous students (n=89)",
+      "headline_es": "3 de cada 4 estudiantes indigenas urbanos en riesgo no son detectados por el sistema",
+      "headline_en": "3 in 4 urban indigenous students at risk are completely missed by the early warning system",
+      "explanation_es": "Los estudiantes indigenas en zonas urbanas son los mas invisibles para el sistema, con un FNR del 75.3%. Aunque son una muestra pequena (n=89), el patron sugiere que el sistema asocia riesgo con ruralidad, no con vulnerabilidad linguistica urbana.",
+      "explanation_en": "Urban indigenous students are the most invisible to the system, with a 75.3% false negative rate. While the sample is small (n=89), the pattern suggests the model associates risk with rurality, missing linguistic vulnerability in cities.",
+      "metric_source": {
+        "path": "fairness_metrics.json#intersections.language_x_rural.groups.other_indigenous_urban.fnr",
+        "label": "FNR for urban indigenous-language students"
+      },
+      "visualization_type": "heatmap",
+      "data_key": "intersections.language_x_rural",
+      "severity": "high"
+    },
+    {
+      "id": "model_sees_poverty",
+      "stat": "Top-5 SHAP features: age, nightlight_intensity_z, is_working, census_indigenous_lang_pct_z, census_literacy_rate_z; 0/5 overlap with logistic regression identity features",
+      "headline_es": "El modelo predice desercion a traves de la pobreza y la geografia, no de la identidad del estudiante",
+      "headline_en": "The model predicts dropout through poverty and geography, not student identity",
+      "explanation_es": "Los 5 factores mas influyentes segun SHAP son estructurales: edad, luminosidad nocturna (proxy de urbanizacion), situacion laboral, porcentaje de lengua indigena del distrito y alfabetizacion censal. Ninguno coincide con las variables identitarias que dominan el modelo lineal.",
+      "explanation_en": "The 5 most influential factors according to SHAP are structural: age, nightlight intensity (urbanization proxy), employment status, district indigenous language prevalence, and census literacy rate. None overlap with the identity features that dominate the linear model.",
+      "metric_source": {
+        "path": "shap_values.json#top_5_shap",
+        "label": "Top 5 SHAP features (LightGBM)"
+      },
+      "visualization_type": "bar_chart",
+      "data_key": "global_importance",
+      "severity": "medium"
+    },
+    {
+      "id": "selva_fnr_crisis",
+      "stat": "FNR = 59.3% in the Selva region",
+      "headline_es": "Alerta Escuela no detecta a 6 de cada 10 estudiantes en riesgo en la region Selva",
+      "headline_en": "Alerta Escuela misses 6 in 10 at-risk students in the Selva region (Amazon basin)",
+      "explanation_es": "En la Selva, el sistema falla en detectar al 59.3% de los estudiantes que abandonan la escuela. La region amazonica presenta las condiciones mas dificiles para la prediccion: alta dispersion geografica, menor conectividad y poblaciones indigenas diversas.",
+      "explanation_en": "In the Selva (Amazon basin), the system fails to flag 59.3% of students who drop out. The Amazon region presents the hardest prediction conditions: high geographic dispersion, lower connectivity, and diverse indigenous populations.",
+      "metric_source": {
+        "path": "fairness_metrics.json#dimensions.region.groups.selva.fnr",
+        "label": "FNR for Selva (Amazon) region"
+      },
+      "visualization_type": "choropleth",
+      "data_key": "dimensions.region",
+      "severity": "high"
+    },
+    {
+      "id": "district_mismatch",
+      "stat": "Pearson r = -0.071 between predictions and admin rates",
+      "headline_es": "Las predicciones distritales no coinciden con las tasas oficiales de desercion (r = -0.071)",
+      "headline_en": "District-level predictions show near-zero correlation with official dropout rates (r = -0.071)",
+      "explanation_es": "La correlacion de Pearson entre las predicciones agregadas del modelo y las tasas de desercion del MINEDU es practicamente nula (r = -0.071). Esto sugiere que el modelo de alerta individual no se traduce en patrones distritales coherentes con las estadisticas administrativas.",
+      "explanation_en": "The Pearson correlation between aggregated model predictions and Peru's Ministry of Education (MINEDU) dropout rates is near zero (r = -0.071). This suggests the individual alert model does not translate into district-level patterns consistent with administrative statistics.",
+      "metric_source": {
+        "path": "choropleth.json#correlation.pearson_r",
+        "label": "Pearson r between model predictions and admin dropout rates"
+      },
+      "visualization_type": "choropleth",
+      "data_key": "correlation",
+      "severity": "medium"
+    },
+    {
+      "id": "sex_equity_minimal",
+      "stat": "FNR gap = 3.3% between sexes",
+      "headline_es": "La brecha de equidad por sexo es minima: solo 3.3% de diferencia en FNR",
+      "headline_en": "The gender equity gap is minimal: only 3.3% FNR difference between boys and girls",
+      "explanation_es": "A diferencia de la lengua y la geografia, el modelo trata de manera casi equitativa a ninos y ninas, con una brecha de FNR de solo 3.3%. Este hallazgo positivo contrasta con las disparidades criticas encontradas en otras dimensiones.",
+      "explanation_en": "Unlike language and geography, the model treats boys and girls nearly equally, with an FNR gap of just 3.3%. This positive finding contrasts sharply with the critical disparities found across linguistic and regional dimensions.",
+      "metric_source": {
+        "path": "fairness_metrics.json#dimensions.sex.gaps.max_fnr_gap",
+        "label": "Maximum FNR gap between sex groups"
+      },
+      "visualization_type": "bar_chart",
+      "data_key": "dimensions.sex",
+      "severity": "low"
+    }
+  ]
+}
