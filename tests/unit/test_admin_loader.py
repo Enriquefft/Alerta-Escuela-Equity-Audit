@@ -59,7 +59,7 @@ class TestUbigeoValidation:
 
     def test_ubigeo_zero_padding(self, tmp_path):
         """UBIGEO values are zero-padded to 6 characters."""
-        csv_content = "UBIGEO,tasa_desercion\n10101,0.5\n150101,0.3\n"
+        csv_content = "UBIGEO,Tasa\n10101,0.5\n150101,0.3\n"
         csv_file = tmp_path / "test.csv"
         csv_file.write_text(csv_content)
 
@@ -70,7 +70,7 @@ class TestUbigeoValidation:
 
     def test_duplicate_ubigeo_raises(self, tmp_path):
         """Duplicate UBIGEO values raise ValueError."""
-        csv_content = "UBIGEO,tasa_desercion\n010101,0.5\n010101,0.3\n"
+        csv_content = "UBIGEO,Tasa\n010101,0.5\n010101,0.3\n"
         csv_file = tmp_path / "test.csv"
         csv_file.write_text(csv_content)
 
@@ -88,7 +88,7 @@ class TestRateValidation:
 
     def test_valid_rates(self, tmp_path):
         """Valid rates within 0-100 pass validation."""
-        csv_content = "UBIGEO,tasa_desercion\n010101,0.5\n150101,1.2\n"
+        csv_content = "UBIGEO,Tasa\n010101,0.5\n150101,1.2\n"
         csv_file = tmp_path / "test.csv"
         csv_file.write_text(csv_content)
 
@@ -97,7 +97,7 @@ class TestRateValidation:
 
     def test_negative_rate_raises(self, tmp_path):
         """Negative rates raise ValueError."""
-        csv_content = "UBIGEO,tasa_desercion\n010101,-0.5\n"
+        csv_content = "UBIGEO,Tasa\n010101,-0.5\n"
         csv_file = tmp_path / "test.csv"
         csv_file.write_text(csv_content)
 
@@ -106,7 +106,7 @@ class TestRateValidation:
 
     def test_rate_above_100_raises(self, tmp_path):
         """Rates above 100% raise ValueError."""
-        csv_content = "UBIGEO,tasa_desercion\n010101,105.0\n"
+        csv_content = "UBIGEO,Tasa\n010101,105.0\n"
         csv_file = tmp_path / "test.csv"
         csv_file.write_text(csv_content)
 
@@ -128,8 +128,8 @@ class TestLoadAdminDropoutRates:
             admin_dir = tmp_path / "data" / "raw" / "admin"
             admin_dir.mkdir(parents=True)
             # Only create secundaria
-            (admin_dir / "secundaria_2023.csv").write_text(
-                "UBIGEO,tasa_desercion\n010101,1.0\n"
+            (admin_dir / "admin_dropout_secundaria.csv").write_text(
+                "UBIGEO,Tasa\n010101,1.0\n"
             )
             with pytest.raises(FileNotFoundError, match="primaria"):
                 load_admin_dropout_rates()
@@ -139,8 +139,8 @@ class TestLoadAdminDropoutRates:
         with patch("data.admin.find_project_root", return_value=tmp_path):
             admin_dir = tmp_path / "data" / "raw" / "admin"
             admin_dir.mkdir(parents=True)
-            (admin_dir / "primaria_2023.csv").write_text(
-                "UBIGEO,tasa_desercion\n010101,0.5\n"
+            (admin_dir / "admin_dropout_primaria.csv").write_text(
+                "UBIGEO,Tasa\n010101,0.5\n"
             )
             with pytest.raises(FileNotFoundError, match="secundaria"):
                 load_admin_dropout_rates()
@@ -150,11 +150,11 @@ class TestLoadAdminDropoutRates:
         with patch("data.admin.find_project_root", return_value=tmp_path):
             admin_dir = tmp_path / "data" / "raw" / "admin"
             admin_dir.mkdir(parents=True)
-            (admin_dir / "primaria_2023.csv").write_text(
-                "UBIGEO,tasa_desercion\n010101,0.5\n150101,0.3\n"
+            (admin_dir / "admin_dropout_primaria.csv").write_text(
+                "UBIGEO,Tasa\n010101,0.5\n150101,0.3\n"
             )
-            (admin_dir / "secundaria_2023.csv").write_text(
-                "UBIGEO,tasa_desercion\n010101,1.0\n150101,0.8\n"
+            (admin_dir / "admin_dropout_secundaria.csv").write_text(
+                "UBIGEO,Tasa\n010101,1.0\n150101,0.8\n"
             )
 
             result = load_admin_dropout_rates()
@@ -169,11 +169,11 @@ class TestLoadAdminDropoutRates:
         with patch("data.admin.find_project_root", return_value=tmp_path):
             admin_dir = tmp_path / "data" / "raw" / "admin"
             admin_dir.mkdir(parents=True)
-            (admin_dir / "primaria_2023.csv").write_text(
-                "UBIGEO,tasa_desercion\n010101,0.5\n"
+            (admin_dir / "admin_dropout_primaria.csv").write_text(
+                "UBIGEO,Tasa\n010101,0.5\n"
             )
-            (admin_dir / "secundaria_2023.csv").write_text(
-                "UBIGEO,tasa_desercion\n010101,1.0\n"
+            (admin_dir / "admin_dropout_secundaria.csv").write_text(
+                "UBIGEO,Tasa\n010101,1.0\n"
             )
 
             result = load_admin_dropout_rates()
