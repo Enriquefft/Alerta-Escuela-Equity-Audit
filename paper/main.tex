@@ -110,7 +110,11 @@ Our intersectional analysis directly operationalizes these frameworks in an educ
 \section{Data}
 % =============================================================================
 
-We use Peru's Encuesta Nacional de Hogares (ENAHO), a nationally representative household survey conducted annually by the Instituto Nacional de Estad\'istica e Inform\'atica (INEI) \cite{inei2023enaho}. Our analysis pools six waves (2018--2023) covering school-age children (6--17 years), yielding 150,135 individual-year observations.
+Peru has approximately 8 million school-age children, and dropout remains a persistent challenge---particularly in rural areas and among indigenous-language communities. The Ministry of Education (MINEDU) operates Alerta Escuela, which uses data from the Sistema de Informaci\'{o}n de Apoyo a la Gesti\'{o}n de la Instituci\'{o}n Educativa (SIAGIE) to flag students at risk of dropout \cite{minedu2023alerta,minedu2022estadistica}. Because SIAGIE administrative records are not publicly accessible, we use ENAHO survey data as a proxy to construct and audit an Alerta Escuela--style prediction model.
+
+We use Peru's Encuesta Nacional de Hogares (ENAHO), a nationally representative household survey conducted annually by the Instituto Nacional de Estad\'{i}stica e Inform\'{a}tica (INEI) \cite{inei2023enaho}. ENAHO employs a multi-stage, stratified sampling design covering all 25 departments of Peru, with survey weights (FACTOR07) that account for the complex sampling structure and enable nationally representative inference. We extract data from Module 200 (demographic characteristics) and Module 300 (education), joining them by household and person identifiers.
+
+Our analysis pools six annual waves (2018--2023) covering school-age children aged 6--17, yielding 150,135 individual-year observations after data cleaning. The 2020 wave is notably affected by the COVID-19 pandemic: INEI conducted phone interviews rather than in-person visits, resulting in a reduced sample of approximately 13,755 observations (compared to approximately 25,000 in a typical year) and 52\% null values in the education attendance variable (P303), which were dropped. We define dropout as a binary outcome: a child of school age who was enrolled in the previous academic year but is not currently attending, following MINEDU's operational definition.
 
 \begin{table}[htbp]
   \caption{Sample Description by Demographic Dimensions}
@@ -118,7 +122,7 @@ We use Peru's Encuesta Nacional de Hogares (ENAHO), a nationally representative 
   \input{tables/table_01_sample.tex}
 \end{table}
 
-Table~\ref{tab:sample} summarizes the sample across key demographic dimensions. Dropout is defined as a child of school age who was enrolled in the previous year but is not currently attending, following MINEDU's operational definition.
+Table~\ref{tab:sample} summarizes the sample across key demographic dimensions. The sample is predominantly Spanish-speaking (approximately 84\%), with indigenous-language speakers comprising Quechua, Aymara, and other indigenous groups. Urban residents constitute approximately 65\% of observations. The sample spans all three major geographic regions: Costa (coast), Sierra (highlands), and Selva (Amazon lowlands).
 
 \begin{table}[htbp]
   \caption{Weighted Dropout Rates by Language Group}
@@ -126,7 +130,7 @@ Table~\ref{tab:sample} summarizes the sample across key demographic dimensions. 
   \input{tables/table_02_language.tex}
 \end{table}
 
-Table~\ref{tab:language} reveals substantial disparities in dropout rates across language groups. Indigenous-language speakers face rates 34\% higher than Spanish speakers on average.
+Table~\ref{tab:language} reveals substantial disparities in weighted dropout rates across language groups. Indigenous-language speakers face rates 34\% higher than Spanish speakers on average. The Awajun group exhibits the highest dropout rate at 0.2047, compared to 0.1526 for Castellano speakers---a gap that persists even after accounting for geographic and socioeconomic differences.
 
 \begin{table}[htbp]
   \caption{Weighted Dropout Rates by Region and Poverty Quintile}
@@ -141,17 +145,35 @@ Table~\ref{tab:language} reveals substantial disparities in dropout rates across
   \label{fig:dropout_heatmap}
 \end{figure}
 
-Table~\ref{tab:region_poverty} and Figure~\ref{fig:dropout_heatmap} show how dropout rates vary by region and poverty level, with the Sierra and Selva regions and the poorest quintile exhibiting the highest rates.
+Table~\ref{tab:region_poverty} and Figure~\ref{fig:dropout_heatmap} show how dropout rates vary by region, poverty level, and their interactions with language. The Sierra and Selva regions exhibit higher dropout rates than the Costa, and a monotonic poverty gradient is visible: the poorest quintile has substantially higher dropout rates than the wealthiest. Figure~\ref{fig:dropout_heatmap} further reveals that the interaction of language and rurality produces disparities that exceed what either dimension alone would suggest.
+
+In addition to individual and household variables from ENAHO, we merge district-level spatial features to capture contextual effects. Census data provides district population and literacy rate z-scores. Nightlight intensity, measured by satellite remote sensing, serves as a proxy for local economic activity and infrastructure. Administrative records from MINEDU provide district-level primaria (primary) and secundaria (secondary) completion rates. Merge rates are high: 100\% for administrative and census data, and 95.9\% for nightlight data, with 44 districts (1.53\%) having primaria but no secundaria administrative records.
 
 % =============================================================================
 \section{Methods}
 % =============================================================================
 
-We engineer 25 features spanning individual demographics, household characteristics, and district-level spatial indicators from census and administrative data. Models are trained on 2018--2021 data ($n=98{,}023$), validated on 2022 ($n=26{,}477$), and tested on 2023 ($n=25{,}635$), following a temporal split that mirrors real-world deployment.
+\subsection{Feature Engineering}
 
-We compare three model families: logistic regression (for interpretability), LightGBM \cite{ke2017lightgbm} (for predictive performance), and XGBoost (for algorithm-independence verification). LightGBM hyperparameters are tuned via Optuna with 100 trials. Platt scaling calibrates the final model's probability estimates. All metrics are computed with ENAHO survey weights (FACTOR07).
+We engineer 25 features organized into three categories. \emph{Individual demographics} (8 features) include age, sex, nationality (Peruvian/foreign), and mother tongue encoded as binary indicators for Quechua, Aymara, other indigenous languages, and foreign languages, with Castellano as the reference category. \emph{Household characteristics} (8 features) include parent education (maximum years of schooling between household head and spouse, mapped from ENAHO's P301A categorical variable), poverty index z-score, poverty quintile (constructed using FACTOR07-weighted quantiles to ensure each quintile represents exactly 20\% of the population), working status, household size, and a binary indicator for whether the child's birthplace matches their current residence. Note that ENAHO's birthplace question (P209) is asked only of respondents aged 12 and above; children aged 6--11 are assigned the default of Peruvian-born. \emph{District-level spatial indicators} (9 features) include nightlight intensity z-score (a satellite-derived proxy for local economic activity), census population and literacy rate z-scores, administrative primaria and secundaria completion rates, and the district's historical dropout rate computed from ENAHO itself. Nightlight z-score nulls (4.1\% of observations) are imputed with 0.0, representing the distribution mean \cite{macnell2023implementing}.
 
-Fairness evaluation uses the fairlearn framework \cite{bird2020fairlearn} to compute false negative rates (FNR), false positive rates (FPR), precision, and PR-AUC across seven demographic dimensions and three intersections. SHAP TreeExplainer \cite{lundberg2020local} provides feature-level interpretability.
+\subsection{Model Selection and Training}
+
+We compare three model families chosen for complementary purposes. \emph{Logistic regression} provides interpretable coefficients and odds ratios; we fit both a scikit-learn implementation for prediction and a statsmodels GLM with Binomial family for statistical inference (standard errors, p-values, confidence intervals). \emph{LightGBM} \cite{ke2017lightgbm} serves as the primary predictive model, leveraging gradient boosting's ability to capture nonlinearities and feature interactions without explicit specification. \emph{XGBoost} \cite{chen2016xgboost} serves as an algorithm-independence check: if fairness findings hold across both gradient boosting implementations, they reflect data structure rather than algorithmic artifacts.
+
+Models are trained on 2018--2021 data ($n=98{,}023$), validated on 2022 ($n=26{,}477$), and tested on 2023 ($n=25{,}635$). This temporal split mirrors real-world deployment, where models trained on historical data must predict future cohorts. LightGBM hyperparameters are tuned via Optuna \cite{akiba2019optuna} with 100 trials, using early stopping on validation average precision (PR-AUC). All models incorporate ENAHO survey weights (FACTOR07) during training and evaluation to ensure nationally representative estimates.
+
+\subsection{Calibration}
+
+Gradient boosted trees produce probability estimates that are often poorly calibrated, particularly when class weighting is applied to handle imbalanced outcomes \cite{niculescumizil2005predicting}. We apply Platt scaling \cite{platt1999probabilistic} to the LightGBM model's raw probability outputs, fitting a sigmoid function on the validation set. This reduces the Brier score from 0.212 to 0.116---a 45\% improvement---confirming that calibration is critical for models with scale\_pos\_weight adjustments. The Platt scaling parameters ($A=-6.236$, $B=4.443$) compress the raw probability range, with calibrated probabilities reaching a maximum of approximately 0.43.
+
+\subsection{Fairness Evaluation Framework}
+
+Fairness evaluation uses the fairlearn framework \cite{bird2020fairlearn} to compute disaggregated metrics across seven demographic dimensions (language, natural region, rurality, poverty quintile, sex, nationality, age group) and three intersections (language $\times$ rurality, language $\times$ poverty quintile, language $\times$ region). For each subgroup, we compute four metrics: false negative rate (FNR, the proportion of actual dropouts missed by the model), false positive rate (FPR, the proportion of non-dropouts incorrectly flagged), precision, and PR-AUC. All metrics are computed with survey weights. This framework operationalizes the ``slice analysis'' approach advocated by Baker and Hawn \cite{baker2022algorithmic} and aligns with the audit methodology of Saleiro et al. \cite{saleiro2018aequitas}.
+
+The choice of FNR as a primary fairness metric reflects its direct operational interpretation: a high FNR means the system fails to identify students who will drop out. From an equity perspective, FNR disparities indicate which populations are systematically rendered invisible to the early warning system. We complement FNR with FPR to capture the surveillance--invisibility trade-off that Chouldechova's \cite{chouldechova2017fair} impossibility theorem predicts will arise when base rates differ across groups.
+
+SHAP TreeExplainer \cite{lundberg2020local} provides feature-level interpretability, decomposing each prediction into additive feature contributions. We compute SHAP values on the raw (uncalibrated) LightGBM model, as TreeExplainer requires direct access to the tree structure. SHAP interaction values are computed on a 1,000-row subsample of the test set.
 
 % =============================================================================
 \section{Results}
@@ -163,13 +185,15 @@ Fairness evaluation uses the fairlearn framework \cite{bird2020fairlearn} to com
   \input{tables/table_04_models.tex}
 \end{table}
 
-Table~\ref{tab:models} compares the three model families. LightGBM and XGBoost achieve near-identical validation PR-AUC (0.262 vs. 0.263), confirming algorithm independence of our fairness findings. The calibrated LightGBM model achieves a test PR-AUC of 0.236 with substantially improved Brier score (0.112 vs. 0.186 uncalibrated).
+Table~\ref{tab:models} compares the three model families on the 2022 validation set. LightGBM and XGBoost achieve near-identical validation PR-AUC (0.262 vs. 0.263), yielding an algorithm-independence ratio of 1.0006. This near-perfect agreement is significant for our fairness analysis: it means that any disparities we identify reflect the structure of the data and prediction task, not artifacts of a particular gradient boosting implementation. The calibrated LightGBM model achieves a test PR-AUC of 0.236, with a validation-test gap of 0.023 (well within the 0.07 threshold that would indicate concerning generalization failure). The calibrated Brier score improves from 0.212 to 0.116---a reduction that confirms calibration is essential for interpreting predicted probabilities as actual dropout risks.
 
 \begin{table}[htbp]
   \caption{Logistic Regression Coefficients (All 25 Features)}
   \label{tab:lr_coefficients}
   \input{tables/table_05_lr_coefficients.tex}
 \end{table}
+
+Table~\ref{tab:lr_coefficients} shows the logistic regression coefficients for all 25 features. Indigenous language variables dominate the linear model: the ``other indigenous'' group has the highest odds ratio (2.20), followed by Quechua and Aymara. This pattern---where identity features rank highest in a linear model---contrasts sharply with the SHAP analysis of the tree-based models presented in Section~6, where spatial-structural features dominate. The paradigm difference between linear and tree-based models (zero overlap in top-5 features) is itself a finding: it demonstrates that the ``importance'' of identity features depends entirely on the model family, and that tree-based models can achieve similar or better predictive accuracy by routing through correlated spatial-structural features instead.
 
 \begin{figure}[htbp]
   \centering
@@ -185,7 +209,7 @@ Table~\ref{tab:models} compares the three model families. LightGBM and XGBoost a
   \label{fig:calibration}
 \end{figure}
 
-Table~\ref{tab:lr_coefficients} shows the logistic regression coefficients. Indigenous language variables dominate the linear model, with the ``other indigenous'' group having the highest odds ratio (2.20). Figure~\ref{fig:pr_curves} compares PR curves across models, and Figure~\ref{fig:calibration} demonstrates the calibration improvement.
+Figure~\ref{fig:pr_curves} visually confirms the algorithm independence: LightGBM and XGBoost PR curves are nearly superimposed across the full recall range, while logistic regression shows lower precision at equivalent recall levels. Figure~\ref{fig:calibration} demonstrates the calibration improvement. The uncalibrated model systematically overestimates risk for the highest-probability predictions---a known consequence of the scale\_pos\_weight parameter used to handle class imbalance. Platt scaling corrects this distortion, producing probabilities that more closely match observed dropout rates. This calibration step is particularly important for fairness: uncalibrated probabilities systematically overestimate risk for groups with high base rates (indigenous-language speakers), and calibration helps ensure that a predicted probability of, say, 0.3 corresponds to an approximately 30\% actual dropout rate regardless of group membership.
 
 % =============================================================================
 \section{Fairness Analysis}
@@ -197,19 +221,11 @@ Table~\ref{tab:lr_coefficients} shows the logistic regression coefficients. Indi
   \input{tables/table_06_fairness_language.tex}
 \end{table}
 
-Table~\ref{tab:fairness_language} reveals a fundamental FNR--FPR trade-off across language groups. The model achieves low FNR for indigenous-language speakers (0.22 for other indigenous) but at the cost of high FPR (0.52)---a pattern we term ``surveillance bias.'' Conversely, Spanish speakers face high FNR (0.63) with low FPR (0.18)---``invisibility bias'' where the majority of actual dropouts are missed.
+\subsection{Language Dimension: The Surveillance--Invisibility Axis}
 
-\begin{table}[htbp]
-  \caption{Intersection Analysis: Language $\times$ Rurality}
-  \label{tab:intersection}
-  \input{tables/table_07_intersection.tex}
-\end{table}
+Table~\ref{tab:fairness_language} reveals a fundamental FNR--FPR trade-off across language groups. The model achieves low FNR for indigenous-language speakers (0.22 for other indigenous languages) but at the cost of high FPR (0.52)---a pattern we term ``surveillance bias,'' where the system correctly identifies most indigenous-language dropouts but also incorrectly flags many non-dropouts. Conversely, Spanish speakers face high FNR (0.63) with low FPR (0.18)---``invisibility bias'' where the majority of actual dropouts are missed by the system.
 
-\begin{table}[htbp]
-  \caption{SHAP Feature Importance (Top 15)}
-  \label{tab:shap}
-  \input{tables/table_08_shap.tex}
-\end{table}
+This inverse FNR-FPR relationship is not a model bug but the mathematical consequence of Chouldechova's~\cite{chouldechova2017fair} impossibility result applied to groups with different base rates. Indigenous-language speakers have higher baseline dropout rates, so a model trained to minimize overall prediction error will flag them more aggressively. The result is a systematic redistribution of prediction errors: indigenous communities bear the burden of false alarms (surveillance) while Spanish-speaking dropouts bear the burden of being missed (invisibility).
 
 \begin{figure}[htbp]
   \centering
@@ -218,6 +234,28 @@ Table~\ref{tab:fairness_language} reveals a fundamental FNR--FPR trade-off acros
   \label{fig:fnr_fpr}
 \end{figure}
 
+Figure~\ref{fig:fnr_fpr} visualizes this trade-off. The inverse relationship between FNR and FPR across language groups forms a clear axis: as FNR decreases (better detection), FPR increases (more false alarms), with indigenous-language groups clustered at the high-detection/high-surveillance end and Spanish speakers at the low-detection/low-surveillance end.
+
+\subsection{Other Demographic Dimensions}
+
+The fairness analysis extends beyond language to six additional dimensions. \emph{Region:} The Selva (Amazon) and Sierra (highlands) regions show lower FNR than the Costa (coast)---the model detects rural and remote dropouts more effectively, likely because these students match the spatial profile most strongly associated with dropout risk. However, a calibration gap exists: students predicted as ``high risk'' in the Selva have a 28.1\% actual dropout rate, compared to 38.9\% in the Sierra, meaning the same risk score carries different meaning across regions.
+
+\emph{Poverty:} A monotonic relationship emerges across poverty quintiles---students in poorer quintiles are flagged more frequently and have higher base dropout rates. This alignment between base rates and flagging rates means poverty-based disparities are partially expected, though the magnitude of the FNR gap between the poorest and wealthiest quintiles warrants attention.
+
+\emph{Sex:} The gender gap is minimal, with an FNR difference of only 0.026 between male and female students. Sex is not a major axis of disparity in this model, consistent with the relatively small gender gap in Peruvian school enrollment at the primary and secondary levels.
+
+\emph{Nationality:} With only 27 non-Peruvian students in the test set, this dimension is unusable for reliable fairness inference. We report it for completeness but note that any metrics computed on such a small sample are unreliable.
+
+\emph{Age:} Older students (ages 15--17) are flagged more accurately than younger students (ages 6--11), reflecting both higher base dropout rates among older students and the model's heavy reliance on age as a predictive feature.
+
+\subsection{Intersectional Analysis}
+
+\begin{table}[htbp]
+  \caption{Intersection Analysis: Language $\times$ Rurality}
+  \label{tab:intersection}
+  \input{tables/table_07_intersection.tex}
+\end{table}
+
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\columnwidth]{figures/fig05_fnr_heatmap.pdf}
@@ -225,7 +263,17 @@ Table~\ref{tab:fairness_language} reveals a fundamental FNR--FPR trade-off acros
   \label{fig:fnr_heatmap}
 \end{figure}
 
-Table~\ref{tab:intersection} shows the starkest finding: urban indigenous students face an FNR of 0.753---the model misses three-quarters of their dropouts. This intersection group, invisible in both language-only and geography-only analyses, represents the most systematically missed population.
+Table~\ref{tab:intersection} and Figure~\ref{fig:fnr_heatmap} present the paper's starkest finding. Urban indigenous students face an FNR of 0.753---the model misses three out of four of their dropouts. This intersection group is invisible in both language-only analysis (where other-indigenous FNR is 0.22, driven by rural indigenous students) and geography-only analysis (where urban FNR is moderate). Only by crossing language and urbanicity does this extreme disparity emerge, directly demonstrating the intersectionality imperative articulated by Crenshaw~\cite{crenshaw1989demarginalizing} and operationalized computationally by Buolamwini and Gebru~\cite{buolamwini2018gender}.
+
+The mechanism behind this disparity is interpretable: the model predicts dropout primarily through spatial-structural features---nightlight intensity, district historical dropout rates, census literacy rates---that code indigenous communities as rural. Urban indigenous students ``break the spatial profile'': they live in urban areas with higher nightlight intensity and lower district-level dropout rates, but face the same educational barriers (language, cultural mismatch, discrimination) as their rural counterparts. The model has no pathway to identify them because the features that capture indigenous disadvantage in rural settings do not activate in urban ones. We note the sample caveat: $n=89$ for urban other-indigenous students in the test set, which is sufficient for estimating proportions but should be interpreted with appropriate caution.
+
+\subsection{SHAP Interpretability}
+
+\begin{table}[htbp]
+  \caption{SHAP Feature Importance (Top 15)}
+  \label{tab:shap}
+  \input{tables/table_08_shap.tex}
+\end{table}
 
 \begin{figure}[htbp]
   \centering
@@ -241,21 +289,79 @@ Table~\ref{tab:intersection} shows the starkest finding: urban indigenous studen
   \label{fig:shap_beeswarm}
 \end{figure}
 
-Table~\ref{tab:shap} and Figures~\ref{fig:shap_bar}--\ref{fig:shap_beeswarm} reveal that the model predicts through spatial-structural features (age, nightlight intensity, working status, census indicators) rather than identity features directly. The top 5 SHAP features have zero overlap with the top 5 logistic regression features, reflecting the paradigm difference between linear and tree-based models.
+Table~\ref{tab:shap} and Figures~\ref{fig:shap_bar}--\ref{fig:shap_beeswarm} reveal how the model makes predictions, directly addressing RQ2. The top five SHAP features---age, nightlight z-score, working status, census literacy z-score, and poverty index z-score---are all spatial-structural variables. Identity features contribute minimally: the sex indicator (es\_mujer) ranks 16th out of 25 features with a mean absolute SHAP value of only 0.003, and the nationality indicator (es\_peruano) ranks 25th with effectively zero contribution, consistent with the $n=27$ non-Peruvian sample producing no learnable signal.
+
+Critically, the top 5 SHAP features have zero overlap with the top 5 logistic regression features (which are dominated by indigenous language dummies). This paradigm difference reflects how tree-based models route predictions differently from linear models: where logistic regression must assign large coefficients to identity features to capture group-level differences, LightGBM can achieve similar discrimination through the continuous spatial-structural features that correlate with those identity categories. The fairness implications are significant: the model encodes structural inequities without using identity features directly. Removing protected attributes from the feature set would not mitigate the disparities documented above, because the model already operates through proxy features that carry the same information.
 
 % =============================================================================
 \section{Discussion}
 % =============================================================================
 
-Our equity audit reveals three key findings. First, the FNR--FPR trade-off across language groups represents a systematic redistribution of prediction errors: indigenous students are over-flagged (surveillance) while Spanish-speaking dropouts are missed (invisibility). Second, intersection analysis reveals that urban indigenous students---who defy the spatial profile associated with indigenous languages---are the most invisible group. Third, SHAP analysis shows the model operates through spatial-structural proxies rather than direct identity features, suggesting that even ``fair'' feature sets can encode structural inequities.
+\subsection{Summary of Findings}
 
-These findings have direct policy implications for Alerta Escuela and similar systems across Latin America. We recommend: (1) group-specific threshold adjustment to equalize FNR across language groups; (2) supplementary urban indigenous identification mechanisms; and (3) regular fairness auditing as a deployment requirement.
+Our equity audit of an Alerta Escuela--style dropout prediction model reveals three principal findings, each corresponding to a research question.
+
+In response to \textbf{RQ1} (what disparities exist in prediction accuracy across demographic groups), we document a surveillance--invisibility axis across language groups: indigenous-language speakers experience low FNR (0.22) but high FPR (0.52), constituting surveillance bias, while Spanish speakers experience high FNR (0.63) but low FPR (0.18), constituting invisibility bias. This systematic redistribution of prediction errors follows directly from Chouldechova's \cite{chouldechova2017fair} impossibility result applied to groups with heterogeneous base rates.
+
+In response to \textbf{RQ2} (how the model encodes disparities), SHAP analysis reveals that the model predicts through spatial-structural proxy features---age, nightlight intensity, census literacy rates, poverty index---rather than through identity features directly. Indigenous language indicators, which dominate the logistic regression model, contribute minimally to LightGBM predictions (zero overlap in top-5 features between models). This means the model encodes structural inequities without explicit use of protected attributes.
+
+In response to \textbf{RQ3} (how intersections amplify prediction errors), the language $\times$ urbanicity intersection reveals urban indigenous students' FNR of 0.753---a disparity completely invisible in single-axis analysis of either language or geography alone. This finding directly operationalizes the intersectionality frameworks of Crenshaw~\cite{crenshaw1989demarginalizing} and the computational demonstrations of Buolamwini and Gebru~\cite{buolamwini2018gender} in an educational context.
+
+\subsection{The Spatial Proxy Mechanism}
+
+Our SHAP analysis reveals that the model essentially uses geography as a proxy for demographic risk. Nightlight intensity, district-level dropout rates, census literacy rates, and rurality indicators collectively encode the spatial concentration of disadvantage. This spatial proxy mechanism is efficient for prediction---it explains why LightGBM and logistic regression achieve comparable PR-AUC despite using features very differently---but it creates systematic blind spots for populations that do not match spatial stereotypes.
+
+Urban indigenous students exemplify this failure mode: they reside in areas with higher nightlight intensity, lower district dropout rates, and more urban infrastructure, yet face educational barriers (language, cultural mismatch, limited bilingual instruction) comparable to their rural counterparts. The model has no pathway to identify their risk because the features that capture indigenous disadvantage in rural settings do not activate in urban ones. This finding resonates with Perdomo et al.'s~\cite{perdomo2023difficult} argument that structural features predict dropout as well as individual risk scores---and extends it by showing that reliance on structural features creates predictable fairness failures at demographic intersections.
+
+\subsection{Considerations for EWS Operators}
+
+Our findings raise several considerations for operators of educational early warning systems:
+
+\begin{itemize}
+  \item Group-specific threshold adjustment could equalize FNR across language groups, reducing invisibility bias for Spanish speakers without necessarily increasing overall error. However, threshold adjustment redistributes errors rather than eliminating them---equalizing FNR would increase FPR for Spanish speakers---and the appropriate trade-off depends on the relative costs of missed dropouts versus false alarms in specific operational contexts.
+  \item Supplementary identification mechanisms for urban indigenous students could address the intersection-level blind spot our analysis reveals. However, designing such mechanisms without creating additional surveillance of already-marginalized communities requires careful consideration of community perspectives and consent \cite{mcmahon2020reenvisioning}.
+  \item Regular fairness auditing, conducted across multiple demographic dimensions and their intersections, could detect disparities before they become entrenched. The question of who should conduct such audits---system operators, independent researchers, affected communities, or regulatory bodies---remains open.
+\end{itemize}
+
+\subsection{Generalizability}
+
+Our findings likely apply to similar EWS systems across Latin America and other developing regions that use administrative or spatial features for dropout prediction. The surveillance--invisibility dynamic may emerge wherever prediction models operate on populations with heterogeneous base rates and correlated spatial-demographic structure. Adelman et al.'s~\cite{adelman2018predicting} work in Guatemala and Honduras and Villegas-Ch et al.'s~\cite{villegas2023supporting} analysis in Latin American higher education suggest that the structural features driving our model's predictions---poverty, geography, household characteristics---are similarly dominant across the region. Whether the specific intersection-level failures we document (urban indigenous invisibility) generalize depends on the degree to which indigenous populations in other countries exhibit similar rural-urban migration patterns.
+
+% =============================================================================
+\section{Limitations}
+% =============================================================================
+
+Several limitations qualify the interpretation of our findings.
+
+First, we audit an Alerta Escuela--style model built on ENAHO survey data, not the actual Alerta Escuela system, which uses SIAGIE administrative records that are not publicly accessible. Our findings demonstrate what disparities \emph{can} emerge in dropout prediction using nationally representative data, not what disparities definitively exist in the deployed system. The feature sets, training data, and modeling choices of the actual system may differ from our proxy replication.
+
+Second, ENAHO's mother tongue variable (P300) captures language by self-report. Bilingual speakers may report Spanish as their mother tongue, potentially undercounting indigenous-language prevalence and understating the disparities we document. The true magnitude of language-based prediction disparities may be larger than our estimates.
+
+Third, the 2020 wave is affected by the COVID-19 pandemic. INEI conducted phone interviews rather than in-person household visits, producing a reduced sample (approximately 13,755 observations versus approximately 25,000 in typical years) with 52\% null values in the education attendance variable. While we include 2020 in the training data after dropping null records, this year may not represent the same population as in-person survey years.
+
+Fourth, some intersectional subgroups have small samples: $n=89$ for urban other-indigenous students (our starkest finding) and $n=27$ for non-Peruvian nationality (rendering this dimension unusable for reliable inference). While $n=89$ is sufficient for point estimates of proportions, the associated confidence intervals are wide, and results for this group should be interpreted with appropriate caution.
+
+Fifth, while we incorporate FACTOR07 survey weights throughout training and evaluation, the theoretical properties of survey-weighted gradient boosting are not fully established. MacNell et al.~\cite{macnell2023implementing} found that ignoring survey weights in gradient boosting can affect both prediction accuracy and feature importance rankings, supporting our decision to incorporate weights, but the formal statistical guarantees of weighted ML estimators under complex survey designs remain an active area of research.
+
+% =============================================================================
+\section{Ethical Considerations}
+% =============================================================================
+
+\paragraph{Positionality.} The author is Peruvian, a computer science self-learner at Universidad de Ingenier\'{i}a y Tecnolog\'{i}a (UTEC), and co-founder of Genera, an educational technology startup. This positionality shapes the work in important ways: as someone who believes AI can address education's one-size-fits-all problem, I undertook this audit precisely because systems deployed without scrutiny risk deepening the inequities I aim to address. I am not from the indigenous communities most affected by the disparities documented here, and this work should be understood as an outsider's technical audit rather than a community-centered assessment. A more complete evaluation would incorporate the perspectives of indigenous educators, families, and students directly affected by early warning systems.
+
+\paragraph{Generative AI Disclosure.} Portions of the data pipeline code and manuscript preparation were assisted by generative AI tools (Claude, Anthropic). The author was responsible for all research design, methodological decisions, result interpretation, and substantive writing. AI assistance was used for code implementation and editorial refinement.
+
+\paragraph{Data Ethics.} This study uses publicly available, de-identified survey data (ENAHO) released by INEI for research purposes. No individual students can be identified from the analysis, and no direct human subjects interaction was involved. The analysis operates exclusively on aggregate patterns in survey-weighted data.
 
 % =============================================================================
 \section{Conclusion}
 % =============================================================================
 
-This paper demonstrates that dropout prediction systems can systematically disadvantage the groups they aim to serve. Our comprehensive equity audit of an Alerta Escuela--style model reveals a surveillance--invisibility axis across language groups and identifies urban indigenous students as the most missed population. These findings underscore the need for mandatory fairness auditing of educational early warning systems.
+This paper presents a comprehensive equity audit of an Alerta Escuela--style dropout prediction model using six years of nationally representative ENAHO survey data (2018--2023, $N=150{,}135$). Our audit evaluates fairness across seven demographic dimensions and three intersections, using survey-weighted metrics throughout and applying SHAP interpretability analysis to understand how the model encodes disparities.
+
+Our findings answer three research questions. \textbf{RQ1:} Substantial disparities exist in prediction accuracy across demographic groups, organized along a surveillance--invisibility axis---indigenous-language speakers are over-flagged (FNR=0.22, FPR=0.52) while Spanish-speaking dropouts are systematically missed (FNR=0.63, FPR=0.18). \textbf{RQ2:} The model encodes these disparities through spatial-structural proxy features (age, nightlight intensity, census literacy rates, poverty index) rather than through identity features directly, as revealed by SHAP analysis showing zero overlap between the top-5 features of linear and tree-based models. \textbf{RQ3:} Intersectional analysis reveals that urban indigenous students face an FNR of 0.753---a disparity completely invisible to single-axis evaluation and the most extreme prediction failure in our analysis.
+
+As educational early warning systems proliferate across Latin America and globally, fairness auditing must become standard practice. Our analysis demonstrates that single-axis evaluation is insufficient: the populations most systematically missed by prediction models---those at the intersection of multiple dimensions of disadvantage---can only be identified through intersectional analysis. The evidence presented here demonstrates that dropout prediction systems can encode systematic inequities even without explicitly discriminatory intent. Understanding who gets missed is a prerequisite for building systems that serve all students equitably.
 
 % =============================================================================
 % Appendix
