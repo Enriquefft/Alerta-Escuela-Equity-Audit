@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+title: "Where You Live, Not Who You Are: An Equity Audit of Peru's Alerta Escuela Student Dropout Prediction System"
+message: "If you use this software or data, please cite it as below."
+type: software
+authors:
+  - given-names: Enrique
+    family-names: Flores
+    affiliation: "Genera"
+license: MIT
+repository-code: "https://github.com/enriqueflores/Alerta-Escuela-Equity-Audit"
+keywords:
+  - algorithmic fairness
+  - equity audit
+  - dropout prediction
+  - education
+  - Peru
+  - machine learning
+  - LightGBM
+abstract: >-
+  First independent equity audit of Peru's Alerta Escuela system,
+  a LightGBM-based student dropout prediction model deployed by
+  MINEDU to 90,000+ educators. Analysis of ENAHO 2018-2023
+  microdata (n=150,135) reveals a two-sided detection gap:
+  indigenous students face 52% false positive rates while
+  Spanish-speaking students have 63% false negative rates.
+  SHAP analysis shows the model predicts through place-based
+  features (nightlights, literacy rates) rather than identity
+  features, with zero overlap between top-5 predictors from
+  logistic regression and gradient boosting.
