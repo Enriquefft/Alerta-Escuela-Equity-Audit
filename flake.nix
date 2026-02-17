@@ -24,6 +24,35 @@
           uv
           ruff
           cmake
+          (texlive.combine {
+            inherit (texlive) scheme-medium
+              acmart
+              amsmath
+              totpages
+              environ
+              trimspaces
+              ncctools
+              comment
+              cmap
+              hyperxmp
+              ifmtarg
+              draftwatermark
+              preprint
+              natbib
+              setspace
+              textcase
+              libertine
+              inconsolata
+              newtx
+              xstring
+              mweights
+              fontaxes
+              upquote
+              caption
+              siunitx
+              booktabs
+              ;
+          })
         ];
 
         env = {
