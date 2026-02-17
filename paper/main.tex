@@ -19,13 +19,18 @@
 
 \title{Equity Audit of Peru's Alerta Escuela Early Warning System: Who Gets Missed?}
 
-\author{[Author Name]}
+\author{Enrique Francisco Flores Teniente}
 \affiliation{%
-  \institution{[Institution]}
-  \city{[City]}
-  \country{[Country]}
+  \institution{Universidad de Ingeniería y Tecnología (UTEC)}
+  \city{Lima}
+  \country{Peru}
 }
-\email{[email]}
+\affiliation{%
+  \institution{Genera}
+  \city{Lima}
+  \country{Peru}
+}
+\email{enrique.flores@utec.edu.pe}
 
 \begin{abstract}
 Peru's Alerta Escuela early warning system aims to identify students at risk of dropping out, yet its algorithmic fairness properties remain unexamined. Using six years of nationally representative ENAHO survey data (2018--2023, $N=150{,}135$), we replicate an Alerta Escuela--style dropout prediction model and conduct a comprehensive equity audit across language, geography, poverty, and sex dimensions. Our LightGBM model achieves a calibrated test PR-AUC of 0.236, with a false negative rate (FNR) of 63\% for Spanish-speaking students but only 22\% for indigenous-language speakers---revealing that the system over-flags indigenous students (surveillance bias) while missing the majority of Spanish-speaking dropouts (invisibility bias). SHAP analysis shows the model predicts through spatial-structural features (age, nightlights, literacy rates, poverty) rather than identity features directly. The starkest disparity emerges at the intersection of language and urbanicity: urban indigenous students face a 75\% FNR, making them the most invisible group. These findings demonstrate that dropout prediction systems can encode systematic inequities even without explicitly discriminatory intent.
