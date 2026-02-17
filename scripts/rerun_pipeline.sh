@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-# Re-run the full pipeline (Phases 3-10) after replacing synthetic data.
+# Re-run the full analysis pipeline (Phases 3-13).
+#
+# Prerequisites:
+#   - ENAHO microdata downloaded to data/raw/ (see README.md)
+#   - Python environment set up: uv sync
 #
 # Usage:
 #   bash scripts/rerun_pipeline.sh
@@ -10,10 +14,24 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 echo "============================================================"
-echo "  Alerta Escuela Audit -- Full Pipeline Re-run"
-echo "  (After replacing synthetic data with real Census + VIIRS)"
+echo "  Alerta Escuela Equity Audit — Full Pipeline"
 echo "============================================================"
 echo ""
+
+# --- Prerequisites check ---
+if [ ! -d "data/raw" ] || [ -z "$(ls -A data/raw 2>/dev/null)" ]; then
+    echo "ERROR: data/raw/ is empty or missing."
+    echo "Download ENAHO microdata first:"
+    echo "  uv run python src/data/download.py --years 2018 2019 2020 2021 2022 2023"
+    echo ""
+    echo "See README.md for details."
+    exit 1
+fi
+
+if ! command -v uv &> /dev/null; then
+    echo "ERROR: uv not found. Install from https://docs.astral.sh/uv/"
+    exit 1
+fi
 
 # Phase 3: Build merged dataset (ENAHO + admin + census + nightlights)
 echo "[Phase 3] Building merged dataset..."
@@ -55,6 +73,21 @@ echo ""
 # Phase 10: Cross-validation with admin data
 echo "[Phase 10] Cross-validation..."
 uv run python src/fairness/cross_validation.py
+echo ""
+
+# Phase 11: Findings distillation
+echo "[Phase 11] Findings distillation..."
+uv run python src/fairness/findings.py
+echo ""
+
+# Phase 12: Publication figures
+echo "[Phase 12] Publication figures..."
+uv run python scripts/publication_figures.py
+echo ""
+
+# Phase 13: LaTeX table generation
+echo "[Phase 13] Generating LaTeX tables..."
+uv run python scripts/generate_tables.py
 echo ""
 
 echo "============================================================"
