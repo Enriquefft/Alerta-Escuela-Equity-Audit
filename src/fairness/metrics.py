@@ -550,8 +550,30 @@ def _compute_gaps(mf_binary: MetricFrame) -> dict:
 # ---------------------------------------------------------------------------
 
 
-def _load_and_prepare_data() -> dict:
+_PRED_FILE_MAP = {
+    "lgbm_calibrated": "predictions_lgbm_calibrated.parquet",
+    "rf": "predictions_rf.parquet",
+    "mlp": "predictions_mlp.parquet",
+    "lr": "predictions_lr.parquet",
+    "xgb": "predictions_xgb.parquet",
+}
+
+_THRESHOLD_MAP = {
+    "lgbm_calibrated": lambda r: r["test_2023_calibrated"]["metadata"]["optimal_threshold"],
+    "rf": lambda r: r["random_forest"]["threshold_analysis"]["optimal_threshold"],
+    "mlp": lambda r: r["mlp"]["threshold_analysis"]["optimal_threshold"],
+    "lr": lambda r: r["logistic_regression"]["threshold_analysis"]["optimal_threshold"],
+    "xgb": lambda r: r["xgboost"]["threshold_analysis"]["optimal_threshold"],
+}
+
+
+def _load_and_prepare_data(model_name: str = "lgbm_calibrated") -> dict:
     """Load predictions + features and prepare arrays for fairness analysis.
+
+    Parameters
+    ----------
+    model_name : str
+        Model key: lgbm_calibrated, rf, mlp, lr, xgb.
 
     Returns
     -------
@@ -560,15 +582,15 @@ def _load_and_prepare_data() -> dict:
               threshold, n_test, n_dropouts
     """
     root = find_project_root()
-    pred_path = root / "data" / "processed" / "predictions_lgbm_calibrated.parquet"
+    pred_path = root / "data" / "processed" / _PRED_FILE_MAP[model_name]
     feat_path = root / "data" / "processed" / "enaho_with_features.parquet"
     results_path = root / "data" / "exports" / "model_results.json"
 
     # Load threshold from model_results.json
     with open(results_path) as f:
         model_results = json.load(f)
-    threshold = model_results["test_2023_calibrated"]["metadata"]["optimal_threshold"]
-    print(f"  Threshold (calibrated): {threshold}")
+    threshold = _THRESHOLD_MAP[model_name](model_results)
+    print(f"  Threshold ({model_name}): {threshold}")
 
     # Load predictions and filter to test_2023
     pred = pl.read_parquet(pred_path)
@@ -610,7 +632,10 @@ def _load_and_prepare_data() -> dict:
     # Extract numpy arrays
     y_true = merged["dropout"].cast(pl.Int8).to_numpy()
     y_prob = merged["prob_dropout"].to_numpy()
-    y_prob_uncal = merged["prob_dropout_uncalibrated"].to_numpy()
+    if model_name == "lgbm_calibrated" and "prob_dropout_uncalibrated" in merged.columns:
+        y_prob_uncal = merged["prob_dropout_uncalibrated"].to_numpy()
+    else:
+        y_prob_uncal = y_prob  # Same as predicted for non-calibrated models
     weights = merged["FACTOR07"].to_numpy()
 
     # Binary predictions using calibrated threshold
@@ -683,6 +708,7 @@ REFERENCE_GROUPS = {
 
 
 def run_fairness_pipeline(
+    model_name: str = "lgbm_calibrated",
     n_bootstrap: int = 1000,
     n_permutations: int = 5000,
 ) -> dict:
@@ -690,6 +716,8 @@ def run_fairness_pipeline(
 
     Parameters
     ----------
+    model_name : str
+        Model key: lgbm_calibrated, rf, mlp, lr, xgb.
     n_bootstrap : int
         Number of bootstrap replicates for CIs.
     n_permutations : int
@@ -701,13 +729,16 @@ def run_fairness_pipeline(
         The fairness_metrics.json content.
     """
     root = find_project_root()
-    output_path = root / "data" / "exports" / "fairness_metrics.json"
+    if model_name == "lgbm_calibrated":
+        output_path = root / "data" / "exports" / "fairness_metrics.json"
+    else:
+        output_path = root / "data" / "exports" / f"fairness_metrics_{model_name}.json"
 
     # -----------------------------------------------------------------------
     # Step 1: Load and prepare data
     # -----------------------------------------------------------------------
-    print("Step 1: Loading and preparing data...")
-    data = _load_and_prepare_data()
+    print(f"Step 1: Loading and preparing data for model '{model_name}'...")
+    data = _load_and_prepare_data(model_name=model_name)
     y_true = data["y_true"]
     y_pred = data["y_pred"]
     y_prob = data["y_prob"]
@@ -886,7 +917,7 @@ def run_fairness_pipeline(
 
     fairness_json = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "model": "lightgbm",
+        "model": model_name,
         "threshold": threshold,
         "threshold_type": "calibrated",
         "calibration_note": (
