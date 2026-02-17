@@ -351,3 +351,126 @@ def _is_nan(val) -> bool:
         return np.isnan(float(val))
     except (ValueError, TypeError):
         return False
+
+
+# ---------------------------------------------------------------------------
+# Phase 16: Bootstrap CI + Permutation Test Validation
+# ---------------------------------------------------------------------------
+
+CI_METRICS = ["tpr", "fpr", "fnr", "precision", "pr_auc"]
+
+
+def test_ci_fields_present(fairness_data):
+    """Every group must have CI fields for all metrics."""
+    for dim_name, dim in fairness_data["dimensions"].items():
+        for group_name, group in dim["groups"].items():
+            for metric in CI_METRICS:
+                assert f"{metric}_ci_lower" in group, (
+                    f"Missing {metric}_ci_lower for {dim_name}/{group_name}"
+                )
+                assert f"{metric}_ci_upper" in group, (
+                    f"Missing {metric}_ci_upper for {dim_name}/{group_name}"
+                )
+
+
+def test_ci_bounds_valid(fairness_data):
+    """CI lower <= point estimate <= CI upper for all metrics (with tolerance)."""
+    for dim_name, dim in fairness_data["dimensions"].items():
+        for group_name, group in dim["groups"].items():
+            for metric in CI_METRICS:
+                point = group[metric]
+                ci_l = group.get(f"{metric}_ci_lower")
+                ci_u = group.get(f"{metric}_ci_upper")
+                if point is None or ci_l is None or ci_u is None:
+                    continue
+                if _is_nan(point) or _is_nan(ci_l) or _is_nan(ci_u):
+                    continue
+                assert ci_l <= point + 0.02, (
+                    f"{dim_name}/{group_name}/{metric}: ci_lower={ci_l} > point={point}"
+                )
+                assert ci_u >= point - 0.02, (
+                    f"{dim_name}/{group_name}/{metric}: ci_upper={ci_u} < point={point}"
+                )
+
+
+def test_ci_width_flagging(fairness_data):
+    """Groups with FNR CI width > 0.3 must have ci_warning."""
+    for dim_name, dim in fairness_data["dimensions"].items():
+        for group_name, group in dim["groups"].items():
+            ci_l = group.get("fnr_ci_lower")
+            ci_u = group.get("fnr_ci_upper")
+            if ci_l is None or ci_u is None:
+                continue
+            fnr_width = ci_u - ci_l
+            if fnr_width > 0.3:
+                assert "ci_warning" in group, (
+                    f"Wide CI ({fnr_width:.3f}) for {dim_name}/{group_name} not flagged"
+                )
+
+
+def test_p_values_valid(fairness_data):
+    """p-values must be in [0, 1] or null for reference/unusable groups."""
+    for dim_name, dim in fairness_data["dimensions"].items():
+        for group_name, group in dim["groups"].items():
+            for key, value in group.items():
+                if key.endswith("_p_value") and value is not None:
+                    assert 0 <= value <= 1, (
+                        f"Invalid p-value {value} for {dim_name}/{group_name}/{key}"
+                    )
+
+
+def test_intersection_cis_present(fairness_data):
+    """Intersection groups must have CIs (no p-values required)."""
+    for int_name, intersection in fairness_data["intersections"].items():
+        for group_name, group in intersection["groups"].items():
+            for metric in CI_METRICS:
+                assert f"{metric}_ci_lower" in group, (
+                    f"Missing {metric}_ci_lower for {int_name}/{group_name}"
+                )
+
+
+def test_urban_indigenous_ci_width(fairness_data):
+    """The headline finding (urban other-indigenous FNR=0.753) must report CI width."""
+    lang_rural = fairness_data["intersections"].get("language_x_rural", {})
+    groups = lang_rural.get("groups", {})
+    found = False
+    for gname, gdata in groups.items():
+        if "other_indigenous" in gname and "urban" in gname:
+            found = True
+            fnr_ci_lower = gdata.get("fnr_ci_lower")
+            fnr_ci_upper = gdata.get("fnr_ci_upper")
+            assert fnr_ci_lower is not None, f"fnr_ci_lower is None for {gname}"
+            assert fnr_ci_upper is not None, f"fnr_ci_upper is None for {gname}"
+            ci_width = fnr_ci_upper - fnr_ci_lower
+            print(
+                f"Urban other-indigenous FNR CI: "
+                f"[{fnr_ci_lower:.3f}, {fnr_ci_upper:.3f}] (width={ci_width:.3f})"
+            )
+    assert found, "Could not find urban other-indigenous group in language_x_rural"
+
+
+def test_bootstrap_metadata(fairness_data):
+    """JSON must include bootstrap/permutation metadata."""
+    assert "bootstrap_replicates" in fairness_data
+    assert fairness_data["bootstrap_replicates"] >= 1000
+    assert "ci_level" in fairness_data
+    assert fairness_data["ci_level"] == 0.95
+
+
+def test_print_ci_summary(fairness_data):
+    """Human review: print CI summary for key groups. Always passes."""
+    lang = fairness_data["dimensions"]["language"]["groups"]
+    print("\n=== Language Dimension: FNR with 95% CI ===")
+    for gname, gdata in lang.items():
+        fnr = gdata.get("fnr")
+        ci_l = gdata.get("fnr_ci_lower")
+        ci_u = gdata.get("fnr_ci_upper")
+        pval = gdata.get("fnr_p_value")
+        if fnr is not None and ci_l is not None:
+            print(
+                f"  {gname}: FNR={fnr:.3f} "
+                f"[{ci_l:.3f}, {ci_u:.3f}] p={pval}"
+            )
+        else:
+            print(f"  {gname}: FNR={fnr} (no CI)")
+    assert True

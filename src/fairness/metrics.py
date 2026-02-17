@@ -25,6 +25,7 @@ Usage::
 
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
 import sys
@@ -43,6 +44,8 @@ from sklearn.metrics import (
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from utils import find_project_root
+from fairness.bootstrap import bootstrap_subgroup_cis
+from fairness.hypothesis_tests import test_all_disparities
 
 logger = logging.getLogger(__name__)
 
@@ -138,6 +141,51 @@ PROBA_METRICS = {
 }
 
 
+# ---------------------------------------------------------------------------
+# Bootstrap / permutation cache
+# ---------------------------------------------------------------------------
+
+def _data_hash(*arrays: np.ndarray) -> str:
+    """Compute a fast hash over numpy arrays to detect data changes."""
+    h = hashlib.sha256()
+    for a in arrays:
+        # Object arrays (string labels) need special handling
+        if a.dtype == object:
+            h.update(str(a[:100].tolist()).encode())
+        else:
+            h.update(a.tobytes()[:4096])
+        h.update(str(len(a)).encode())
+    return h.hexdigest()[:16]
+
+
+def _load_cache(cache_path: Path, expected_hash: str) -> dict | None:
+    """Load cached bootstrap/permutation results if hash matches."""
+    if not cache_path.exists():
+        return None
+    try:
+        with open(cache_path) as f:
+            cached = json.load(f)
+        if cached.get("data_hash") == expected_hash:
+            logger.info("Cache hit: %s", cache_path.name)
+            return cached
+    except (json.JSONDecodeError, KeyError):
+        pass
+    return None
+
+
+def _save_cache(cache_path: Path, data_hash: str, boot_cis: dict, perm_results: dict) -> None:
+    """Save bootstrap/permutation results to cache."""
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "data_hash": data_hash,
+        "bootstrap_cis": boot_cis,
+        "permutation_results": perm_results,
+    }
+    with open(cache_path, "w") as f:
+        json.dump(payload, f)
+    logger.info("Cache saved: %s", cache_path.name)
+
+
 def _analyze_dimension(
     y_true: np.ndarray,
     y_pred: np.ndarray,
@@ -148,6 +196,9 @@ def _analyze_dimension(
     dimension_name: str,
     min_sample: int = 100,
     min_high_risk: int = 30,
+    n_bootstrap: int = 1000,
+    n_permutations: int = 10000,
+    reference_group: str | None = None,
 ) -> dict:
     """Compute fairness metrics for a single dimension.
 
@@ -198,6 +249,45 @@ def _analyze_dimension(
 
     combined = pd.concat([mf_binary.by_group, mf_proba.by_group], axis=1)
 
+    # ---- Bootstrap CIs + Permutation tests (cached) ----
+    ci_metric_fns = {
+        "tpr": (_safe_recall, "binary"),
+        "fpr": (weighted_fpr, "binary"),
+        "fnr": (_safe_fnr, "binary"),
+        "precision": (_safe_precision, "binary"),
+        "pr_auc": (average_precision_score, "prob"),
+    }
+
+    root = find_project_root()
+    cache_dir = root / "data" / "processed" / "cache"
+    dim_safe = dimension_name.replace(" ", "_").replace("/", "_")
+    cache_path = cache_dir / f"stat_cache_{dim_safe}.json"
+    dhash = _data_hash(y_true, y_pred, y_prob, weights, groups)
+
+    cached = _load_cache(cache_path, dhash)
+    if cached is not None:
+        boot_cis = cached["bootstrap_cis"]
+        perm_results = cached["permutation_results"]
+        print(f"    [cache hit] {dimension_name}")
+    else:
+        print(f"    [computing] bootstrap + permutation for {dimension_name}...")
+        boot_cis = bootstrap_subgroup_cis(
+            y_true, y_pred, y_prob, weights, groups,
+            metric_fns=ci_metric_fns,
+            n_replicates=n_bootstrap,
+            seed=42,
+        )
+        perm_results = {}
+        if reference_group is not None:
+            perm_results = test_all_disparities(
+                y_true, y_pred, y_prob, weights, groups,
+                reference_group=reference_group,
+                metric_fns=ci_metric_fns,
+                n_permutations=n_permutations,
+                seed=42,
+            )
+        _save_cache(cache_path, dhash, boot_cis, perm_results)
+
     # Build per-group output
     result_groups = {}
     for group_name in combined.index:
@@ -214,6 +304,34 @@ def _analyze_dimension(
             "precision": round(float(combined.loc[group_name, "precision"]), 6),
             "pr_auc": round(float(combined.loc[group_name, "pr_auc"]), 6),
         }
+
+        # Add CI fields
+        g_str = str(group_name)
+        g_boot = boot_cis.get(g_str, {})
+        for metric in ["tpr", "fpr", "fnr", "precision", "pr_auc"]:
+            m_ci = g_boot.get(metric, {})
+            ci_l = m_ci.get("ci_lower")
+            ci_u = m_ci.get("ci_upper")
+            group_data[f"{metric}_ci_lower"] = round(ci_l, 6) if ci_l is not None else None
+            group_data[f"{metric}_ci_upper"] = round(ci_u, 6) if ci_u is not None else None
+
+        # Add p-value fields
+        g_perm = perm_results.get(g_str, {})
+        for metric in ["tpr", "fpr", "fnr", "precision", "pr_auc"]:
+            m_perm = g_perm.get(metric, {})
+            group_data[f"{metric}_p_value"] = m_perm.get("p_value")
+
+        # CI width warning
+        fnr_ci_l = group_data.get("fnr_ci_lower")
+        fnr_ci_u = group_data.get("fnr_ci_upper")
+        if fnr_ci_l is not None and fnr_ci_u is not None:
+            fnr_width = fnr_ci_u - fnr_ci_l
+            if fnr_width > 0.3:
+                group_data["ci_warning"] = "wide_interval"
+            elif n_unweighted < 30:
+                group_data["ci_warning"] = "insufficient_sample"
+        elif n_unweighted < 30:
+            group_data["ci_warning"] = "insufficient_sample"
 
         # Calibration by group: among predicted high-risk (uncalibrated > 0.7)
         high_risk_mask = group_mask & (y_prob_uncal > 0.7)
@@ -258,6 +376,7 @@ def _analyze_intersection(
     intersection_name: str,
     min_sample: int = 50,
     min_high_risk: int = 30,
+    n_bootstrap: int = 1000,
 ) -> dict:
     """Compute fairness metrics for an intersectional analysis.
 
@@ -287,6 +406,40 @@ def _analyze_intersection(
 
     combined = pd.concat([mf_binary.by_group, mf_proba.by_group], axis=1)
 
+    # Build combined group labels for bootstrap
+    intersection_labels = np.array([
+        "_".join(str(sensitive_df[col].values[i]) for col in sensitive_df.columns)
+        for i in range(len(y_true))
+    ])
+
+    # ---- Bootstrap CIs for intersection (cached) ----
+    ci_metric_fns = {
+        "tpr": (_safe_recall, "binary"),
+        "fpr": (weighted_fpr, "binary"),
+        "fnr": (_safe_fnr, "binary"),
+        "precision": (_safe_precision, "binary"),
+        "pr_auc": (average_precision_score, "prob"),
+    }
+
+    root = find_project_root()
+    cache_dir = root / "data" / "processed" / "cache"
+    cache_path = cache_dir / f"stat_cache_int_{intersection_name}.json"
+    dhash = _data_hash(y_true, y_pred, y_prob, weights, intersection_labels)
+
+    cached = _load_cache(cache_path, dhash)
+    if cached is not None:
+        boot_cis = cached["bootstrap_cis"]
+        print(f"    [cache hit] {intersection_name}")
+    else:
+        print(f"    [computing] bootstrap for {intersection_name}...")
+        boot_cis = bootstrap_subgroup_cis(
+            y_true, y_pred, y_prob, weights, intersection_labels,
+            metric_fns=ci_metric_fns,
+            n_replicates=n_bootstrap,
+            seed=42,
+        )
+        _save_cache(cache_path, dhash, boot_cis, {})
+
     # Build per-group output (MultiIndex -> string key)
     result_groups = {}
     for idx in combined.index:
@@ -310,6 +463,27 @@ def _analyze_intersection(
             "precision": round(float(combined.loc[idx, "precision"]), 6),
             "pr_auc": round(float(combined.loc[idx, "pr_auc"]), 6),
         }
+
+        # Add CI fields from bootstrap
+        g_boot = boot_cis.get(group_label, {})
+        for metric in ["tpr", "fpr", "fnr", "precision", "pr_auc"]:
+            m_ci = g_boot.get(metric, {})
+            ci_l = m_ci.get("ci_lower")
+            ci_u = m_ci.get("ci_upper")
+            group_data[f"{metric}_ci_lower"] = round(ci_l, 6) if ci_l is not None else None
+            group_data[f"{metric}_ci_upper"] = round(ci_u, 6) if ci_u is not None else None
+
+        # CI width warning
+        fnr_ci_l = group_data.get("fnr_ci_lower")
+        fnr_ci_u = group_data.get("fnr_ci_upper")
+        if fnr_ci_l is not None and fnr_ci_u is not None:
+            fnr_width = fnr_ci_u - fnr_ci_l
+            if fnr_width > 0.3:
+                group_data["ci_warning"] = "wide_interval"
+            elif n_unweighted < 30:
+                group_data["ci_warning"] = "insufficient_sample"
+        elif n_unweighted < 30:
+            group_data["ci_warning"] = "insufficient_sample"
 
         # Calibration by group
         high_risk_mask = mask & (y_prob_uncal > 0.7)
@@ -497,8 +671,29 @@ def _build_disaggregated_language(merged: pl.DataFrame) -> np.ndarray:
 # ---------------------------------------------------------------------------
 
 
-def run_fairness_pipeline() -> dict:
+REFERENCE_GROUPS = {
+    "language": "castellano",
+    "language_disaggregated": "castellano",
+    "sex": "male",
+    "geography": "urban",
+    "region": "costa",
+    "poverty": "Q5",
+    "nationality": None,  # skip — n=27 non-Peruvian
+}
+
+
+def run_fairness_pipeline(
+    n_bootstrap: int = 1000,
+    n_permutations: int = 5000,
+) -> dict:
     """Run the full fairness metrics pipeline.
+
+    Parameters
+    ----------
+    n_bootstrap : int
+        Number of bootstrap replicates for CIs.
+    n_permutations : int
+        Number of permutations for hypothesis tests.
 
     Returns
     -------
@@ -576,6 +771,7 @@ def run_fairness_pipeline() -> dict:
 
     for dim_name, groups, feature_name, min_sample in dim_configs:
         print(f"\n  Analyzing: {dim_name} (min_sample={min_sample})...")
+        ref = REFERENCE_GROUPS.get(dim_name)
         result = _analyze_dimension(
             y_true=y_true,
             y_pred=y_pred,
@@ -585,6 +781,9 @@ def run_fairness_pipeline() -> dict:
             y_prob_uncal=y_prob_uncal,
             dimension_name=feature_name,
             min_sample=min_sample,
+            n_bootstrap=n_bootstrap,
+            n_permutations=n_permutations,
+            reference_group=ref,
         )
         dimensions[dim_name] = result
 
@@ -633,6 +832,7 @@ def run_fairness_pipeline() -> dict:
             y_prob_uncal=y_prob_uncal[lang_mask],
             intersection_name="language_x_rural",
             min_sample=50,
+            n_bootstrap=n_bootstrap,
         )
         intersections["language_x_rural"] = result
 
@@ -653,6 +853,7 @@ def run_fairness_pipeline() -> dict:
         y_prob_uncal=y_prob_uncal,
         intersection_name="sex_x_poverty",
         min_sample=50,
+        n_bootstrap=n_bootstrap,
     )
     intersections["sex_x_poverty"] = result
 
@@ -674,6 +875,7 @@ def run_fairness_pipeline() -> dict:
             y_prob_uncal=y_prob_uncal[lang_mask],
             intersection_name="language_x_region",
             min_sample=50,
+            n_bootstrap=n_bootstrap,
         )
         intersections["language_x_region"] = result
 
@@ -693,6 +895,11 @@ def run_fairness_pipeline() -> dict:
         "test_set": "2023",
         "n_test": data["n_test"],
         "n_dropouts": data["n_dropouts"],
+        "bootstrap_replicates": n_bootstrap,
+        "permutation_replicates": n_permutations,
+        "ci_level": 0.95,
+        "ci_method": "percentile_bootstrap",
+        "test_method": "permutation_test",
         "dimensions": dimensions,
         "intersections": intersections,
     }
