@@ -16,14 +16,18 @@ Output structure:
     │   ├── 2019/
     │   ├── ...
     │   └── 2024/
-    └── admin/       # District-level dropout rates from datosabiertos
+    ├── admin/       # District-level dropout rates from datosabiertos
+    ├── census/      # Census 2017 district-level indicators
+    └── nightlights/ # VIIRS district-level nighttime radiance
 """
 
 import os
+import subprocess
 import sys
 import shutil
 import glob
 import requests
+import zipfile
 from pathlib import Path
 
 from utils import find_project_root
@@ -47,13 +51,24 @@ PROJECT_ROOT = find_project_root()
 DATA_RAW = PROJECT_ROOT / "data" / "raw"
 ENAHO_DIR = DATA_RAW / "enaho"
 ADMIN_DIR = DATA_RAW / "admin"
+CENSUS_DIR = DATA_RAW / "census"
+NIGHTLIGHTS_DIR = DATA_RAW / "nightlights"
 TEMP_DIR = PROJECT_ROOT / ".tmp_enaho_download"
 
+# Census 2017 REDATAM database (647 MB ZIP from CELADE/ECLAC)
+CENSUS_REDATAM_URL = "https://redatam.org/cdr/descargas/censos/poblacion/CP2017PER.zip"
+
+# GADM Peru Level 3 shapefile (needed for GEE nightlights extraction)
+GADM_URL = "https://geodata.ucdavis.edu/gadm/gadm4.1/shp/gadm41_PER_shp.zip"
+
+# UBIGEO reference table (for GADM→UBIGEO name matching and poverty data)
+UBIGEO_REF_URL = "https://raw.githubusercontent.com/jmcastagnetto/ubigeo-peru-aumentado/main/ubigeo_distrito.csv"
+
 # datosabiertos.gob.pe URLs for district dropout rates
-# These may change -- verify at https://www.datosabiertos.gob.pe if 404
+# Real data from www.datosabiertos.gob.pe (note: www. prefix required)
 ADMIN_URLS = {
-    "primaria_2023": "https://www.datosabiertos.gob.pe/sites/default/files/Tasa%20y%20N%C3%BAmero%20de%20desertores%20de%20EBR%20primaria%202023.csv",
-    "secundaria_2023": "https://www.datosabiertos.gob.pe/sites/default/files/Tasa%20y%20N%C3%BAmero%20de%20desertores%20de%20EBR%20secundaria%202023.csv",
+    "admin_dropout_primaria": "https://www.datosabiertos.gob.pe/sites/default/files/Educacion_Primaria.csv",
+    "admin_dropout_secundaria": "https://www.datosabiertos.gob.pe/sites/default/files/Educacion_Secundaria.csv",
 }
 
 
@@ -261,7 +276,168 @@ def download_admin_data():
 
 
 # ---------------------------------------------------------------------------
-# Step 5: Cleanup
+# Step 5: Download Census 2017 REDATAM data
+# ---------------------------------------------------------------------------
+
+def download_census_data():
+    """Download Census 2017 REDATAM ZIP and process to district-level CSV.
+
+    Downloads the Census 2017 microdata from redatam.org, extracts to CSV
+    using open-redatam, then aggregates to district-level indicators using
+    scripts/process_census_redatam.py.
+
+    If census CSV already exists, skips download.
+    """
+    print("\n" + "=" * 60)
+    print("STEP 5: Census 2017 district-level data")
+    print("=" * 60)
+
+    CENSUS_DIR.mkdir(parents=True, exist_ok=True)
+    census_csv = CENSUS_DIR / "census_2017_districts.csv"
+
+    if census_csv.exists():
+        print(f"  OK census_2017_districts.csv already exists, skipping")
+        return True
+
+    # Download Census REDATAM ZIP
+    census_zip = Path("/tmp/CP2017PER.zip")
+    if not census_zip.exists():
+        print(f"  Downloading Census 2017 REDATAM ({CENSUS_REDATAM_URL})...")
+        print("  (647 MB -- this will take a few minutes)")
+        try:
+            resp = requests.get(CENSUS_REDATAM_URL, timeout=600, stream=True)
+            resp.raise_for_status()
+            with open(census_zip, "wb") as f:
+                for chunk in resp.iter_content(chunk_size=8192):
+                    f.write(chunk)
+            print(f"  OK Downloaded ({census_zip.stat().st_size // (1024*1024)} MB)")
+        except requests.RequestException as e:
+            print(f"  FAIL Census download: {e}")
+            print(f"    Download manually from: {CENSUS_REDATAM_URL}")
+            print(f"    Save to: {census_zip}")
+            return False
+    else:
+        print(f"  Census ZIP already at {census_zip}")
+
+    # Process using the REDATAM script
+    script = PROJECT_ROOT / "scripts" / "process_census_redatam.py"
+    if script.exists():
+        print("  Processing Census REDATAM data...")
+        result = subprocess.run(
+            [sys.executable, str(script)],
+            cwd=str(PROJECT_ROOT),
+            timeout=600,
+        )
+        if result.returncode != 0:
+            print("  FAIL: Census processing script failed")
+            return False
+    else:
+        print(f"  WARNING: {script} not found")
+        print("  Run: uv run python scripts/process_census_redatam.py")
+        return False
+
+    return census_csv.exists()
+
+
+# ---------------------------------------------------------------------------
+# Step 6: Download GADM shapefile + UBIGEO reference for nightlights
+# ---------------------------------------------------------------------------
+
+def download_nightlights_prereqs():
+    """Download GADM shapefile and UBIGEO reference needed for nightlights.
+
+    Nightlights extraction requires:
+    1. GADM Peru Level 3 shapefile (uploaded to Google Earth Engine)
+    2. UBIGEO reference table (for GADM name → UBIGEO matching)
+    3. User runs GEE script manually (scripts/gee_viirs_peru.js)
+    4. User places GEE CSV export as data/raw/nightlights/viirs_districts_gee.csv
+    5. scripts/match_gadm_ubigeo.py converts to viirs_districts.csv
+    """
+    print("\n" + "=" * 60)
+    print("STEP 6: Nightlights data prerequisites")
+    print("=" * 60)
+
+    NIGHTLIGHTS_DIR.mkdir(parents=True, exist_ok=True)
+    nightlights_csv = NIGHTLIGHTS_DIR / "viirs_districts.csv"
+
+    if nightlights_csv.exists():
+        print(f"  OK viirs_districts.csv already exists, skipping")
+        return True
+
+    # Download GADM shapefile
+    gadm_zip = Path("/tmp/gadm41_PER_shp.zip")
+    if not gadm_zip.exists():
+        print(f"  Downloading GADM Peru shapefile...")
+        try:
+            resp = requests.get(GADM_URL, timeout=120)
+            resp.raise_for_status()
+            gadm_zip.write_bytes(resp.content)
+            print(f"  OK GADM shapefile ({len(resp.content) // 1024} KB)")
+        except requests.RequestException as e:
+            print(f"  FAIL GADM download: {e}")
+    else:
+        print(f"  GADM shapefile already at {gadm_zip}")
+
+    # Extract GADM
+    gadm_dir = Path("/tmp/gadm_peru")
+    if not gadm_dir.exists() and gadm_zip.exists():
+        gadm_dir.mkdir(parents=True, exist_ok=True)
+        with zipfile.ZipFile(gadm_zip, "r") as zf:
+            zf.extractall(gadm_dir)
+        print(f"  Extracted to {gadm_dir}")
+
+    # Download UBIGEO reference
+    ubigeo_csv = Path("/tmp/ubigeo_distrito.csv")
+    if not ubigeo_csv.exists():
+        print(f"  Downloading UBIGEO reference table...")
+        try:
+            resp = requests.get(UBIGEO_REF_URL, timeout=30)
+            resp.raise_for_status()
+            ubigeo_csv.write_bytes(resp.content)
+            print(f"  OK UBIGEO reference ({len(resp.content) // 1024} KB)")
+        except requests.RequestException as e:
+            print(f"  FAIL UBIGEO download: {e}")
+    else:
+        print(f"  UBIGEO reference already at {ubigeo_csv}")
+
+    # Check for GEE export
+    gee_csv = NIGHTLIGHTS_DIR / "viirs_districts_gee.csv"
+    if gee_csv.exists():
+        # Run matching script
+        script = PROJECT_ROOT / "scripts" / "match_gadm_ubigeo.py"
+        if script.exists():
+            print("  Running GADM→UBIGEO matching...")
+            result = subprocess.run(
+                [sys.executable, str(script)],
+                cwd=str(PROJECT_ROOT),
+                timeout=60,
+            )
+            if result.returncode == 0:
+                return nightlights_csv.exists()
+        return False
+
+    print("""
+  MANUAL STEPS REQUIRED for nightlights data:
+
+  1. Upload /tmp/gadm_peru/gadm41_PER_3.* to Google Earth Engine
+     (Assets > New > Shape files)
+
+  2. Paste scripts/gee_viirs_peru.js into GEE Code Editor
+     Update GADM_ASSET path, then click Run
+
+  3. In Tasks tab, click Run next to 'viirs_peru_districts'
+
+  4. Download CSV from Google Drive and place at:
+     data/raw/nightlights/viirs_districts_gee.csv
+
+  5. Run: uv run python scripts/match_gadm_ubigeo.py
+    """)
+
+    return False
+
+
+# ---------------------------------------------------------------------------
+# Step 7: Cleanup
 # ---------------------------------------------------------------------------
 
 def cleanup():
@@ -287,6 +463,8 @@ def main():
 
   Downloads ENAHO 2018-2024 (Modules 02, 03, 05, 34, 37)
   + district dropout rates from datosabiertos
+  + Census 2017 district-level indicators
+  + VIIRS nightlights prerequisites
 ==========================================================
     """)
 
@@ -294,6 +472,8 @@ def main():
     for year in YEARS:
         (ENAHO_DIR / year).mkdir(parents=True, exist_ok=True)
     ADMIN_DIR.mkdir(parents=True, exist_ok=True)
+    CENSUS_DIR.mkdir(parents=True, exist_ok=True)
+    NIGHTLIGHTS_DIR.mkdir(parents=True, exist_ok=True)
 
     # Check what already exists
     existing = sum(1 for y in YEARS if any((ENAHO_DIR / y).glob("*300*")))
@@ -316,6 +496,12 @@ def main():
     # Admin data
     download_admin_data()
 
+    # Census data
+    download_census_data()
+
+    # Nightlights prerequisites
+    download_nightlights_prereqs()
+
     # Cleanup
     cleanup()
 
@@ -330,23 +516,13 @@ def main():
         print(f"  Place files in: {ENAHO_DIR}/{{YEAR}}/")
     print("=" * 60)
 
-    # Print note about additional data sources
-    print("""
-NOTE: This script downloads ENAHO + admin dropout rates only.
-You still need to manually obtain:
-
-  1. Census 2017 district-level data -> data/raw/census/
-     Source: INEI (https://censos2017.inei.gob.pe/redatam/)
-
-  2. VIIRS Nighttime Lights (pre-aggregated) -> data/raw/nightlights/
-     Source: Jiaxiong Yao's research site or Google Earth Engine
-
-  3. Censo Escolar aggregates -> data/raw/escolar/
-     Source: https://www.datosabiertos.gob.pe/dataset/censo-escolar
-
-These are supplementary enrichment data (M1.4). You can start
-M1.1 and M1.2 with just ENAHO data.
-    """)
+    # Print status of supplementary data
+    census_ok = (CENSUS_DIR / "census_2017_districts.csv").exists()
+    nightlights_ok = (NIGHTLIGHTS_DIR / "viirs_districts.csv").exists()
+    print(f"\n  Census 2017:  {'OK' if census_ok else 'MISSING'}")
+    print(f"  Nightlights:  {'OK' if nightlights_ok else 'MISSING (manual GEE step needed)'}")
+    if not nightlights_ok:
+        print("  See instructions above for Google Earth Engine workflow.")
 
 
 if __name__ == "__main__":

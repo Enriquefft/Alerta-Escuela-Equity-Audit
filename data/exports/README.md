@@ -6,7 +6,7 @@ Developer-facing documentation for integrating export files into the M4 scrollyt
 
 | File | Size | Site Section | Producing Script | Phase |
 |------|------|-------------|-----------------|-------|
-| `findings.json` | ~15 KB | Narrative findings | `src/fairness/findings.py` | 11 |
+| `findings.json` | ~10 KB | Narrative findings | `src/fairness/findings.py` | 11 |
 | `fairness_metrics.json` | 28 KB | Subgroup fairness dashboard | `src/fairness/metrics.py` | 8 |
 | `shap_values.json` | 29 KB | SHAP interpretability | `src/fairness/shap_analysis.py` | 9 |
 | `choropleth.json` | 402 KB | District-level map | `src/fairness/cross_validation.py` | 10 |
@@ -18,14 +18,14 @@ Developer-facing documentation for integrating export files into the M4 scrollyt
 
 ## findings.json
 
-**Purpose:** 7 bilingual (ES/EN) media-ready findings ordered by narrative arc, each linking to its source data.
+**Purpose:** 8 bilingual (ES/EN) media-ready findings ordered by narrative arc, each linking to its source data.
 
 **Schema:**
 
 ```json
 {
   "generated_at": "ISO 8601 timestamp",
-  "n_findings": 7,
+  "n_findings": 8,
   "findings": [
     {
       "id": "string (unique identifier, e.g. 'fnr_overall')",
@@ -38,7 +38,7 @@ Developer-facing documentation for integrating export files into the M4 scrollyt
         "path": "string (format: filename.json#dot.path)",
         "label": "string (human-readable metric description)"
       },
-      "visualization_type": "bar_chart | grouped_bar | heatmap | choropleth",
+      "visualization_type": "bar_chart | grouped_bar | heatmap | choropleth | comparison_bar",
       "data_key": "string (key in source export for rendering)",
       "severity": "critical | high | medium | low"
     }
@@ -63,6 +63,9 @@ Developer-facing documentation for integrating export files into the M4 scrollyt
 | `generated_at` | string | ISO 8601 timestamp |
 | `model` | string | Model name (`"lightgbm"`) |
 | `threshold` | float | Classification threshold (calibrated) |
+| `threshold_type` | string | Threshold type (`"calibrated"`) |
+| `calibration_note` | string | Note on calibrated prob range and high-risk cutoff |
+| `test_set` | string | Test year (`"2023"`) |
 | `n_test` | int | Test set size |
 | `n_dropouts` | int | Positive class count in test |
 | `dimensions` | object | 7 fairness dimensions (see below) |
@@ -74,17 +77,23 @@ Developer-facing documentation for integrating export files into the M4 scrollyt
 {
   "groups": {
     "castellano": {
-      "n": 22149,
+      "n_unweighted": 23170,
+      "n_weighted": 6993371.01,
       "tpr": 0.367,
-      "fpr": 0.160,
+      "fpr": 0.175,
       "fnr": 0.633,
-      "precision": 0.252,
-      "pr_auc": 0.191
+      "precision": 0.243,
+      "pr_auc": 0.235,
+      "calibration_high_risk": { "n_predicted_high": 0, "actual_dropout_rate": null },
+      "flagged_small_sample": false
     }
   },
   "gaps": {
-    "equalized_odds_tpr": 0.033,
-    "max_fnr_gap": 0.033
+    "equalized_odds_tpr": 0.707,
+    "equalized_odds_fpr": 0.345,
+    "predictive_parity": 0.181,
+    "max_fnr_gap": 0.707,
+    "max_fnr_groups": ["unknown", "other_indigenous"]
   }
 }
 ```
@@ -112,13 +121,18 @@ Developer-facing documentation for integrating export files into the M4 scrollyt
 |-----|------|-------------|
 | `generated_at` | string | ISO 8601 timestamp |
 | `model` | string | Model name (`"lightgbm"`) |
+| `computed_on` | string | Dataset used (`"test_2023"`) |
+| `n_test` | int | Number of test observations |
 | `shap_space` | string | SHAP value space (`"log_odds"`) |
 | `base_value` | float | Expected value (log-odds) |
-| `feature_names` | array[25] | All feature names |
+| `feature_names` | array[25] | All feature names (English) |
+| `feature_labels_es` | object | Spanish labels keyed by feature name |
 | `global_importance` | object | Mean absolute SHAP per feature |
 | `top_5_shap` | array[5] | Top 5 SHAP features |
 | `top_5_lr` | array[5] | Top 5 logistic regression features |
 | `overlap_count` | int | Overlap between SHAP and LR top-5 |
+| `overlap_features` | array | Features appearing in both top-5 lists |
+| `overlap_note` | string | Explanation of overlap result |
 | `regional` | object | Per-region (costa/sierra/selva) SHAP |
 | `es_peruano` | object | Nationality feature analysis |
 | `es_mujer` | object | Sex feature analysis |
@@ -165,10 +179,9 @@ Developer-facing documentation for integrating export files into the M4 scrollyt
 **M4 component:** Choropleth map colored by `model_error` or `predicted_dropout_rate`. Tooltip shows district stats. Overlay toggle for indigenous language prevalence.
 
 **Data provenance:**
-- Source: ENAHO 2023 test predictions aggregated to district level + synthetic admin data
+- Source: ENAHO 2023 test predictions aggregated to district level + MINEDU admin data (datosabiertos.gob.pe)
 - Pipeline: District-level aggregation with Pearson correlation and stratified error analysis
 - Script: `src/fairness/cross_validation.py` (Phase 10)
-- Note: Admin data is synthetic (datosabiertos.gob.pe returned 404). Loaders accept real data seamlessly.
 
 ---
 
@@ -236,12 +249,12 @@ Developer-facing documentation for integrating export files into the M4 scrollyt
 
 ```json
 {
-  "group": "castellano",
-  "n": 113895,
-  "dropout_rate": 0.153,
-  "ci_lower": 0.149,
-  "ci_upper": 0.156,
-  "weighted_n": 19234567
+  "group": "other_indigenous",
+  "weighted_rate": 0.2187,
+  "lower_ci": 0.2176,
+  "upper_ci": 0.2199,
+  "n_unweighted": 3947,
+  "n_weighted": 496036.0
 }
 ```
 
@@ -270,8 +283,8 @@ Developer-facing documentation for integrating export files into the M4 scrollyt
 **Calibration:** Apply Platt scaling in JavaScript after ONNX inference:
 
 ```javascript
-const A = -5.278337;
-const B = 4.276521;
+const A = -6.236085;
+const B = 4.442308;
 const calibrated = 1 / (1 + Math.exp(A * raw_prob + B));
 ```
 

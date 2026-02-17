@@ -29,11 +29,11 @@ from utils import find_project_root, pad_ubigeo
 logger = logging.getLogger(__name__)
 
 # Expected file names in data/raw/admin/
-_PRIMARIA_FILE = "primaria_2023.csv"
-_SECUNDARIA_FILE = "secundaria_2023.csv"
+_PRIMARIA_FILE = "admin_dropout_primaria.csv"
+_SECUNDARIA_FILE = "admin_dropout_secundaria.csv"
 
-# Column name for dropout rate in admin CSVs
-_RATE_COL = "tasa_desercion"
+# Column name for dropout rate in admin CSVs (from datosabiertos.gob.pe)
+_RATE_COL = "Tasa"  # Capital T, from real datosabiertos files
 
 
 @dataclass
@@ -89,11 +89,15 @@ def _load_admin_csv(filepath: Path, level: str) -> pl.DataFrame:
 
     df = pl.read_csv(
         filepath,
-        schema_overrides={"UBIGEO": pl.Utf8},
+        schema_overrides={"ubigeo": pl.Utf8},  # Real files use lowercase
         infer_schema_length=10_000,
     )
 
-    # Zero-pad UBIGEO
+    # Normalize: rename lowercase ubigeo to uppercase UBIGEO, then zero-pad
+    if "ubigeo" in df.columns:
+        df = df.rename({"ubigeo": "UBIGEO"})
+
+    # Zero-pad UBIGEO from 5 digits to 6 digits
     df = df.with_columns(pad_ubigeo(pl.col("UBIGEO")).alias("UBIGEO"))
 
     # Validate UBIGEO length

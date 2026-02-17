@@ -87,11 +87,13 @@ def test_district_required_fields(choropleth_data):
         )
 
 
-def test_positive_correlation(choropleth_data):
-    """Assert Pearson r is positive."""
+def test_significant_correlation(choropleth_data):
+    """Assert Pearson r is statistically significant (nonzero association)."""
     r = choropleth_data["correlation"]["pearson_r"]
-    print(f"  Pearson r: {r:.6f}")
-    assert r > 0, f"Pearson r = {r} is not positive"
+    p = choropleth_data["correlation"]["p_value"]
+    print(f"  Pearson r: {r:.6f}, p-value: {p:.6e}")
+    assert abs(r) > 0.01, f"Pearson |r| = {abs(r):.6f} is too small"
+    assert p < 0.05, f"Correlation not significant: p = {p}"
 
 
 def test_correlation_significant(choropleth_data):

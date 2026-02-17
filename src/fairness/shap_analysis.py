@@ -315,6 +315,7 @@ def run_shap_pipeline() -> dict:
     # ===================================================================
     print("\nStep 2: Generating beeswarm plot...")
     explanation = explainer(X_test)
+    explanation.feature_names = list(MODEL_FEATURES)
     shap.plots.beeswarm(explanation, max_display=25, show=False)
     plt.tight_layout()
     plt.savefig(

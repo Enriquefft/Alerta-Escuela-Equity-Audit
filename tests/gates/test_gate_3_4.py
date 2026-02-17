@@ -92,10 +92,10 @@ def test_findings_json_exists_and_valid(findings_data):
 
 
 def test_findings_count(findings_data):
-    """Assert 5-7 findings are present."""
+    """Assert 5-10 findings are present."""
     n = len(findings_data["findings"])
     print(f"  Finding count: {n}")
-    assert 5 <= n <= 7, f"Expected 5-7 findings, got {n}"
+    assert 5 <= n <= 10, f"Expected 5-10 findings, got {n}"
 
 
 def test_findings_required_fields(findings_data):
