@@ -14,7 +14,7 @@ Transform v1.0 analysis into citable academic paper with publication-quality fig
 - Continues from v1.0 (Phase 12+)
 - Decimal phases (e.g., 12.1): Urgent insertions
 
-- [ ] **Phase 12: Publication Figures** - New headline figures (FNR bar, FNR×rurality heatmap, combined PR curves) + polish existing for print
+- [x] **Phase 12: Publication Figures** - New headline figures (FNR bar, FNR×rurality heatmap, combined PR curves) + polish existing for print
 - [ ] **Phase 13: LaTeX Template + Table Generation** - ACM template with structure, auto-generate 8 tables from JSON exports
 - [ ] **Phase 14: Repo Cleanup for Public Release** - README, LICENSE, CITATION.cff, reproducibility verification
 
@@ -66,6 +66,6 @@ Phase 12 → 13 → 14
 
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
-| 12. Publication Figures | 0/1 | Pending | — |
+| 12. Publication Figures | 1/1 | Complete | 2026-02-17 |
 | 13. LaTeX Template + Table Generation | 0/1 | Pending | — |
 | 14. Repo Cleanup for Public Release | 0/1 | Pending | — |
