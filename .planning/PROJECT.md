@@ -44,11 +44,23 @@ All in `data/exports/`: findings.json, fairness_metrics.json, shap_values.json, 
 | Temporal split over random split | Prevents future data leakage, mirrors real deployment scenario | Validated — val-test gap 0.0233 |
 | specs.md as authoritative source | Single source of truth for all implementation details | Validated |
 
-## Next Milestone Goals
+## Next Milestone: v2.0-publication
 
-*(Define with `/gsd:new-milestone`)*
+Transform v1.0 analysis into citable academic paper:
+- Phase 12: Publication figures (FNR bar chart, FNR×rurality heatmap, combined PR curves, polish)
+- Phase 13: LaTeX template + auto-generated tables from JSON exports
+- Phase 14: Repo cleanup for public release (README, LICENSE, CITATION.cff, reproducibility)
 
-Candidate v2 features:
+### Out of Scope for v2.0 (Manual Work TODO)
+
+- Write paper sections (Introduction through Conclusion)
+- Write press summaries (Spanish + English)
+- Write blog posts
+- Pitch media outlets (Ojo Publico, El Comercio)
+- Submit to arXiv, FAccT 2027, AIES 2026
+
+### Deferred to v3.0+
+
 - Automated pipeline re-run when new ENAHO year released
 - Interactive fairness metrics dashboard
 - Causal analysis of language → dropout pathway
