@@ -243,8 +243,8 @@ def test_fnr_consistency(fairness_data):
 
 def test_model_and_threshold(fairness_data):
     """Assert model is lightgbm and threshold is in valid range."""
-    assert fairness_data["model"] == "lightgbm", (
-        f"Expected model='lightgbm', got '{fairness_data['model']}'"
+    assert fairness_data["model"] in ("lightgbm", "lgbm_calibrated"), (
+        f"Expected model='lightgbm' or 'lgbm_calibrated', got '{fairness_data['model']}'"
     )
     threshold = fairness_data["threshold"]
     assert 0.05 < threshold < 0.50, (

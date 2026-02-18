@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "purpose": "Minimum sample size for credible intersectional fairness auditing with survey data",
+    "framing": "methodological_limitation"
+  },
+  "majority_miss_test": {
+    "description": "Can we confirm FNR > 0.50 (model misses majority)?",
+    "fnr_observed": 0.75,
+    "fnr_null": 0.5,
+    "effect_size_h": 0.5236,
+    "alpha": 0.05,
+    "power": 0.8,
+    "required_n_dropouts": 46,
+    "enaho_years_required": 8,
+    "students_per_year_approx": 30,
+    "dropouts_per_year_approx": 6
+  },
+  "gap_detection_test": {
+    "description": "Can we confirm FNR gap vs castellano (0.75 vs 0.633)?",
+    "fnr_target": 0.75,
+    "fnr_castellano": 0.633,
+    "effect_size_h": 0.2544,
+    "required_n_dropouts": 192,
+    "enaho_years_required": 32
+  },
+  "conclusion": "Detecting FNR > 0.50 at 80% power requires 46 dropout observations (~8 ENAHO years). Detecting the gap vs castellano requires 192 (~32 years). Survey-based intersectional fairness auditing cannot produce significant results for groups contributing ~6 positive observations per survey year. This demonstrates why administrative data (SIAGIE) must be opened for meaningful intersectional auditing."
+}

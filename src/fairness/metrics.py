@@ -505,6 +505,13 @@ def _analyze_intersection(
         if n_unweighted < min_sample:
             group_data["flagged_small_sample"] = True
 
+        # Also flag if FNR CI width > 0.5 (uninformative)
+        fnr_ci_l = group_data.get("fnr_ci_lower")
+        fnr_ci_u = group_data.get("fnr_ci_upper")
+        if fnr_ci_l is not None and fnr_ci_u is not None:
+            if (fnr_ci_u - fnr_ci_l) > 0.5:
+                group_data["flagged_small_sample"] = True
+
         result_groups[group_label] = group_data
 
     # Compute gaps

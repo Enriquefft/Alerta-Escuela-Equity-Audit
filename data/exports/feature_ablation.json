@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "hyperparameters": "reused from lightgbm best_params",
+    "full_model_n_features": 25,
+    "individual_n_features": 18,
+    "spatial_n_features": 7,
+    "full_model_threshold": 0.167268,
+    "note": "Each variant uses its own optimal threshold (max weighted F1 on validation set) to ensure meaningful FNR comparisons"
+  },
+  "fnr_by_language": {
+    "castellano": {
+      "full": 0.632913,
+      "individual_only": 0.649398,
+      "spatial_only": 0.316636
+    },
+    "quechua": {
+      "full": 0.416304,
+      "individual_only": 0.192376,
+      "spatial_only": 0.160403
+    },
+    "aimara": {
+      "full": 0.262894,
+      "individual_only": 0.288112,
+      "spatial_only": 0.187736
+    },
+    "other_indigenous": {
+      "full": 0.215743,
+      "individual_only": 0.136364,
+      "spatial_only": 0.131379
+    },
+    "foreign": {
+      "full": 0.270517,
+      "individual_only": 0.270517,
+      "spatial_only": 0.312687
+    }
+  },
+  "val_pr_auc": {
+    "full": 0.261634,
+    "individual_only": 0.250154,
+    "spatial_only": 0.176025
+  },
+  "interpretation": "mixed",
+  "thresholds": {
+    "individual_only": 0.4,
+    "spatial_only": 0.38
+  },
+  "rank_analysis": {
+    "highest_fnr_group_by_variant": {
+      "full": "castellano",
+      "individual_only": "castellano",
+      "spatial_only": "castellano"
+    },
+    "highest_fnr_consistent": true,
+    "top2_consistent": false
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-02-17T14:12:10.370271+00:00",
-  "model": "lightgbm",
+  "generated_at": "2026-02-18T10:33:58.285417+00:00",
+  "model": "lgbm_calibrated",
   "threshold": 0.167268,
   "threshold_type": "calibrated",
   "calibration_note": "Calibrated probs max at 0.431; high-risk (>0.7) uses uncalibrated probs",
@@ -1126,7 +1126,8 @@
           "calibration_high_risk": {
             "n_predicted_high": 0,
             "actual_dropout_rate": null
-          }
+          },
+          "flagged_small_sample": true
         },
         "aimara_urban": {
           "n_unweighted": 25,
@@ -1244,7 +1245,8 @@
           "calibration_high_risk": {
             "n_predicted_high": 0,
             "actual_dropout_rate": null
-          }
+          },
+          "flagged_small_sample": true
         },
         "quechua_rural": {
           "n_unweighted": 1390,
@@ -1623,7 +1625,8 @@
           "calibration_high_risk": {
             "n_predicted_high": 0,
             "actual_dropout_rate": null
-          }
+          },
+          "flagged_small_sample": true
         },
         "castellano_costa": {
           "n_unweighted": 10022,

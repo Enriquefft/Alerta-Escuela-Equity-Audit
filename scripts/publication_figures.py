@@ -91,11 +91,11 @@ def fig01_pr_curves() -> None:
         (df_test["dropout"].cast(pl.Float64) * df_test["FACTOR07"]).sum()
         / df_test["FACTOR07"].sum()
     )
-    ax.axhline(prevalence, color="gray", ls="--", lw=0.8, label=f"Prevalencia ({prevalence:.3f})")
+    ax.axhline(prevalence, color="gray", ls="--", lw=0.8, label=f"Prevalence ({prevalence:.3f})")
 
-    ax.set_xlabel("Recall (Sensitividad)")
-    ax.set_ylabel("Precision (Precision)")
-    ax.set_title("Curvas Precision-Recall — Test 2023")
+    ax.set_xlabel("Recall")
+    ax.set_ylabel("Precision")
+    ax.set_title("Precision-Recall Curves — Test 2023")
     ax.legend(loc="upper right", framealpha=0.9)
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
@@ -128,7 +128,7 @@ def fig02_calibration() -> None:
         prob_uncal,
         n_bins=10,
         strategy="uniform",
-        name=f"Sin calibrar (Brier={brier_uncal:.4f})",
+        name=f"Uncalibrated (Brier={brier_uncal:.4f})",
         ax=ax,
         color="#d62728",
     )
@@ -137,14 +137,14 @@ def fig02_calibration() -> None:
         prob_cal,
         n_bins=10,
         strategy="uniform",
-        name=f"Calibrado (Brier={brier_cal:.4f})",
+        name=f"Calibrated (Brier={brier_cal:.4f})",
         ax=ax,
         color="#2ca02c",
     )
 
-    ax.set_title("Curva de Calibracion — LightGBM")
-    ax.set_xlabel("Probabilidad predicha (promedio por bin)")
-    ax.set_ylabel("Fraccion de positivos observados")
+    ax.set_title("Calibration Curve — LightGBM")
+    ax.set_xlabel("Predicted Probability (bin average)")
+    ax.set_ylabel("Observed Positive Fraction")
     ax.legend(loc="lower right")
 
     save_dual_format(fig, FIGURES / "fig02_calibration")
@@ -180,8 +180,8 @@ def fig03_fnr_fpr_language() -> None:
     width = 0.35
 
     fig, ax = plt.subplots(figsize=(9, 5.5))
-    bars_fnr = ax.bar(x - width / 2, fnrs, width, label="FNR (falsos negativos)", color="#d62728", alpha=0.85)
-    bars_fpr = ax.bar(x + width / 2, fprs, width, label="FPR (falsos positivos)", color="#1f77b4", alpha=0.85)
+    bars_fnr = ax.bar(x - width / 2, fnrs, width, label="FNR (false negatives)", color="#d62728", alpha=0.85)
+    bars_fpr = ax.bar(x + width / 2, fprs, width, label="FPR (false positives)", color="#1f77b4", alpha=0.85)
 
     # Value labels on bars
     for bar in bars_fnr:
@@ -202,14 +202,14 @@ def fig03_fnr_fpr_language() -> None:
 
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
-    ax.set_ylabel("Tasa (0–1)")
-    ax.set_title("Tasa de Falsos Negativos y Falsos Positivos por Grupo Linguistico")
+    ax.set_ylabel("Rate (0-1)")
+    ax.set_title("False Negative and False Positive Rates by Language Group")
     ax.legend(loc="upper left")
     ax.set_ylim(0, max(max(fnrs), max(fprs)) + 0.1)
 
     # Explanatory text box
-    textstr = ("FNR alto = el modelo no detecta desercion\n"
-               "FPR alto = falsas alarmas excesivas")
+    textstr = ("High FNR = model misses dropouts\n"
+               "High FPR = excessive false alarms")
     props = dict(boxstyle="round,pad=0.4", facecolor="lightyellow", alpha=0.8, edgecolor="gray")
     ax.text(0.98, 0.95, textstr, transform=ax.transAxes, fontsize=9,
             verticalalignment="top", horizontalalignment="right", bbox=props)
@@ -234,17 +234,16 @@ def fig04_dropout_heatmap() -> None:
     values = np.array(hm["values"])
     n_unweighted = hm["n_unweighted"]
 
-    # Spanish labels
     row_labels_map = {
         "awajun": "Awajun",
         "ashaninka": "Ashaninka",
-        "other_indigenous": "Otros indigenas",
+        "other_indigenous": "Other indigenous",
         "quechua": "Quechua",
         "aimara": "Aimara",
         "castellano": "Castellano",
-        "foreign": "Extranjero",
+        "foreign": "Foreign",
     }
-    col_labels_map = {"urban": "Urbano", "rural": "Rural"}
+    col_labels_map = {"urban": "Urban", "rural": "Rural"}
 
     row_labels = [row_labels_map.get(r, r) for r in rows]
     col_labels = [col_labels_map.get(c, c) for c in cols]
@@ -267,8 +266,8 @@ def fig04_dropout_heatmap() -> None:
             color = "white" if val > 0.18 else "black"
             ax.text(j, i, text, ha="center", va="center", fontsize=10, color=color)
 
-    ax.set_title("Tasa de Desercion: Grupo Linguistico x Ruralidad")
-    fig.colorbar(im, ax=ax, label="Tasa de desercion", shrink=0.8)
+    ax.set_title("Dropout Rate: Language Group x Rurality")
+    fig.colorbar(im, ax=ax, label="Dropout rate", shrink=0.8)
     fig.tight_layout()
 
     save_dual_format(fig, FIGURES / "fig04_dropout_heatmap")
@@ -289,12 +288,12 @@ def fig05_fnr_heatmap() -> None:
     # Build matrix: rows=language groups, cols=[urban, rural]
     lang_order = ["castellano", "quechua", "aimara", "other_indigenous"]
     col_order = ["urban", "rural"]
-    col_labels = ["Urbano", "Rural"]
+    col_labels = ["Urban", "Rural"]
     row_labels_map = {
         "castellano": "Castellano",
         "quechua": "Quechua",
         "aimara": "Aimara",
-        "other_indigenous": "Otros indigenas",
+        "other_indigenous": "Other indigenous",
     }
 
     matrix = np.full((len(lang_order), len(col_order)), np.nan)
@@ -341,8 +340,8 @@ def fig05_fnr_heatmap() -> None:
     )
     ax.add_patch(rect)
 
-    ax.set_title("Tasa de Falsos Negativos: Grupo Linguistico x Ruralidad")
-    ax.text(0.5, -0.12, "FNR alto = el modelo falla en detectar desercion",
+    ax.set_title("False Negative Rate: Language Group x Rurality")
+    ax.text(0.5, -0.12, "High FNR = model fails to detect dropouts",
             transform=ax.transAxes, ha="center", fontsize=9, style="italic")
     fig.colorbar(im, ax=ax, label="FNR", shrink=0.8)
     fig.tight_layout()
@@ -375,8 +374,8 @@ def fig06_shap_bar() -> None:
     ax.set_yticks(y_pos)
     ax.set_yticklabels(labels)
     ax.invert_yaxis()
-    ax.set_xlabel("Media |SHAP| (escala log-odds)")
-    ax.set_title("Importancia Global de Variables — Top 10 (SHAP)")
+    ax.set_xlabel("Mean |SHAP| (log-odds scale)")
+    ax.set_title("Global Feature Importance — Top 10 (SHAP)")
 
     fig.tight_layout()
     save_dual_format(fig, FIGURES / "fig06_shap_bar")
@@ -386,7 +385,7 @@ def fig06_shap_bar() -> None:
 # FIG-07: SHAP Beeswarm
 # ===================================================================
 def fig07_shap_beeswarm() -> None:
-    """SHAP beeswarm plot with Spanish labels using TreeExplainer."""
+    """SHAP beeswarm plot with English labels using TreeExplainer."""
     logger.info("FIG-07: SHAP beeswarm (computing SHAP values...)")
 
     # Load model and feature-engineered data
@@ -410,14 +409,14 @@ def fig07_shap_beeswarm() -> None:
     explainer = shap.TreeExplainer(model)
     explanation = explainer(X_sub)
 
-    # Apply Spanish feature labels
+    # Apply English feature labels
     explanation.feature_names = [FEATURE_TO_LABEL_ES.get(f, f) for f in MODEL_FEATURES]
 
     fig, ax = plt.subplots(figsize=(9, 7))
     plt.sca(ax)
     shap.plots.beeswarm(explanation, max_display=15, show=False)
     ax.set_title("SHAP Beeswarm — LightGBM (Test 2023)")
-    ax.set_xlabel("Valor SHAP (impacto en log-odds)")
+    ax.set_xlabel("SHAP Value (impact on log-odds)")
 
     fig = plt.gcf()
     fig.tight_layout()

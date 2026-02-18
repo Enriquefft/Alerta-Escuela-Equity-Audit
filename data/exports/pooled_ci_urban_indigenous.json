@@ -1,0 +1,19 @@
+{
+  "subgroup": "other_indigenous_urban",
+  "pooled_splits": [
+    "validate_2022",
+    "test_2023"
+  ],
+  "n_unweighted": 167,
+  "n_dropouts_unweighted": 13,
+  "fnr_point": 0.6884300400566803,
+  "fnr_ci_lower": 0.39201741130602336,
+  "fnr_ci_upper": 0.9794041219498951,
+  "ci_width": 0.5873867106438717,
+  "credible": false,
+  "credibility_criterion": "ci_lower > 0.50",
+  "bootstrap_method": "simple_weighted",
+  "bootstrap_note": "PSU bootstrap inappropriate -- pooling two survey years breaks single-design assumption",
+  "n_replicates": 2000,
+  "includes_non_test_data": true
+}

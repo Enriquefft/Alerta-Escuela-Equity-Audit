@@ -42,19 +42,22 @@ MODEL_COLORS: dict[str, str] = {
 }
 
 MODEL_LABELS: dict[str, str] = {
-    "lr": "Regresion Logistica",
+    "lr": "Logistic Regression",
     "lgbm": "LightGBM",
     "xgb": "XGBoost",
 }
 
-# Spanish language group labels
-LANGUAGE_LABELS_ES: dict[str, str] = {
+# Language group labels (English)
+LANGUAGE_LABELS_EN: dict[str, str] = {
     "castellano": "Castellano",
     "quechua": "Quechua",
     "aimara": "Aimara",
-    "other_indigenous": "Otros indigenas",
-    "foreign": "Extranjero",
+    "other_indigenous": "Other indigenous",
+    "foreign": "Foreign",
 }
+
+# Keep old name as alias for backwards compatibility
+LANGUAGE_LABELS_ES = LANGUAGE_LABELS_EN
 
 # Feature name → Spanish label mapping (for SHAP figures)
 FEATURE_TO_LABEL_ES: dict[str, str] = dict(zip(MODEL_FEATURES, FEATURE_LABELS_ES))

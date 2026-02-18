@@ -38,31 +38,31 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 FEATURE_LABELS_ES: list[str] = [
-    "Edad",                                    # age
-    "Edad de secundaria (12+)",                # is_secundaria_age
-    "Sexo femenino",                           # es_mujer
-    "Lengua castellana",                       # lang_castellano
-    "Lengua quechua",                          # lang_quechua
-    "Lengua aimara",                           # lang_aimara
-    "Otra lengua indigena",                    # lang_other_indigenous
-    "Lengua extranjera",                       # lang_foreign
-    "Zona rural",                              # rural
-    "Region Sierra",                           # is_sierra
-    "Region Selva",                            # is_selva
-    "Tasa de desercion distrital (admin, z)",  # district_dropout_rate_admin_z
-    "Intensidad de luces nocturnas (z)",       # nightlight_intensity_z
-    "Indice de pobreza (z)",                   # poverty_index_z
-    "Quintil de pobreza",                      # poverty_quintile
-    "Nacionalidad peruana",                    # es_peruano
-    "Tiene discapacidad",                      # has_disability
-    "Trabaja",                                 # is_working
-    "Beneficiario JUNTOS",                     # juntos_participant
-    "Ingreso del hogar (log)",                 # log_income
-    "Educacion de los padres (anos)",          # parent_education_years
-    "Poblacion indigena del distrito (z)",     # census_indigenous_lang_pct_z
-    "Tasa de alfabetismo del distrito (z)",    # census_literacy_rate_z
-    "Acceso a electricidad del distrito (z)",  # census_electricity_pct_z
-    "Acceso a agua del distrito (z)",          # census_water_access_pct_z
+    "Age",                                      # age
+    "Secondary-school age (12+)",               # is_secundaria_age
+    "Female",                                   # es_mujer
+    "Castellano speaker",                       # lang_castellano
+    "Quechua speaker",                          # lang_quechua
+    "Aimara speaker",                           # lang_aimara
+    "Other indigenous language",                # lang_other_indigenous
+    "Foreign language",                         # lang_foreign
+    "Rural",                                    # rural
+    "Sierra region",                            # is_sierra
+    "Selva region",                             # is_selva
+    "District dropout rate (admin, z)",         # district_dropout_rate_admin_z
+    "Nightlight intensity (z)",                 # nightlight_intensity_z
+    "Poverty index (z)",                        # poverty_index_z
+    "Poverty quintile",                         # poverty_quintile
+    "Peruvian nationality",                     # es_peruano
+    "Has disability",                           # has_disability
+    "Employed",                                 # is_working
+    "JUNTOS beneficiary",                       # juntos_participant
+    "Household income (log)",                   # log_income
+    "Parental education (years)",               # parent_education_years
+    "District indigenous pop. (z)",             # census_indigenous_lang_pct_z
+    "District literacy rate (z)",               # census_literacy_rate_z
+    "District electricity access (z)",          # census_electricity_pct_z
+    "District water access (z)",                # census_water_access_pct_z
 ]
 
 # LR top-5 by |coefficient| (from model_results.json)
