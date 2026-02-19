@@ -5,16 +5,17 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
   };
 
-  outputs = { self, nixpkgs }:
+  outputs =
+    { self, nixpkgs }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
 
       # Runtime libraries for Python manylinux wheels
       runtimeLibs = with pkgs; [
-        stdenv.cc.cc.lib      # libstdc++.so.6
-        libgcc.lib            # libgomp.so.1 (OpenMP for LightGBM)
-        zlib                  # libz.so (various wheels)
+        stdenv.cc.cc.lib # libstdc++.so.6
+        libgcc.lib # libgomp.so.1 (OpenMP for LightGBM)
+        zlib # libz.so (various wheels)
       ];
     in
     {
@@ -24,8 +25,10 @@
           uv
           ruff
           cmake
+          just
           (texlive.combine {
-            inherit (texlive) scheme-medium
+            inherit (texlive)
+              scheme-medium
               acmart
               amsmath
               totpages

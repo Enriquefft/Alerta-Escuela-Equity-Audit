@@ -31,3 +31,7 @@ fmt:
 # Start JupyterLab
 lab:
     uv run jupyter lab
+
+# Build PDF from LaTeX
+pdf:
+    cd paper && pdflatex -interaction=nonstopmode main.tex && pdflatex -interaction=nonstopmode main.tex
