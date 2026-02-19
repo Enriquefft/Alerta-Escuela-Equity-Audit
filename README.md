@@ -1,4 +1,4 @@
-# Where You Live, Not Who You Are: An Equity Audit of Peru's Alerta Escuela
+# Who Gets Missed? A Proxy Equity Audit of Survey-Derived Dropout Risk in Perú
 
 First independent equity audit of Peru's **Alerta Escuela**, a LightGBM-based student dropout prediction system deployed by MINEDU (Ministry of Education) to 90,000+ educators since October 2020.
 
@@ -118,8 +118,7 @@ If you use this work, please cite:
 ```bibtex
 @software{flores2026alertaaudit,
   author = {Flores, Enrique},
-  title = {Where You Live, Not Who You Are: An Equity Audit of Peru's
-           Alerta Escuela Student Dropout Prediction System},
+  title = {Who Gets Missed? A Proxy Equity Audit of Survey-Derived Dropout Risk in Perú},
   year = {2026},
   url = {https://github.com/enriqueflores/Alerta-Escuela-Equity-Audit}
 }
