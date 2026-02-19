@@ -1,0 +1,162 @@
+\documentclass[notitlepage,12pt]{jedm}
+%\usepackage[sc,sf,small]{titlesec}
+\usepackage[table]{xcolor}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\hypersetup{
+  colorlinks   = true, %Colours links instead of ugly boxes
+  urlcolor     = blue, %Colour for external hyperlinks
+  linkcolor    = blue, %Colour of internal links
+  citecolor   = blue %Colour of citations
+}
+
+%-----------------------------------------------------------------------
+% FINAL COPYEDITTED SUBMISSION - UNCOMMENT THIS TO SUPPRESS PAGE NUMBERS
+%\pagenumbering{gobble}
+%-----------------------------------------------------------------------
+
+\begin{document}
+
+\title{Submission Instructions}
+\date{} %do not delete this, it suppresses insertion of the date
+
+%% Authors should be aligned.  If authors and their affiliation fit in a single horizontal block, you can follow this simple format:
+\author{{\large Author One}\\Institution of Author one\\City, County\\email.of@author.dom \and {\large Second Author}\\Affiliation\\City, County\\email@xx.xx  \and {\large Third Author}\\Affiliation\\City, County\\email@xx.xx }
+
+%% However, if authors do not fit in a single horizontal, they need to be put in parbox of fixed with with the \authorFixedWidth macro:
+\newcommand{\authorFixedWidth}[1]{\parbox[t]{.25\textwidth}{\raggedright#1 \raisebox{0pt}[0pt][6pt]{}}}
+%% The list of authors should look like:
+%% \author{\authorFixedWidth{{\large Author One}\\Institution of Author one\\City, County\\email.of@author.dom} \and \authorFixedWidth{{\large Second Author}\\Affiliation\\City, County\\email@xx.xx}  \and \authorFixedWidth{{\large Third Author}\\Affiliation\\City, County\\email@xx.xx}   \and \authorFixedWidth{{\large Fourth Author}\\Affiliation\\City, County\\email@xx.xx}   \and \authorFixedWidth{{\large Fifth Author}\\A very long Affiliation for this author\\City, County\\email@xx.xx}   \and \authorFixedWidth{{\large Sixth Author}\\Affiliation\\City, County\\email@xx.xx}   \and \authorFixedWidth{{\large Seventh Author}\\Affiliation\\City, County\\email@xx.xx }}
+
+\maketitle
+
+\begin{abstract}
+This document serves both as JEDM submission instruction and as a template file.  This is the abstract. It should contain from 100 to 300 words. Authors are encouraged to share the code, data, or intermediate results behind their submissions. While links to code can be included in footnotes in the article, authors are encouraged to include a sentence at the end of the abstract to draw the attention of readers, something like: The code is available at https://kwbln.github.io/code3 and the  data and at: https://xyz.github.io/jedm23. \\ %Keep \\ for spacing to keywords
+
+{\parindent0pt
+\textbf{Keywords:} submission, JEDM, abstract, instructions, style
+}
+\end{abstract}
+
+
+\section{Paper Format}
+
+Manuscripts should be formatted for letter sized paper, one side only, leaving 2.75cm margins on the right and left sides and 2.25cm on the top and bottom. Body font should be Times Roman 12pt and sections, title, and authors font should be Helvetica.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Style Files}
+
+For LaTeX, a style file named \texttt{jedm.cls} is provided on the journal's web site.  An MS Word file containing this example text is also provided, \texttt{jedm.doc}, which can be used as a template (see the Styles menu). Note that copy/pasting into the template may not ensure correct formatting but selecting a region of text and applying the appropriate style should always work. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Figures and Tables}
+
+Each figure and table must be mentioned in the text, and must be numbered consecutively in order of appearance (with captions in lower case). For the review process, the figures should be integrated into the text rather than being inserted at the end of the document.
+
+As JEDM is an electronic journal, authors are encouraged to use colours when it enhances visibility and understanding of figures.
+
+Figures need to have alternative text (``alt text'') describing the figure, which will allow people using screen readers to understand the image, and will help in cases where an image cannot be loaded. Furthermore, alt text allows search engines to better index your paper and the figures in it.
+
+To add alt text, use the \texttt{{\char'134}Description} command. The alt text should describe everything necessary in the figure so that someone who cannot see the figure will not miss any essential information in the figure. The alt text should be concise. Do not simply repeat the figure caption; the figure caption is already readable as text. Moreover, figure captions typically provide context for a figure, whereas the purpose of alt text is to represent the \textit{content} of the figure in an alternative format.
+
+See the ACM SIGACCESS guidelines, the ACM author guidelines, and the Microsoft Word instructions for more information on how to write appropriate alt text:
+
+\url{https://www.sigaccess.org/welcome-to-sigaccess/resources/describing-figures/}
+
+\url{https://authors.acm.org/journals/how-to-write-alt-text-and-why}
+
+\url{https://support.microsoft.com/en-us/topic/everything-you-need-to-know-to-write-effective-alt-text-df98f884-ca3d-456c-807b-1a1fa82f5dc2}
+
+
+Examples of a figure and a table are given in Figure~\ref{fig:example} and Table~\ref{tab:1}.
+
+\begin{figure}
+  \centering
+  \Description{A green semicircle and a yellow right angle next to each other, with the words "Example text" between them.}  % Alt text
+  \includegraphics[width=0.5\textwidth]{example-fig.pdf}
+  \caption{This is the figure's caption.  It should be a centered paragraph of width 193mm (7.6in). Font size should be 11pt.}
+  \label{fig:example}
+\end{figure}
+
+\begin{table}
+  \caption{This is an example of a table that lists the margins of this template.  Captions should follow the same rules as a figure, except that they are put on top of the table.}\vspace*{1ex}
+  \label{tab:1}
+  \centering
+  \begin{tabular}{| l | l |}
+    \hline
+    \multicolumn{1}{|c|}{\textbf{Margin}} & \multicolumn{1}{c|}{\textbf{Size}} \\
+    \hline
+    left&2.75cm\\
+    right&2.75cm\\
+    top&2.25cm\\
+    bottom&2.25cm\\
+    \hline
+  \end{tabular}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Appendices}
+
+Supplementary technical material (e.g., mathematical proofs or descriptions of experimental procedures) should be collected in an appendix at the end of the paper (after the references).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Footnotes and Acknowledgments}
+
+Footnotes should be used sparingly and indicated by consecutive superscript numbers in the text. Material to be footnoted should appear at the bottom of the page on which it is referenced. Acknowledgments and grant numbers should be put into a separate `Acknowledgment' section right before the list of references.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{References}
+
+References should follow the ACM standard.  The example provided here uses the \texttt{jedm.cls} class file and \texttt{acmtrans.bst} bib style file.  For example, we could write that \citeN{JEDM:baker2009} published a review on EDM in this journal; other reviews were published later \cite[for eg.]{romero2010educational}. The provided ref.bib file contains examples of virtually every possible citation type.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Supporting Materials}
+
+Authors are encouraged to submit the data they use and the analysis code in order to replicate and perform rigorous comparisons across studies. See the online submission instructions for guidance on using and citing code repositories. Authors should add a sentence at the end of the abstract giving the link(s) to supporting materials.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Page numbering and Sectioning}
+
+For the manuscript to be reviewed, page number should appear at the bottom of each page.  \textbf{For the final version, they must be taken out as the standard JEDM footer is be added.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Sections and Subsections}
+
+Section style should follow the example in this document.
+
+%%%%
+\subsubsection{Subsection Levels}
+
+There should be no more than three levels of sections.
+
+\paragraph{Fourth Level.}
+
+The fourth level should simply have their title in the same font style as those of of subsections, without numbering and at the beginning of a paragraph.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Submission}
+
+The journal prefers PDF format, but can also accommodate most other popular formats.  Care should be taken to embed fonts in the rendered PDF. The provided Word template has a larger filesize because it contains embedded fonts.
+
+Instructions for submitting the papers on the website are at \\
+\url{http://jedm.educationaldatamining.org/index.php/JEDM/about/submissions#onlineSubmissions}.  You first need to register and log in to the site.  When registering, you must activate your role as ``author''.
+
+\section*{Declaration of Generative AI Software Tools in the Writing Process}
+
+This special section should be included if you have used generative AI software tools in the writing process. In such a case, the sentence below must be completed.
+
+
+\emph{During the preparation of this work, the author(s) used [NAME TOOL(S) / SERVICE(S)] in the section(s) [mention precisely all parts where you used the tool(s) or services(s)] in order to [REASON(S)]. After using this tool(s)/service(s), the author(s) reviewed and edited the content as needed and take(s) full responsibility for the content of the publication}.
+
+
+
+% REMOVE NOCITE OR IT WILL LIST EVERYTHING IN YOUR DATABASE AS A REFERENCE
+%\nocite{*}
+
+\bibliographystyle{acmtrans}
+\bibliography{ref}
+
+\end{document}
