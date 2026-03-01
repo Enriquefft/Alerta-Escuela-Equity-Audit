@@ -928,7 +928,7 @@ def run_fairness_pipeline(
         "threshold": threshold,
         "threshold_type": "calibrated",
         "calibration_note": (
-            "Calibrated probs max at 0.431; high-risk (>0.7) uses uncalibrated probs"
+            "Calibrated probs max at 0.476; high-risk (>0.7) uses uncalibrated probs"
         ),
         "test_set": "2023",
         "n_test": data["n_test"],
