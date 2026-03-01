@@ -1,0 +1,13 @@
+\begin{tabular}{@{}lSSS[table-format=+1.4]S[table-format=+2.1]@{}}
+\toprule
+Model & {PR-AUC (25f)} & {PR-AUC (31f)} & {Change} & {Change (\%)} \\
+\midrule
+Logistic Regression & 0.2103 & 0.2404 & +0.0301 & +14.3 \\
+LightGBM & 0.2611 & 0.2908 & +0.0297 & +11.4 \\
+XGBoost & 0.2612 & 0.2870 & +0.0258 & +9.9 \\
+Random Forest & 0.2613 & 0.2858 & +0.0245 & +9.4 \\
+MLP & 0.2380 & 0.2677 & +0.0297 & +12.5 \\
+\bottomrule
+\multicolumn{5}{l}{\footnotesize Validation set (2022). 25f = 25-feature v1 model; 31f = 31-feature v2 model with overage} \\
+\multicolumn{5}{l}{\footnotesize and interaction features. All models show consistent improvement with expanded feature set.} \\
+\end{tabular}

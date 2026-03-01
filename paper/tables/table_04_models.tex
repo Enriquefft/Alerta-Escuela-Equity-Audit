@@ -1,12 +1,14 @@
-\begin{tabular}{@{}lSSSSl@{}}
+\begin{tabular}{@{}lSSSSSl@{}}
 \toprule
-Model & {PR-AUC (val)} & {PR-AUC (test)} & {ROC-AUC (val)} & {Brier (test)} & BSS (test) \\
+Model & {PR-AUC\textsubscript{25f} (val)} & {PR-AUC\textsubscript{31f} (val)} & {PR-AUC (test)} & {ROC-AUC (val)} & {Brier (test)} & BSS (test) \\
 \midrule
-Logistic Regression & 0.210 & 0.193 & 0.604 & {---} & {$<$0} \\
-LightGBM (raw) & 0.262 & 0.236 & 0.652 & {---} & {$<$0} \\
-LightGBM (calibrated) & {---} & 0.236 & {---} & 0.112 & 0.040 \\
-XGBoost & 0.263 & 0.239 & 0.648 & {---} & {$<$0} \\
-Random Forest & 0.261 & 0.237 & 0.647 & {---} & {$<$0} \\
-MLP & 0.238 & 0.210 & 0.630 & {---} & 0.012 \\
+Logistic Regression & 0.210 & 0.240 & 0.193 & 0.604 & {---} & {$<$0} \\
+LightGBM (raw) & 0.262 & 0.291 & 0.236 & 0.652 & {---} & {$<$0} \\
+LightGBM (calibrated) & {---} & {---} & 0.236 & {---} & 0.112 & 0.040 \\
+XGBoost & 0.263 & 0.287 & 0.239 & 0.648 & {---} & {$<$0} \\
+Random Forest & 0.261 & 0.286 & 0.237 & 0.647 & {---} & {$<$0} \\
+MLP & 0.238 & 0.268 & 0.210 & 0.630 & {---} & 0.012 \\
 \bottomrule
+\multicolumn{7}{l}{\footnotesize 25f = 25-feature v1 model; 31f = 31-feature v2 model with overage and interaction features.} \\
+\multicolumn{7}{l}{\footnotesize Test metrics and Brier/BSS reported for v1 (primary model). V2 column is a robustness check.} \\
 \end{tabular}
