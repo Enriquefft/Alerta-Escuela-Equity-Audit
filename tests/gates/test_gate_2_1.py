@@ -102,14 +102,14 @@ def test_model_results_metadata(model_results: dict) -> None:
     meta = model_results["logistic_regression"]["metadata"]
 
     assert meta["model_type"] == "LogisticRegression"
-    assert meta["n_features"] == 25, f"n_features={meta['n_features']} != 25"
+    assert meta["n_features"] == 31, f"n_features={meta['n_features']} != 31"
     assert meta["train_years"] == [2018, 2019, 2020, 2021]
     assert meta["validate_year"] == 2022
     assert meta["test_year"] == 2023
     assert meta["class_weight"] == "balanced"
     assert meta["convergence"] is True
     assert "feature_names" in meta
-    assert len(meta["feature_names"]) == 25
+    assert len(meta["feature_names"]) == 31
 
     print(f"\n  Metadata: model_type={meta['model_type']}")
     print(f"    n_features: {meta['n_features']}")
@@ -225,7 +225,7 @@ def test_threshold_analysis_complete(model_results: dict) -> None:
 
 
 def test_coefficients_sensible_signs(model_results: dict) -> None:
-    """26 coefficients; print equity-relevant features for human review.
+    """32 coefficients; print equity-relevant features for human review.
 
     NOTE: Do NOT hard-assert the sign of every feature -- only print for
     human review.  The logistic regression with class_weight='balanced' and
@@ -234,8 +234,8 @@ def test_coefficients_sensible_signs(model_results: dict) -> None:
     lr = model_results["logistic_regression"]
     coefficients = lr["coefficients"]
 
-    assert len(coefficients) == 26, (
-        f"Expected 26 coefficients (intercept + 25 features), got {len(coefficients)}"
+    assert len(coefficients) == 32, (
+        f"Expected 32 coefficients (intercept + 31 features), got {len(coefficients)}"
     )
 
     # Build lookup

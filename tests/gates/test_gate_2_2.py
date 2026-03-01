@@ -124,7 +124,7 @@ def test_lgbm_importances_normalized(model_results: dict) -> None:
     )
 
     # Count check
-    assert len(importances) == 25, (
+    assert len(importances) == 31, (
         f"Expected 25 features, got {len(importances)}"
     )
 
@@ -136,7 +136,7 @@ def test_lgbm_importances_normalized(model_results: dict) -> None:
         )
 
     print(f"\n  Importances sum: {total:.4f} (~1.0 PASS)")
-    print(f"  Feature count: {len(importances)} (25 PASS)")
+    print(f"  Feature count: {len(importances)} (31 PASS)")
     print(f"  Sorted descending: PASS")
 
 
@@ -152,7 +152,7 @@ def test_lgbm_metadata(model_results: dict) -> None:
     assert meta["model_type"] == "LGBMClassifier", (
         f"model_type={meta['model_type']}"
     )
-    assert meta["n_features"] == 25, f"n_features={meta['n_features']}"
+    assert meta["n_features"] == 31, f"n_features={meta['n_features']}"
     assert meta["train_years"] == [2018, 2019, 2020, 2021]
     assert meta["validate_year"] == 2022
     assert meta["test_year"] == 2023
@@ -190,7 +190,7 @@ def test_xgb_metadata(model_results: dict) -> None:
     assert meta["model_type"] == "XGBClassifier", (
         f"model_type={meta['model_type']}"
     )
-    assert meta["n_features"] == 25
+    assert meta["n_features"] == 31
     assert meta["optuna_n_trials"] >= 50, (
         f"optuna_n_trials={meta['optuna_n_trials']}"
     )

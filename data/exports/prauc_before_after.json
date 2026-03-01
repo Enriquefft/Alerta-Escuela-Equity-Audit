@@ -1,0 +1,47 @@
+{
+  "description": "PR-AUC comparison: 25-feature (v3) vs 31-feature (v4) models",
+  "generated_at": "2026-03-01T19:01:05.310387+00:00",
+  "previous_feature_count": 25,
+  "new_feature_count": 31,
+  "new_features": [
+    "overage_years",
+    "is_overage",
+    "age_x_working",
+    "age_x_poverty",
+    "rural_x_parent_ed",
+    "sec_age_x_income"
+  ],
+  "models": {
+    "logistic_regression": {
+      "previous_val_prauc": 0.2103,
+      "new_val_prauc": 0.240364,
+      "change": 0.030064,
+      "change_pct": 14.3
+    },
+    "lightgbm": {
+      "previous_val_prauc": 0.2611,
+      "new_val_prauc": 0.29075,
+      "change": 0.02965,
+      "change_pct": 11.36
+    },
+    "xgboost": {
+      "previous_val_prauc": 0.2612,
+      "new_val_prauc": 0.286975,
+      "change": 0.025775,
+      "change_pct": 9.87
+    },
+    "random_forest": {
+      "previous_val_prauc": 0.2613,
+      "new_val_prauc": 0.285793,
+      "change": 0.024493,
+      "change_pct": 9.37
+    },
+    "mlp": {
+      "previous_val_prauc": 0.238,
+      "new_val_prauc": 0.267739,
+      "change": 0.029739,
+      "change_pct": 12.5
+    }
+  },
+  "interpretation_note": "Positive change means new features improved prediction. Negative or near-zero change means the model found no predictive signal in the new features. Both outcomes are valid findings for the v4 experiment."
+}
