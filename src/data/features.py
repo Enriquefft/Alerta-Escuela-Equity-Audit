@@ -66,6 +66,13 @@ MODEL_FEATURES: list[str] = [
     "census_literacy_rate_z",
     "census_electricity_pct_z",
     "census_water_access_pct_z",
+    # v4.0 features: overage-for-grade and interaction terms
+    "overage_years",
+    "is_overage",
+    "age_x_working",
+    "age_x_poverty",
+    "rural_x_parent_ed",
+    "sec_age_x_income",
 ]
 
 META_COLUMNS: list[str] = [
@@ -287,11 +294,12 @@ def _load_supplementary_features(years: list[int]) -> pl.DataFrame:
             year=year,
         )
 
-        # --- Module 300: P301A for parent education (may already be loaded) ---
+        # --- Module 300: P301A for parent education, P301B for grade within level ---
         # P301A is in module 300. Load it separately in case mod200 does not have it.
+        # P301B = last year completed within current education level (needed for overage).
         mod300 = _load_module_for_year(
             year_dir, "Enaho01a", "300",
-            columns=["P301A"],
+            columns=["P301A", "P301B"],
             key_cols=JOIN_KEYS,
             year=year,
         )
@@ -334,14 +342,20 @@ def _load_supplementary_features(years: list[int]) -> pl.DataFrame:
             logger.warning("Module 200 not loaded for year %d; skipping supplementary", year)
             continue
 
-        # Merge P301A from module 300 if not already in mod200
-        if "P301A" not in person_df.columns and mod300 is not None:
-            person_df = person_df.join(
-                mod300.select(JOIN_KEYS + ["P301A"]),
-                on=JOIN_KEYS,
-                how="left",
-                suffix="_m300",
-            )
+        # Merge P301A and P301B from module 300 if not already in mod200
+        if mod300 is not None:
+            m300_cols = JOIN_KEYS.copy()
+            if "P301A" not in person_df.columns and "P301A" in mod300.columns:
+                m300_cols.append("P301A")
+            if "P301B" not in person_df.columns and "P301B" in mod300.columns:
+                m300_cols.append("P301B")
+            if len(m300_cols) > len(JOIN_KEYS):
+                person_df = person_df.join(
+                    mod300.select(m300_cols),
+                    on=JOIN_KEYS,
+                    how="left",
+                    suffix="_m300",
+                )
 
         # Merge P501 from module 500 (person-level)
         if mod500 is not None:
@@ -390,7 +404,7 @@ def _load_supplementary_features(years: list[int]) -> pl.DataFrame:
 
         # Select final columns for this year
         final_cols = person_key + [
-            c for c in ["P209", "P210", "P203", "P301A", "P501", "P710_04", "INGHOG1D"]
+            c for c in ["P209", "P210", "P203", "P301A", "P301B", "P501", "P710_04", "INGHOG1D"]
             if c in person_df.columns
         ]
         person_df = person_df.select(final_cols)
@@ -454,6 +468,132 @@ def _compute_parent_education(
     )
 
     return hh_education
+
+
+def _compute_overage(df: pl.DataFrame, warnings: list[str]) -> pl.DataFrame:
+    """Compute overage-for-grade from P301A (education level) and P301B (last year completed).
+
+    Peru's expected age mapping:
+    - Primaria grade G (1-6): expected age = 5 + G  (grade 1 at age 6, grade 6 at age 11)
+    - Secundaria grade G (1-5): expected age = 11 + G (grade 1 at age 12, grade 5 at age 16)
+
+    Deriving current grade:
+    - P301A=2 (inicial) attending school -> primaria grade 1
+    - P301A=3 (primaria incompleta) -> primaria grade = P301B + 1
+    - P301A=4 (primaria completa) attending -> secundaria grade 1
+    - P301A=5 (secundaria incompleta) -> secundaria grade = P301B + 1
+    - P301A=6 (secundaria completa) -> secundaria grade 5
+
+    For dropouts (P306=2) or students without P301B, overage is imputed
+    with the median overage for their age group.
+
+    Returns DataFrame with ``overage_years`` (non-negative int) and
+    ``is_overage`` (binary) columns.
+    """
+    has_p301b = "P301B" in df.columns
+
+    if has_p301b:
+        # Derive expected age from P301A + P301B
+        expected_age = (
+            # Inicial (P301A=2) attending school -> primaria grade 1 -> expected age 6
+            pl.when(pl.col("P301A") == 2.0)
+            .then(pl.lit(6))
+            # Primaria incompleta (P301A=3): grade = P301B + 1, expected = 5 + grade
+            .when(pl.col("P301A") == 3.0)
+            .then(5 + pl.col("P301B").fill_null(0).cast(pl.Int64) + 1)
+            # Primaria completa (P301A=4): in secundaria grade 1 -> expected age 12
+            .when(pl.col("P301A") == 4.0)
+            .then(pl.lit(12))
+            # Secundaria incompleta (P301A=5): grade = P301B + 1, expected = 11 + grade
+            .when(pl.col("P301A") == 5.0)
+            .then(11 + pl.col("P301B").fill_null(0).cast(pl.Int64) + 1)
+            # Secundaria completa (P301A=6): grade 5 -> expected age 16
+            .when(pl.col("P301A") == 6.0)
+            .then(pl.lit(16))
+            # Sin nivel (P301A=1) or other -> assume primaria grade 1
+            .otherwise(pl.lit(6))
+        ).alias("_expected_age")
+
+        df = df.with_columns(expected_age)
+        df = df.with_columns(
+            pl.max_horizontal(
+                pl.col("age") - pl.col("_expected_age"),
+                pl.lit(0),
+            ).alias("overage_years")
+        )
+
+        logger.info(
+            "Overage computed from P301A + P301B: mean=%.2f, max=%d",
+            df["overage_years"].mean(),
+            df["overage_years"].max(),
+        )
+    else:
+        # Fallback: approximate from P301A education level only
+        # If in primaria (P301A in {2,3}) and age > 11 -> overage
+        # If in secundaria (P301A in {4,5}) and age > 16 -> overage
+        # More granular: use P301A to infer midpoint grade
+        warnings.append(
+            "P301B not available; overage approximated from P301A education level only"
+        )
+        expected_age = (
+            pl.when(pl.col("P301A") == 2.0).then(pl.lit(6))    # inicial -> grade 1
+            .when(pl.col("P301A") == 3.0).then(pl.lit(9))      # primaria incompleta -> midpoint grade 4
+            .when(pl.col("P301A") == 4.0).then(pl.lit(12))     # primaria completa -> sec grade 1
+            .when(pl.col("P301A") == 5.0).then(pl.lit(14))     # sec incompleta -> midpoint grade 3
+            .when(pl.col("P301A") == 6.0).then(pl.lit(16))     # sec completa -> grade 5
+            .when(pl.col("P301A") == 1.0).then(pl.lit(6))      # sin nivel -> grade 1
+            .otherwise(pl.lit(6))
+        ).alias("_expected_age")
+
+        df = df.with_columns(expected_age)
+        df = df.with_columns(
+            pl.max_horizontal(
+                pl.col("age") - pl.col("_expected_age"),
+                pl.lit(0),
+            ).alias("overage_years")
+        )
+
+        logger.info(
+            "Overage approximated from P301A only: mean=%.2f, max=%d",
+            df["overage_years"].mean(),
+            df["overage_years"].max(),
+        )
+
+    # Impute nulls with median by age group (mainly for dropouts without grade data)
+    n_null_overage = df["overage_years"].null_count()
+    if n_null_overage > 0:
+        # Compute median overage by age among non-null rows
+        medians = (
+            df.filter(pl.col("overage_years").is_not_null())
+            .group_by("age")
+            .agg(pl.col("overage_years").median().alias("_med_overage"))
+        )
+        df = df.join(medians, on="age", how="left")
+        df = df.with_columns(
+            pl.col("overage_years").fill_null(pl.col("_med_overage")).fill_null(0).cast(pl.Int64).alias("overage_years")
+        )
+        df = df.drop("_med_overage")
+        warnings.append(f"Imputed {n_null_overage} null overage_years with median by age group")
+        logger.info("Imputed %d null overage_years with median by age group", n_null_overage)
+
+    # Ensure integer type and non-negative
+    df = df.with_columns(
+        pl.col("overage_years").cast(pl.Int64).clip(lower_bound=0).alias("overage_years")
+    )
+
+    # Binary overage indicator
+    df = df.with_columns(
+        pl.when(pl.col("overage_years") > 0)
+        .then(pl.lit(1))
+        .otherwise(pl.lit(0))
+        .alias("is_overage")
+    )
+
+    # Clean up temporary column
+    if "_expected_age" in df.columns:
+        df = df.drop("_expected_age")
+
+    return df
 
 
 def _compute_weighted_poverty_quintile(
@@ -782,6 +922,33 @@ def build_features(df: pl.DataFrame) -> FeatureResult:
     logger.info("Supplementary features complete")
 
     # -----------------------------------------------------------------------
+    # 3.5. Overage-for-grade feature
+    # -----------------------------------------------------------------------
+    logger.info("Step 3.5: Computing overage-for-grade feature")
+    df = _compute_overage(df, warnings)
+
+    overage_stats = {
+        "mean": round(float(df["overage_years"].mean()), 3),
+        "max": int(df["overage_years"].max()),
+        "pct_overage": round(
+            float(df.filter(pl.col("is_overage") == 1).height / df.height), 4
+        ),
+    }
+    logger.info("Overage stats: %s", overage_stats)
+
+    # -----------------------------------------------------------------------
+    # 3.6. Interaction features
+    # -----------------------------------------------------------------------
+    logger.info("Step 3.6: Computing interaction features")
+    df = df.with_columns([
+        (pl.col("age") * pl.col("is_working")).alias("age_x_working"),
+        (pl.col("age") * pl.col("poverty_quintile")).alias("age_x_poverty"),
+        (pl.col("rural") * pl.col("parent_education_years")).alias("rural_x_parent_ed"),
+        (pl.col("is_secundaria_age") * pl.col("log_income")).alias("sec_age_x_income"),
+    ])
+    logger.info("Interaction features computed: age_x_working, age_x_poverty, rural_x_parent_ed, sec_age_x_income")
+
+    # -----------------------------------------------------------------------
     # 4. Z-score standardization of spatial features
     # -----------------------------------------------------------------------
     logger.info("Step 4: Z-score standardization of district-level features")
@@ -831,7 +998,7 @@ def build_features(df: pl.DataFrame) -> FeatureResult:
         "es_mujer", "lang_castellano", "lang_quechua", "lang_aimara",
         "lang_other_indigenous", "lang_foreign", "rural", "is_sierra",
         "is_selva", "es_peruano", "has_disability", "is_working",
-        "juntos_participant", "is_secundaria_age",
+        "juntos_participant", "is_secundaria_age", "is_overage",
     ]
     binary_validation: dict[str, list] = {}
     for col in binary_features:
@@ -853,6 +1020,16 @@ def build_features(df: pl.DataFrame) -> FeatureResult:
     # -----------------------------------------------------------------------
     # Build stats
     # -----------------------------------------------------------------------
+    # New feature null rates
+    new_feature_names = [
+        "overage_years", "is_overage", "age_x_working",
+        "age_x_poverty", "rural_x_parent_ed", "sec_age_x_income",
+    ]
+    new_feature_null_rates = {
+        f: round(df[f].null_count() / df.height, 6)
+        for f in new_feature_names if f in df.columns
+    }
+
     stats = {
         "total_rows": df.height,
         "total_features": len(MODEL_FEATURES),
@@ -861,6 +1038,11 @@ def build_features(df: pl.DataFrame) -> FeatureResult:
         "quintile_balance": quintile_weighted,
         "binary_validation": binary_validation,
         "supplementary_load_summary": supplementary_load_summary,
+        "new_features_v4": {
+            "feature_names": new_feature_names,
+            "null_rates": new_feature_null_rates,
+            "overage_stats": overage_stats,
+        },
     }
 
     logger.info(
