@@ -474,3 +474,88 @@ def test_print_ci_summary(fairness_data):
         else:
             print(f"  {gname}: FNR={fnr} (no CI)")
     assert True
+
+
+# ---------------------------------------------------------------------------
+# Phase 28: Fairness Re-Analysis (FAIR-02, FAIR-03)
+# ---------------------------------------------------------------------------
+
+COMPARISON_PATH = ROOT / "data" / "exports" / "fairness_comparison.json"
+
+
+@pytest.fixture(scope="module")
+def comparison_data():
+    """Load fairness_comparison.json."""
+    assert COMPARISON_PATH.exists(), (
+        f"fairness_comparison.json not found at {COMPARISON_PATH}. "
+        "Run Phase 28 Plan 02."
+    )
+    with open(COMPARISON_PATH) as f:
+        return json.load(f)
+
+
+def test_fairness_comparison_export(comparison_data):
+    """FAIR-02: fairness_comparison.json exists with before/after FNR for language groups."""
+    required_keys = {
+        "language_fnr_comparison", "max_fnr_gap", "scenario",
+        "scenario_rationale", "cross_architecture",
+    }
+    assert required_keys.issubset(comparison_data.keys()), (
+        f"Missing keys: {required_keys - comparison_data.keys()}"
+    )
+    # Language comparison has at least castellano and one indigenous group
+    lang_comp = comparison_data["language_fnr_comparison"]
+    assert "castellano" in lang_comp, "Missing castellano in comparison"
+    for group_data in lang_comp.values():
+        assert "fnr_v1" in group_data, "Missing fnr_v1"
+        assert "fnr_v2" in group_data, "Missing fnr_v2"
+        assert "change" in group_data, "Missing change"
+
+
+def test_disparity_scenario_classified(comparison_data):
+    """FAIR-02: Scenario is one of persist/narrow/disappear with rationale."""
+    assert comparison_data["scenario"] in ("persist", "narrow", "disappear"), (
+        f"Invalid scenario: {comparison_data['scenario']}"
+    )
+    assert len(comparison_data["scenario_rationale"]) > 10, (
+        "Scenario rationale too short or empty"
+    )
+
+
+def test_all_model_fairness_exports():
+    """FAIR-03: All 5 model fairness JSONs exist with valid structure."""
+    exports = ROOT / "data" / "exports"
+    model_files = {
+        "lgbm_calibrated": "fairness_metrics.json",
+        "lr": "fairness_metrics_lr.json",
+        "rf": "fairness_metrics_rf.json",
+        "mlp": "fairness_metrics_mlp.json",
+        "xgb": "fairness_metrics_xgb.json",
+    }
+    for model, fname in model_files.items():
+        path = exports / fname
+        assert path.exists(), f"Missing fairness export for {model}: {fname}"
+        with open(path) as f:
+            data = json.load(f)
+        assert "dimensions" in data, f"{model}: missing dimensions"
+        assert len(data["dimensions"]) == 7, (
+            f"{model}: expected 7 dimensions, got {len(data['dimensions'])}"
+        )
+        assert "intersections" in data, f"{model}: missing intersections"
+
+
+def test_cross_architecture_fnr_consistency(comparison_data):
+    """FAIR-03: FNR rank order comparison across all 5 models."""
+    cross = comparison_data["cross_architecture"]
+    assert len(cross["fnr_by_model"]) == 5, (
+        f"Expected 5 models, got {len(cross['fnr_by_model'])}"
+    )
+    assert "rank_order_consistent" in cross, "Missing rank_order_consistent"
+    assert "worst_group_per_model" in cross, "Missing worst_group_per_model"
+
+    # Print summary for human review
+    print("\n=== Cross-Architecture FNR Rank Order ===")
+    for model, order in cross["rank_order_by_model"].items():
+        print(f"  {model}: {' > '.join(order)}")
+    print(f"  Consistent worst group: {cross['rank_order_consistent']}")
+    print(f"  Worst per model: {cross['worst_group_per_model']}")
