@@ -2,19 +2,19 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-18)
+See: .planning/PROJECT.md (updated 2026-03-01)
 
 **Core value:** The fairness audit is the product. Models exist to be audited, not to achieve SOTA.
-**Current focus:** v4.0-model-experiments
+**Current focus:** v4.0-model-experiments, Phase 26 (Feature Engineering)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-03-01 — Milestone v4.0 started
+Phase: 26 — Feature Engineering (1 of 4 in v4.0)
+Plan: 02 of 3 complete
+Status: Executing phase 26
+Last activity: 2026-03-01 — Completed 26-02 (Panel Linkage Assessment)
 
-Progress: [                ] 0%
+Progress: [#####           ] 33%
 
 ## Performance Metrics
 
@@ -32,56 +32,21 @@ Progress: [                ] 0%
 | 23    | 01   | ~8 min   | 13    | 3     |
 | 24    | 01   | ~8 min   | 5     | 2     |
 | 25    | 01   | ~10 min  | 9     | 1     |
+| 26    | 02   | ~4 min   | 2     | 3     |
 
 ## Accumulated Context
 
 ### Decisions
 
-- [v3.2]: Target JEDM instead of FAccT 2027 (free APC, ~3-month review)
-- [v3.2]: Pool val+test data for urban indigenous CI, flag non-test data prominently
-- [v3.2]: Remove arXiv prep phase (JEDM has own portal)
-- [v3.2]: Keep media materials phase deferred (Phase 20)
-- [v3.2]: Feature ablation to experimentally test spatial proxy mechanism
-- [v3.2]: Rename "algorithm independence" → "cross-architecture consistency"
-- [v3.2]: English figure labels (JEDM is English-language)
-- [v3.2]: Phase 25 added — paper is 22pp, needs cuts to reach 15-18pp target
+- [v4.0]: Research-oriented milestone — all outcomes valid and publishable
+- [v4.0]: Panel linkage threshold: <20% linkable = skip trajectory features, document as negative result
+- [v4.0]: Phase structure: features -> models -> fairness -> paper (linear dependency chain)
+- [26-02]: Panel linkage effective rate 18.9% (raw 22.0% * quality 85.9%) — below 20% threshold, skip trajectory features
+- [26-02]: Negative result documented as publishable finding for JEDM Limitations section
 
 ### Pending Todos
 
 None.
-
-### Decisions (from discuss-phase 22)
-
-- [v3.2]: Pool val+test replaces test-only FNR (not alongside)
-- [v3.2]: Credibility threshold: CI lower bound > 0.50
-- [v3.2]: Strictly other-indigenous urban cell (don't mix with Quechua/Aymara)
-- [v3.2]: Simple weighted bootstrap (pooling breaks PSU design)
-- [v3.2]: If pooled CI lower bound ≤ 0.50, castellano invisibility (FNR=0.633, n=22K+) becomes headline
-- [v3.2]: Power analysis reframed as methodological limitation — survey data ceiling for intersectional auditing
-- [v3.2]: Fix flagged_small_sample for other_indigenous_urban in JSON
-- [v3.2]: Paper should argue this kind of study can't produce significant intersectional results due to data limitations → SIAGIE access argument
-
-### Decisions (from Phase 22 execution)
-
-- [v3.2]: Pooled CI credible=false (CI lower 0.392 < 0.50) -- castellano invisibility (FNR=0.633) is headline
-- [v3.2]: Ablation interpretation "mixed" -- castellano consistently highest FNR across all variants
-- [v3.2]: Per-variant thresholds needed for ablation (scale_pos_weight shifts prob distributions)
-- [v3.2]: Need 46 dropouts (~8 ENAHO years) to confirm FNR > 0.50 for urban other-indigenous
-
-### Decisions (from Phase 23+24 execution)
-
-- [v3.2]: Phase 23 restructure + Phase 24 style polish applied together (committed b692b5b)
-- [v3.2]: Paper compiles clean at 22 pages — content additions offset structural cuts
-- [v3.2]: JEDM accepts 15-25pp; 22pp is within range but above self-imposed 18pp target
-
-### Decisions (from Phase 25 execution)
-
-- [v3.2]: Paper reduced from 22 to 18 pages
-- [v3.2]: Tables 5, 9, 10, 11 moved to Supplementary Tables appendix
-- [v3.2]: Figures 4 (dropout heatmap), 7 (SHAP beeswarm) moved to appendix
-- [v3.2]: Figure 1 (PR curves) removed entirely — Table 4 has all numbers
-- [v3.2]: Discussion subsections merged: EWS Operators condensed, Generalizability deleted, Normative condensed
-- [v3.2]: Additional prose tightening in Data, Methods, Results, Fairness, Limitations, Introduction
 
 ### Blockers/Concerns
 
@@ -89,6 +54,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-18
-Stopped at: v3.2 milestone complete. Ready for JEDM submission.
+Last session: 2026-03-01
+Stopped at: Completed 26-02-PLAN.md (Panel Linkage Assessment)
 Resume file: None
