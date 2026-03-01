@@ -19,7 +19,7 @@ Experiment with model improvements to test whether better features strengthen or
 
 - [x] **Phase 26: Feature Engineering** - Build overage-for-grade, assess panel linkage feasibility, engineer interaction features (completed 2026-03-01)
 - [x] **Phase 27: Model Retraining** - Retrain all 5 model families with new features, re-calibrate, compare PR-AUC before/after (completed 2026-03-01)
-- [ ] **Phase 28: Fairness Re-Analysis** - Full fairness pipeline on updated models, assess FNR disparity change, cross-architecture consistency
+- [x] **Phase 28: Fairness Re-Analysis** - Full fairness pipeline on updated models, assess FNR disparity change, cross-architecture consistency (completed 2026-03-01)
 - [ ] **Phase 29: Interpretation & Paper Update** - Interpret results per outcome scenario, update paper, document panel linkage outcome
 
 ### Phase Details
@@ -64,7 +64,7 @@ Plans:
   2. FNR disparity change quantified: before/after comparison showing persist/narrow/disappear for castellano vs indigenous groups
   3. Cross-architecture consistency checked across all 5 updated models (FNR rank order comparison)
   4. Updated fairness_metrics.json exported with new results
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 Plans:
 - [ ] 28-01-PLAN.md — Backup old exports, clear caches, re-run fairness pipeline for all 5 models
 - [ ] 28-02-PLAN.md — Before/after FNR comparison export, cross-architecture consistency, gate tests
@@ -93,5 +93,5 @@ Phase 26 -> 27 -> 28 -> 29
 |-------|---------------|--------|-----------|
 | 26. Feature Engineering | 3/3 | Complete    | 2026-03-01 |
 | 27. Model Retraining | 2/2 | Complete    | 2026-03-01 |
-| 28. Fairness Re-Analysis | 1/2 | In Progress|  |
+| 28. Fairness Re-Analysis | 2/2 | Complete   | 2026-03-01 |
 | 29. Interpretation & Paper Update | 0/? | Not started | - |

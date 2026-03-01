@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-01T21:42:00Z"
+last_updated: "2026-03-01T21:48:00Z"
 progress:
   total_phases: 26
   completed_phases: 15
-  total_plans: 37
-  completed_plans: 23
+  total_plans: 38
+  completed_plans: 24
 ---
 
 # Project State
@@ -22,12 +22,12 @@ See: .planning/PROJECT.md (updated 2026-03-01)
 
 ## Current Position
 
-Phase: 28 — Fairness Re-analysis (3 of 4 in v4.0)
-Plan: 01 of 2 complete
-Status: Fairness pipeline re-run complete for all 5 models; Plan 02 (comparison) next
-Last activity: 2026-03-01 — Completed 28-01 (Fairness Pipeline Re-run)
+Phase: 28 — Fairness Re-analysis (3 of 4 in v4.0) COMPLETE
+Plan: 02 of 2 complete
+Status: Phase 28 complete; comparison export and gate tests done
+Last activity: 2026-03-01 — Completed 28-02 (Fairness Comparison Export)
 
-Progress: [########--------] 50%
+Progress: [################] 100%
 
 ## Performance Metrics
 
@@ -37,8 +37,8 @@ Progress: [########--------] 50%
 - v3.0: 2 plans (Phase 15)
 - v3.1: 7 plans (Phase 16: 1, Phase 17: 2, Phase 18: 3, Phase 19: 1)
 - v3.2: 4 plans (Phase 22: 1, Phase 23: 1, Phase 24: 1, Phase 25: 1)
-- v4.0: 6 plans (Phase 26: 3, Phase 27: 2, Phase 28: 1)
-- Total: 37 plans completed
+- v4.0: 7 plans (Phase 26: 3, Phase 27: 2, Phase 28: 2)
+- Total: 38 plans completed
 
 | Phase | Plan | Duration | Tasks | Files |
 |-------|------|----------|-------|-------|
@@ -52,6 +52,7 @@ Progress: [########--------] 50%
 | 27    | 01   | ~7 min   | 2     | 11    |
 | 27    | 02   | ~80 min  | 2     | 8     |
 | 28    | 01   | ~124 min | 3     | 9     |
+| 28    | 02   | ~3 min   | 2     | 2     |
 
 ## Accumulated Context
 
@@ -73,6 +74,9 @@ Progress: [########--------] 50%
 - [27-02]: Created retrain_all.py orchestration script for safe baseline.py overwrite handling
 - [28-01]: Updated calibration_note from 0.431 to 0.476 max calibrated prob (new Platt params)
 - [28-01]: Castellano FNR 0.663 consistent across all 5 models (0.607-0.663), confirming algorithm-independence
+- [28-02]: Castellano FNR disparity classified as "persist" -- gap 0.6531 > 0.20 with rank order preserved
+- [28-02]: Cross-architecture FNR rank order identical in all 5 models: castellano > quechua > other_indigenous
+- [28-02]: Castellano FNR slightly increased 0.633 -> 0.663 (+4.7%) with 31-feature model
 
 ### Pending Todos
 
@@ -85,5 +89,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Completed 28-01-PLAN.md
+Stopped at: Completed 28-02-PLAN.md (Phase 28 complete)
 Resume file: None

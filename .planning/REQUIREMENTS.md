@@ -24,7 +24,7 @@ Requirements for model experimentation milestone. Each maps to roadmap phases.
 ### Fairness Analysis
 
 - [x] **FAIR-01**: Re-run full fairness pipeline with updated primary model
-- [ ] **FAIR-02**: Assess whether FNR disparity persists, narrows, or disappears
+- [x] **FAIR-02**: Assess whether FNR disparity persists, narrows, or disappears
 - [x] **FAIR-03**: Check cross-architecture consistency with all 5 updated models
 
 ### Interpretation & Paper
@@ -62,7 +62,7 @@ Requirements for model experimentation milestone. Each maps to roadmap phases.
 | MODEL-03 | Phase 27 | Complete |
 | MODEL-04 | Phase 27 | Complete |
 | FAIR-01 | Phase 28 | Complete |
-| FAIR-02 | Phase 28 | Pending |
+| FAIR-02 | Phase 28 | Complete |
 | FAIR-03 | Phase 28 | Complete |
 | PAPER-01 | Phase 29 | Pending |
 | PAPER-02 | Phase 29 | Pending |
