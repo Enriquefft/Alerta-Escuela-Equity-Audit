@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-18)
 
 **Core value:** The fairness audit is the product. Models exist to be audited, not to achieve SOTA.
-**Current focus:** v3.2-jedm-revision — COMPLETE
+**Current focus:** v4.0-model-experiments
 
 ## Current Position
 
-Phase: 25 of 25 (Page Count Reduction) -- COMPLETE
-Plan: 1 of 1 in current phase
-Status: All phases complete. Paper at 18 pages (down from 22).
-Last activity: 2026-02-18 -- Phase 25 executed
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-03-01 — Milestone v4.0 started
 
-Progress: [################] 100% (4 of 4 phases complete)
+Progress: [                ] 0%
 
 ## Performance Metrics
 
