@@ -64,7 +64,10 @@ Plans:
   2. FNR disparity change quantified: before/after comparison showing persist/narrow/disappear for castellano vs indigenous groups
   3. Cross-architecture consistency checked across all 5 updated models (FNR rank order comparison)
   4. Updated fairness_metrics.json exported with new results
-**Plans**: TBD
+**Plans:** 1/2 plans executed
+Plans:
+- [ ] 28-01-PLAN.md — Backup old exports, clear caches, re-run fairness pipeline for all 5 models
+- [ ] 28-02-PLAN.md — Before/after FNR comparison export, cross-architecture consistency, gate tests
 
 #### Phase 29: Interpretation & Paper Update
 **Goal**: Results interpreted per outcome scenario and paper updated with new findings, tables, and figures. Panel linkage documented regardless of outcome.
@@ -90,5 +93,5 @@ Phase 26 -> 27 -> 28 -> 29
 |-------|---------------|--------|-----------|
 | 26. Feature Engineering | 3/3 | Complete    | 2026-03-01 |
 | 27. Model Retraining | 2/2 | Complete    | 2026-03-01 |
-| 28. Fairness Re-Analysis | 0/? | Not started | - |
+| 28. Fairness Re-Analysis | 1/2 | In Progress|  |
 | 29. Interpretation & Paper Update | 0/? | Not started | - |
