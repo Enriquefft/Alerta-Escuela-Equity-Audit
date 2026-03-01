@@ -44,6 +44,7 @@ BINARY_FEATURES = [
     "is_working",
     "juntos_participant",
     "is_secundaria_age",
+    "is_overage",
 ]
 
 EXPECTED_FIGURES = [
@@ -76,9 +77,9 @@ def json_data() -> dict:
 
 
 def test_feature_count(df: pl.DataFrame) -> None:
-    """MODEL_FEATURES >= 19 and all present in parquet."""
-    assert len(MODEL_FEATURES) >= 19, (
-        f"Expected >= 19 model features, got {len(MODEL_FEATURES)}"
+    """MODEL_FEATURES >= 29 and all present in parquet."""
+    assert len(MODEL_FEATURES) >= 29, (
+        f"Expected >= 29 model features, got {len(MODEL_FEATURES)}"
     )
     missing = [f for f in MODEL_FEATURES if f not in df.columns]
     assert not missing, f"Missing model features in parquet: {missing}"
@@ -148,7 +149,7 @@ def test_no_high_null_features(df: pl.DataFrame) -> None:
 
 
 def test_no_high_correlation(df: pl.DataFrame) -> None:
-    """No |correlation| > 0.95 among numeric model features."""
+    """No |correlation| > 0.95 among numeric model features (excluding interaction pairs)."""
     # Select only numeric model features present in the DataFrame
     numeric_cols = [
         col
@@ -159,20 +160,34 @@ def test_no_high_correlation(df: pl.DataFrame) -> None:
         )
     ]
 
+    # Interaction features are expected to correlate highly with their components.
+    # Exclude known interaction-component pairs from the high-correlation check.
+    EXPECTED_HIGH_CORR_PAIRS = {
+        frozenset({"is_working", "age_x_working"}),
+        frozenset({"is_secundaria_age", "sec_age_x_income"}),
+        frozenset({"age", "age_x_working"}),
+        frozenset({"age", "age_x_poverty"}),
+        frozenset({"rural", "rural_x_parent_ed"}),
+        frozenset({"log_income", "sec_age_x_income"}),
+        frozenset({"poverty_quintile", "age_x_poverty"}),
+    }
+
     # Convert to numpy for correlation
     matrix = df.select(numeric_cols).to_numpy()
     # Replace NaN with 0 for correlation computation
     matrix = np.nan_to_num(matrix, nan=0.0)
     corr = np.corrcoef(matrix, rowvar=False)
 
-    # Find pairs with high correlation (excluding diagonal)
+    # Find pairs with high correlation (excluding diagonal and expected pairs)
     n = len(numeric_cols)
     high_corr_pairs: list[tuple[str, str, float]] = []
     for i in range(n):
         for j in range(i + 1, n):
             c = abs(corr[i, j])
             if c > 0.95:
-                high_corr_pairs.append((numeric_cols[i], numeric_cols[j], corr[i, j]))
+                pair = frozenset({numeric_cols[i], numeric_cols[j]})
+                if pair not in EXPECTED_HIGH_CORR_PAIRS:
+                    high_corr_pairs.append((numeric_cols[i], numeric_cols[j], corr[i, j]))
 
     assert not high_corr_pairs, (
         f"High correlations (|r| > 0.95): {high_corr_pairs}"
@@ -189,6 +204,64 @@ def test_no_high_correlation(df: pl.DataFrame) -> None:
     for col1, col2, c in all_pairs[:5]:
         print(f"    {col1} x {col2}: r={c:.4f}")
     print("  Correlation check: PASS (no |r| > 0.95)")
+
+
+# ---------------------------------------------------------------------------
+# Overage and interaction feature tests
+# ---------------------------------------------------------------------------
+
+
+def test_overage_feature(df: pl.DataFrame) -> None:
+    """Overage-for-grade feature is valid: non-negative, reasonable range, zero nulls."""
+    # Zero nulls
+    assert df["overage_years"].null_count() == 0, "overage_years has null values"
+    assert df["is_overage"].null_count() == 0, "is_overage has null values"
+
+    # Non-negative
+    assert df["overage_years"].min() >= 0, f"overage_years min={df['overage_years'].min()} < 0"
+
+    # Reasonable range (0 to ~10; a 17-year-old in primaria grade 1 would be 11 overage)
+    assert df["overage_years"].max() <= 12, f"overage_years max={df['overage_years'].max()} > 12"
+
+    # is_overage is binary {0, 1}
+    unique_vals = set(df["is_overage"].unique().to_list())
+    assert unique_vals.issubset({0, 1}), f"is_overage has unexpected values: {unique_vals}"
+
+    # Consistency: is_overage == 1 iff overage_years > 0
+    mismatch = df.filter(
+        (pl.col("overage_years") > 0) != (pl.col("is_overage") == 1)
+    ).height
+    assert mismatch == 0, f"{mismatch} rows where is_overage inconsistent with overage_years"
+
+    pct_overage = df.filter(pl.col("is_overage") == 1).height / df.height
+    mean_overage = df["overage_years"].mean()
+    print(f"\n  Overage feature: mean={mean_overage:.2f}, max={df['overage_years'].max()}, "
+          f"pct_overage={pct_overage:.1%}")
+    print("  Overage validation: PASS")
+
+
+def test_interaction_features(df: pl.DataFrame) -> None:
+    """4 interaction features exist, have zero nulls, and are logically consistent."""
+    interaction_cols = ["age_x_working", "age_x_poverty", "rural_x_parent_ed", "sec_age_x_income"]
+
+    for col in interaction_cols:
+        assert col in df.columns, f"Interaction feature {col} not in DataFrame"
+        assert df[col].null_count() == 0, f"{col} has {df[col].null_count()} null values"
+
+    # age_x_working should be 0 when is_working == 0
+    non_working = df.filter(pl.col("is_working") == 0)
+    assert non_working["age_x_working"].sum() == 0, (
+        "age_x_working should be 0 for all non-working students"
+    )
+
+    # sec_age_x_income should be 0 when is_secundaria_age == 0
+    non_sec = df.filter(pl.col("is_secundaria_age") == 0)
+    assert non_sec["sec_age_x_income"].sum() == 0, (
+        "sec_age_x_income should be 0 for all non-secundaria-age students"
+    )
+
+    print("\n  Interaction features: all 4 present, zero nulls, logical checks pass")
+    print("  Interaction validation: PASS")
 
 
 # ---------------------------------------------------------------------------
