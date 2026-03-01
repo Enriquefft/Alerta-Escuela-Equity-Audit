@@ -1,0 +1,80 @@
+{
+  "assessment_date": "2026-03-01T16:22:57.843506+00:00",
+  "year_pairs": [
+    {
+      "years": [
+        2018,
+        2019
+      ],
+      "n_year_t": 31220,
+      "n_year_t1": 28686,
+      "n_matched": 6950,
+      "linkage_rate": 0.2226,
+      "quality_age_consistent": 0.8994,
+      "quality_sex_consistent": 0.9443
+    },
+    {
+      "years": [
+        2019,
+        2020
+      ],
+      "n_year_t": 28686,
+      "n_year_t1": 29359,
+      "n_matched": 6729,
+      "linkage_rate": 0.2346,
+      "quality_age_consistent": 0.9116,
+      "quality_sex_consistent": 0.9487
+    },
+    {
+      "years": [
+        2020,
+        2021
+      ],
+      "n_year_t": 29359,
+      "n_year_t1": 27646,
+      "n_matched": 6222,
+      "linkage_rate": 0.2119,
+      "quality_age_consistent": 0.8963,
+      "quality_sex_consistent": 0.9431
+    },
+    {
+      "years": [
+        2021,
+        2022
+      ],
+      "n_year_t": 27646,
+      "n_year_t1": 27147,
+      "n_matched": 5978,
+      "linkage_rate": 0.2162,
+      "quality_age_consistent": 0.9073,
+      "quality_sex_consistent": 0.9488
+    },
+    {
+      "years": [
+        2022,
+        2023
+      ],
+      "n_year_t": 27147,
+      "n_year_t1": 26345,
+      "n_matched": 5773,
+      "linkage_rate": 0.2127,
+      "quality_age_consistent": 0.9186,
+      "quality_sex_consistent": 0.9522
+    }
+  ],
+  "overall": {
+    "mean_linkage_rate": 0.2196,
+    "min_linkage_rate": 0.2119,
+    "max_linkage_rate": 0.2346,
+    "quality_age_consistent": 0.9064,
+    "quality_sex_consistent": 0.9473,
+    "quality_rate": 0.8586,
+    "effective_rate": 0.1885,
+    "n_year_pairs": 5,
+    "total_matched": 31652
+  },
+  "decision": "skip",
+  "reason": "Effective linkage rate (18.9%) is below the 20% threshold. Raw mean linkage rate: 22.0%, quality rate: 85.9%. Insufficient for reliable trajectory feature construction.",
+  "trajectory_features_built": false,
+  "publishable_finding": "Only 22.0% of ENAHO school-age observations could be linked across consecutive waves (effective rate 18.9% after quality filtering), insufficient for reliable trajectory feature construction. This confirms a methodological constraint of ENAHO's rotating panel design for longitudinal child-level analysis."
+}
