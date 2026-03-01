@@ -17,9 +17,9 @@ Requirements for model experimentation milestone. Each maps to roadmap phases.
 ### Model Training
 
 - [x] **MODEL-01**: Retrain LightGBM with new features, re-optimize with Optuna
-- [ ] **MODEL-02**: Retrain all 5 model families (LR, LightGBM, XGBoost, RF, MLP) with new features
+- [x] **MODEL-02**: Retrain all 5 model families (LR, LightGBM, XGBoost, RF, MLP) with new features
 - [x] **MODEL-03**: Re-calibrate primary LightGBM (Platt scaling) and re-export ONNX
-- [ ] **MODEL-04**: Compare PR-AUC before/after for each model family
+- [x] **MODEL-04**: Compare PR-AUC before/after for each model family
 
 ### Fairness Analysis
 
@@ -58,9 +58,9 @@ Requirements for model experimentation milestone. Each maps to roadmap phases.
 | FEAT-03 | Phase 26 | Complete |
 | FEAT-04 | Phase 26 | Complete |
 | MODEL-01 | Phase 27 | Complete |
-| MODEL-02 | Phase 27 | Pending |
+| MODEL-02 | Phase 27 | Complete |
 | MODEL-03 | Phase 27 | Complete |
-| MODEL-04 | Phase 27 | Pending |
+| MODEL-04 | Phase 27 | Complete |
 | FAIR-01 | Phase 28 | Pending |
 | FAIR-02 | Phase 28 | Pending |
 | FAIR-03 | Phase 28 | Pending |

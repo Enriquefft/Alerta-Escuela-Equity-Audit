@@ -18,7 +18,7 @@ Experiment with model improvements to test whether better features strengthen or
 - Continues from v3.2 (Phase 26+). Phases 22-25 completed in v3.2.
 
 - [x] **Phase 26: Feature Engineering** - Build overage-for-grade, assess panel linkage feasibility, engineer interaction features (completed 2026-03-01)
-- [ ] **Phase 27: Model Retraining** - Retrain all 5 model families with new features, re-calibrate, compare PR-AUC before/after
+- [x] **Phase 27: Model Retraining** - Retrain all 5 model families with new features, re-calibrate, compare PR-AUC before/after (completed 2026-03-01)
 - [ ] **Phase 28: Fairness Re-Analysis** - Full fairness pipeline on updated models, assess FNR disparity change, cross-architecture consistency
 - [ ] **Phase 29: Interpretation & Paper Update** - Interpret results per outcome scenario, update paper, document panel linkage outcome
 
@@ -50,7 +50,7 @@ Plans:
   3. Primary LightGBM re-calibrated (Platt scaling) with updated coefficients, ONNX re-exported and validated (max diff < 1e-4)
   4. Before/after PR-AUC table produced for all 5 models showing whether new features improve prediction
   5. model_results.json updated with new metrics (weighted PR-AUC using FACTOR07)
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 Plans:
 - [ ] 27-01-PLAN.md — Retrain LightGBM + XGBoost, re-calibrate, ONNX export
 - [ ] 27-02-PLAN.md — Retrain LR + RF + MLP, before/after PR-AUC comparison
@@ -89,6 +89,6 @@ Phase 26 -> 27 -> 28 -> 29
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
 | 26. Feature Engineering | 3/3 | Complete    | 2026-03-01 |
-| 27. Model Retraining | 1/2 | In Progress|  |
+| 27. Model Retraining | 2/2 | Complete   | 2026-03-01 |
 | 28. Fairness Re-Analysis | 0/? | Not started | - |
 | 29. Interpretation & Paper Update | 0/? | Not started | - |

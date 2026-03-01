@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-01T16:45:40.109Z"
+last_updated: "2026-03-01T19:00:44.000Z"
 progress:
   total_phases: 25
-  completed_phases: 14
+  completed_phases: 15
   total_plans: 33
-  completed_plans: 20
+  completed_plans: 21
 ---
 
 # Project State
@@ -18,16 +18,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-01)
 
 **Core value:** The fairness audit is the product. Models exist to be audited, not to achieve SOTA.
-**Current focus:** v4.0-model-experiments, Phase 27 (Model Retraining)
+**Current focus:** v4.0-model-experiments, Phase 27 complete, ready for Phase 28
 
 ## Current Position
 
-Phase: 27 — Model Retraining (2 of 4 in v4.0)
-Plan: 01 of 2 complete
-Status: 27-01 complete (LightGBM/XGBoost retrained with 31 features), ready for 27-02
-Last activity: 2026-03-01 — Completed 27-01 (Model Retraining)
+Phase: 27 — Model Retraining (2 of 4 in v4.0) COMPLETE
+Plan: 02 of 2 complete
+Status: Phase 27 complete — all 5 model families retrained with 31 features
+Last activity: 2026-03-01 — Completed 27-02 (LR/RF/MLP Retraining + PR-AUC Comparison)
 
-Progress: [########--------] 50%
+Progress: [################] 100%
 
 ## Performance Metrics
 
@@ -37,8 +37,8 @@ Progress: [########--------] 50%
 - v3.0: 2 plans (Phase 15)
 - v3.1: 7 plans (Phase 16: 1, Phase 17: 2, Phase 18: 3, Phase 19: 1)
 - v3.2: 4 plans (Phase 22: 1, Phase 23: 1, Phase 24: 1, Phase 25: 1)
-- v4.0: 4 plans (Phase 26: 3, Phase 27: 1)
-- Total: 35 plans completed
+- v4.0: 5 plans (Phase 26: 3, Phase 27: 2)
+- Total: 36 plans completed
 
 | Phase | Plan | Duration | Tasks | Files |
 |-------|------|----------|-------|-------|
@@ -50,6 +50,7 @@ Progress: [########--------] 50%
 | 26    | 02   | ~4 min   | 2     | 3     |
 | 26    | 03   | ~7 min   | 2     | 2     |
 | 27    | 01   | ~7 min   | 2     | 11    |
+| 27    | 02   | ~80 min  | 2     | 8     |
 
 ## Accumulated Context
 
@@ -67,6 +68,8 @@ Progress: [########--------] 50%
 - [26-03]: All spatial z-score features now imputed with 0.0 to ensure zero nulls in model features
 - [27-01]: No code changes needed for 25->31 feature expansion; MODEL_FEATURES dynamic import worked seamlessly
 - [27-01]: New Platt A=-8.156711, B=5.069181; LightGBM val PR-AUC 0.2908 (+11.2% over 25-feature model)
+- [27-02]: All 5 models improved with 31 features: LR +14.3%, LightGBM +11.4%, XGBoost +9.9%, RF +9.4%, MLP +12.5%
+- [27-02]: Created retrain_all.py orchestration script for safe baseline.py overwrite handling
 
 ### Pending Todos
 
@@ -79,5 +82,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Completed 27-01-PLAN.md (Model Retraining)
+Stopped at: Completed 27-02-PLAN.md (Phase 27 complete)
 Resume file: None
