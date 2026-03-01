@@ -19,6 +19,7 @@ Usage::
 
 from __future__ import annotations
 
+import json
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -633,6 +634,58 @@ def _compute_weighted_poverty_quintile(
     return sorted_df
 
 
+def _check_panel_linkage_decision(warnings: list[str]) -> dict:
+    """Read panel linkage report and determine whether trajectory features are included.
+
+    Returns a dict summarizing the linkage outcome for inclusion in stats.
+    """
+    root = find_project_root()
+    report_path = root / "data" / "exports" / "panel_linkage_report.json"
+
+    if not report_path.exists():
+        logger.warning("Panel linkage report not found at %s; skipping trajectory features", report_path)
+        warnings.append("Panel linkage report not found; trajectory features not included")
+        return {"decision": "skip", "reason": "report_not_found", "effective_rate": None}
+
+    with open(report_path) as f:
+        report = json.load(f)
+
+    decision = report.get("decision", "skip")
+    effective_rate = report.get("overall", {}).get("effective_rate")
+    reason = report.get("reason", "")
+
+    if decision in ("proceed", "marginal"):
+        # Trajectory features would be integrated here if linkage was sufficient.
+        # This path is preserved for future use if ENAHO data improves.
+        logger.info(
+            "Panel linkage decision: %s (effective rate: %.1f%%). "
+            "Trajectory features would be integrated.",
+            decision, (effective_rate or 0) * 100,
+        )
+        warnings.append(
+            f"Panel linkage decision={decision} but trajectory integration "
+            f"not yet implemented in this code path"
+        )
+    else:
+        # decision == "skip"
+        logger.warning(
+            "Panel linkage insufficient (<20%%); trajectory features not included. "
+            "Effective linkage rate: %.1f%%. Reason: %s",
+            (effective_rate or 0) * 100, reason,
+        )
+        warnings.append(
+            f"Panel linkage insufficient (<20%); trajectory features not included. "
+            f"Effective rate: {(effective_rate or 0) * 100:.1f}%"
+        )
+
+    return {
+        "decision": decision,
+        "effective_rate": effective_rate,
+        "reason": reason,
+        "trajectory_features_included": decision in ("proceed", "marginal"),
+    }
+
+
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
@@ -954,8 +1007,9 @@ def build_features(df: pl.DataFrame) -> FeatureResult:
     logger.info("Step 4: Z-score standardization of district-level features")
     for src_col, dst_col in _SPATIAL_COLS_FOR_ZSCORE:
         if src_col in df.columns:
-            # Impute nulls with 0 (mean of z-distribution) for nightlights
-            impute = (src_col == "nightlight_intensity")
+            # Impute nulls with 0 (mean of z-distribution) for all model features
+            # to ensure zero nulls in the final feature matrix
+            impute = dst_col in MODEL_FEATURES
             df = _zscore(df, src_col, dst_col, impute_null=impute)
             logger.info("  z-scored %s -> %s (impute_null=%s)", src_col, dst_col, impute)
         else:
@@ -964,7 +1018,13 @@ def build_features(df: pl.DataFrame) -> FeatureResult:
             warnings.append(f"{src_col} not found; {dst_col} set to 0.0")
 
     # -----------------------------------------------------------------------
-    # 5. school_student_teacher_ratio: ESCALE not available
+    # 5. Conditional trajectory feature integration (from panel linkage)
+    # -----------------------------------------------------------------------
+    logger.info("Step 5: Checking panel linkage decision for trajectory features")
+    panel_linkage_outcome = _check_panel_linkage_decision(warnings)
+
+    # -----------------------------------------------------------------------
+    # 5.5. school_student_teacher_ratio: ESCALE not available
     # -----------------------------------------------------------------------
     logger.warning(
         "school_student_teacher_ratio: ESCALE data not available. "
@@ -1042,6 +1102,15 @@ def build_features(df: pl.DataFrame) -> FeatureResult:
             "feature_names": new_feature_names,
             "null_rates": new_feature_null_rates,
             "overage_stats": overage_stats,
+        },
+        "v4_feature_summary": {
+            "new_features_added": new_feature_names,
+            "total_new_features": len(new_feature_names),
+            "panel_linkage_outcome": panel_linkage_outcome,
+            "total_model_features": len(MODEL_FEATURES),
+            "trajectory_features_included": panel_linkage_outcome.get(
+                "trajectory_features_included", False
+            ),
         },
     }
 
