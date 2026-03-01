@@ -1,12 +1,22 @@
-\begin{tabular}{@{}lSSSSS@{}}
+\begin{tabular}{@{}llSSSSS@{}}
 \toprule
-Language Group & {LR} & {LightGBM} & {XGBoost} & {RF} & {MLP} \\
+Language Group & {Version} & {LR} & {LightGBM} & {XGBoost} & {RF} & {MLP} \\
 \midrule
-Castellano & 0.584 & 0.633 & 0.613 & 0.549 & 0.666 \\
-Quechua & 0.192 & 0.416 & 0.284 & 0.259 & 0.525 \\
-Otros ind\'{i}genas & 0.065 & 0.216 & 0.159 & 0.216 & 0.397 \\
-Aimara* & 0.288 & 0.263 & 0.288 & 0.192 & 0.830 \\
+\multirow{2}{*}{Castellano}
+  & v1 (25f) & 0.584 & 0.633 & 0.613 & 0.549 & 0.666 \\
+  & v2 (31f) & 0.608 & 0.663 & 0.649 & 0.607 & 0.619 \\
+\midrule
+\multirow{2}{*}{Quechua}
+  & v1 (25f) & 0.192 & 0.416 & 0.284 & 0.259 & 0.525 \\
+  & v2 (31f) & 0.282 & 0.481 & 0.479 & 0.389 & 0.338 \\
+\midrule
+\multirow{2}{*}{Otros ind\'{i}genas}
+  & v1 (25f) & 0.065 & 0.216 & 0.159 & 0.216 & 0.397 \\
+  & v2 (31f) & 0.073 & 0.347 & 0.240 & 0.338 & 0.047 \\
+\midrule
+Aimara* & v1 (25f) & 0.288 & 0.263 & 0.288 & 0.192 & 0.830 \\
 \bottomrule
-\multicolumn{6}{l}{\footnotesize * $n=76$; Aimara MLP FNR=0.830 is a small-sample outlier.} \\
-\multicolumn{6}{l}{\footnotesize Cross-architecture consistency claim applies to castellano vs.\ indigenous pattern only.} \\
+\multicolumn{7}{l}{\footnotesize * $n=76$; Aimara shown for v1 only due to small-sample instability.} \\
+\multicolumn{7}{l}{\footnotesize v1 = 25-feature model; v2 = 31-feature model. Rank order (castellano $>$ quechua $>$} \\
+\multicolumn{7}{l}{\footnotesize other indigenous) is identical across all models and both feature sets.} \\
 \end{tabular}
