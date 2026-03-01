@@ -78,7 +78,10 @@ Plans:
   2. Paper tables and figures updated with new model results and fairness metrics
   3. Panel linkage outcome documented in Limitations section (whether positive or negative result)
   4. Paper compiles without errors, narrative consistent with empirical results
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 29-01-PLAN.md — Update tables with v2 (31-feature) model results
+- [ ] 29-02-PLAN.md — Update paper narrative, add Feature Robustness subsection, document panel linkage
 
 ### Deferred
 
@@ -94,4 +97,4 @@ Phase 26 -> 27 -> 28 -> 29
 | 26. Feature Engineering | 3/3 | Complete    | 2026-03-01 |
 | 27. Model Retraining | 2/2 | Complete    | 2026-03-01 |
 | 28. Fairness Re-Analysis | 2/2 | Complete    | 2026-03-01 |
-| 29. Interpretation & Paper Update | 0/? | Not started | - |
+| 29. Interpretation & Paper Update | 0/2 | Not started | - |
