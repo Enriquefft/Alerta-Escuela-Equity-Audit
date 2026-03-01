@@ -1,0 +1,126 @@
+{
+  "generated_at": "2026-03-01T21:46:00.320157+00:00",
+  "v1_model": "lgbm_calibrated (25 features, threshold=0.167268)",
+  "v2_model": "lgbm_calibrated (31 features, threshold=0.185024)",
+  "language_fnr_comparison": {
+    "aimara": {
+      "fnr_v1": 0.262894,
+      "fnr_v2": 0.384149,
+      "change": 0.121255,
+      "change_pct": 46.12
+    },
+    "castellano": {
+      "fnr_v1": 0.632913,
+      "fnr_v2": 0.662695,
+      "change": 0.029782,
+      "change_pct": 4.71
+    },
+    "foreign": {
+      "fnr_v1": 0.270517,
+      "fnr_v2": 0.381601,
+      "change": 0.111084,
+      "change_pct": 41.06
+    },
+    "other_indigenous": {
+      "fnr_v1": 0.215743,
+      "fnr_v2": 0.346905,
+      "change": 0.131162,
+      "change_pct": 60.8
+    },
+    "quechua": {
+      "fnr_v1": 0.416304,
+      "fnr_v2": 0.481227,
+      "change": 0.064923,
+      "change_pct": 15.6
+    },
+    "unknown": {
+      "fnr_v1": 0.92225,
+      "fnr_v2": 1.0,
+      "change": 0.07775,
+      "change_pct": 8.43
+    }
+  },
+  "max_fnr_gap": {
+    "v1": 0.706507,
+    "v2": 0.653095,
+    "change_pct": -7.56
+  },
+  "scenario": "persist",
+  "scenario_rationale": "Max FNR gap 0.6531 > 0.20 and rank order preserved",
+  "cross_architecture": {
+    "models": [
+      "lgbm_calibrated",
+      "lr",
+      "rf",
+      "mlp",
+      "xgb"
+    ],
+    "fnr_by_model": {
+      "lgbm_calibrated": {
+        "castellano": 0.662695,
+        "other_indigenous": 0.346905,
+        "quechua": 0.481227
+      },
+      "lr": {
+        "castellano": 0.608186,
+        "other_indigenous": 0.07332,
+        "quechua": 0.282004
+      },
+      "rf": {
+        "castellano": 0.607067,
+        "other_indigenous": 0.337832,
+        "quechua": 0.388945
+      },
+      "mlp": {
+        "castellano": 0.619055,
+        "other_indigenous": 0.047398,
+        "quechua": 0.337982
+      },
+      "xgb": {
+        "castellano": 0.648947,
+        "other_indigenous": 0.239535,
+        "quechua": 0.479293
+      }
+    },
+    "rank_order_by_model": {
+      "lgbm_calibrated": [
+        "castellano",
+        "quechua",
+        "other_indigenous"
+      ],
+      "lr": [
+        "castellano",
+        "quechua",
+        "other_indigenous"
+      ],
+      "rf": [
+        "castellano",
+        "quechua",
+        "other_indigenous"
+      ],
+      "mlp": [
+        "castellano",
+        "quechua",
+        "other_indigenous"
+      ],
+      "xgb": [
+        "castellano",
+        "quechua",
+        "other_indigenous"
+      ]
+    },
+    "worst_group_per_model": {
+      "lgbm_calibrated": "castellano",
+      "lr": "castellano",
+      "rf": "castellano",
+      "mlp": "castellano",
+      "xgb": "castellano"
+    },
+    "rank_order_consistent": true,
+    "max_fnr_range_per_group": {
+      "castellano": 0.055628,
+      "other_indigenous": 0.299507,
+      "quechua": 0.199223
+    }
+  }
+}
