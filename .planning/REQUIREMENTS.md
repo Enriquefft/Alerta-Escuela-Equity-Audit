@@ -9,10 +9,10 @@ Requirements for model experimentation milestone. Each maps to roadmap phases.
 
 ### Feature Engineering
 
-- [ ] **FEAT-01**: Construct overage-for-grade feature from age and enrollment level (Module 300)
+- [x] **FEAT-01**: Construct overage-for-grade feature from age and enrollment level (Module 300)
 - [x] **FEAT-02**: Assess ENAHO panel linkage feasibility (% of sample linkable across waves)
 - [x] **FEAT-03**: If panel linkage >40%, build trajectory features (income change, sibling dropout, work transitions)
-- [ ] **FEAT-04**: Engineer interaction features (age x working, age x poverty, rural x parental_education, secondary_age x income)
+- [x] **FEAT-04**: Engineer interaction features (age x working, age x poverty, rural x parental_education, secondary_age x income)
 
 ### Model Training
 
@@ -53,10 +53,10 @@ Requirements for model experimentation milestone. Each maps to roadmap phases.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FEAT-01 | Phase 26 | Pending |
+| FEAT-01 | Phase 26 | Complete |
 | FEAT-02 | Phase 26 | Complete |
 | FEAT-03 | Phase 26 | Complete |
-| FEAT-04 | Phase 26 | Pending |
+| FEAT-04 | Phase 26 | Complete |
 | MODEL-01 | Phase 27 | Pending |
 | MODEL-02 | Phase 27 | Pending |
 | MODEL-03 | Phase 27 | Pending |
