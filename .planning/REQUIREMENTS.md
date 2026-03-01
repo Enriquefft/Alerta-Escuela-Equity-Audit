@@ -29,9 +29,9 @@ Requirements for model experimentation milestone. Each maps to roadmap phases.
 
 ### Interpretation & Paper
 
-- [ ] **PAPER-01**: Interpret results per outcome scenario (persist/narrow/disappear/ceiling)
+- [x] **PAPER-01**: Interpret results per outcome scenario (persist/narrow/disappear/ceiling)
 - [x] **PAPER-02**: Update paper tables, figures, and text with new results
-- [ ] **PAPER-03**: Document panel linkage outcome (positive or negative) in Limitations
+- [x] **PAPER-03**: Document panel linkage outcome (positive or negative) in Limitations
 
 ## Future Requirements
 
@@ -64,9 +64,9 @@ Requirements for model experimentation milestone. Each maps to roadmap phases.
 | FAIR-01 | Phase 28 | Complete |
 | FAIR-02 | Phase 28 | Complete |
 | FAIR-03 | Phase 28 | Complete |
-| PAPER-01 | Phase 29 | Pending |
+| PAPER-01 | Phase 29 | Complete |
 | PAPER-02 | Phase 29 | Complete |
-| PAPER-03 | Phase 29 | Pending |
+| PAPER-03 | Phase 29 | Complete |
 
 **Coverage:**
 - v4.0 requirements: 14 total
