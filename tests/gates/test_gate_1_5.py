@@ -77,13 +77,27 @@ def json_data() -> dict:
 
 
 def test_feature_count(df: pl.DataFrame) -> None:
-    """MODEL_FEATURES >= 29 and all present in parquet."""
-    assert len(MODEL_FEATURES) >= 29, (
-        f"Expected >= 29 model features, got {len(MODEL_FEATURES)}"
+    """MODEL_FEATURES count dynamic based on panel linkage decision."""
+    # Determine expected minimum from panel linkage report
+    linkage_report_path = ROOT / "data" / "exports" / "panel_linkage_report.json"
+    if linkage_report_path.exists():
+        with open(linkage_report_path) as f:
+            linkage = json.load(f)
+        decision = linkage.get("decision", "skip")
+    else:
+        decision = "skip"
+
+    if decision in ("proceed", "marginal"):
+        min_features = 32  # 25 original + 6 v4.0 + trajectory features
+    else:
+        min_features = 29  # 25 original + 6 v4.0 (no trajectory)
+
+    assert len(MODEL_FEATURES) >= min_features, (
+        f"Expected >= {min_features} model features (linkage={decision}), got {len(MODEL_FEATURES)}"
     )
     missing = [f for f in MODEL_FEATURES if f not in df.columns]
     assert not missing, f"Missing model features in parquet: {missing}"
-    print(f"\n  Feature count: {len(MODEL_FEATURES)} model features -- PASS")
+    print(f"\n  Feature count: {len(MODEL_FEATURES)} model features (linkage={decision}, min={min_features}) -- PASS")
 
 
 def test_binary_features_valid(df: pl.DataFrame) -> None:
@@ -262,6 +276,60 @@ def test_interaction_features(df: pl.DataFrame) -> None:
 
     print("\n  Interaction features: all 4 present, zero nulls, logical checks pass")
     print("  Interaction validation: PASS")
+
+
+def test_v4_features_summary(df: pl.DataFrame) -> None:
+    """Summary validation of all v4 features: overage distribution, interactions, and linkage."""
+    # Overage distribution check: mean should be ~1-3 for school-age population
+    mean_overage = df["overage_years"].mean()
+    assert 0.5 <= mean_overage <= 5.0, (
+        f"Overage mean {mean_overage:.2f} outside expected range [0.5, 5.0]"
+    )
+
+    # Interaction features have reasonable ranges
+    for col in ["age_x_working", "age_x_poverty", "rural_x_parent_ed", "sec_age_x_income"]:
+        assert df[col].null_count() == 0, f"{col} has nulls"
+        col_min = df[col].min()
+        col_max = df[col].max()
+        assert col_min >= 0, f"{col} has negative values: min={col_min}"
+
+    # Check panel linkage report
+    linkage_report_path = ROOT / "data" / "exports" / "panel_linkage_report.json"
+    assert linkage_report_path.exists(), "panel_linkage_report.json not found"
+    with open(linkage_report_path) as f:
+        linkage = json.load(f)
+    decision = linkage.get("decision", "skip")
+
+    # If trajectory features present, check coverage
+    if decision in ("proceed", "marginal"):
+        effective_rate = linkage.get("overall", {}).get("effective_rate", 0)
+        print(f"\n  Trajectory features included (effective rate: {effective_rate:.1%})")
+    else:
+        # Verify no trajectory columns in MODEL_FEATURES
+        trajectory_cols = ["income_change", "sibling_dropout", "work_transition"]
+        for col in trajectory_cols:
+            assert col not in MODEL_FEATURES, (
+                f"Trajectory feature {col} in MODEL_FEATURES but decision=skip"
+            )
+        print(f"\n  Trajectory features excluded (decision={decision})")
+
+    # Print summary table of all new v4 features
+    v4_features = [
+        "overage_years", "is_overage",
+        "age_x_working", "age_x_poverty", "rural_x_parent_ed", "sec_age_x_income",
+    ]
+    print("\n  v4.0 Feature Summary:")
+    print(f"  {'Feature':<25} {'Min':>10} {'Max':>10} {'Mean':>10} {'Nulls':>8}")
+    print(f"  {'-'*25} {'-'*10} {'-'*10} {'-'*10} {'-'*8}")
+    for feat in v4_features:
+        if feat in df.columns:
+            f_min = df[feat].min()
+            f_max = df[feat].max()
+            f_mean = df[feat].mean()
+            f_nulls = df[feat].null_count()
+            print(f"  {feat:<25} {f_min:>10.2f} {f_max:>10.2f} {f_mean:>10.2f} {f_nulls:>8}")
+    print(f"\n  Total MODEL_FEATURES: {len(MODEL_FEATURES)}")
+    print("  v4 features summary: PASS")
 
 
 # ---------------------------------------------------------------------------
