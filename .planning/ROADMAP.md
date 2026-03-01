@@ -50,7 +50,10 @@ Plans:
   3. Primary LightGBM re-calibrated (Platt scaling) with updated coefficients, ONNX re-exported and validated (max diff < 1e-4)
   4. Before/after PR-AUC table produced for all 5 models showing whether new features improve prediction
   5. model_results.json updated with new metrics (weighted PR-AUC using FACTOR07)
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 27-01-PLAN.md — Retrain LightGBM + XGBoost, re-calibrate, ONNX export
+- [ ] 27-02-PLAN.md — Retrain LR + RF + MLP, before/after PR-AUC comparison
 
 #### Phase 28: Fairness Re-Analysis
 **Goal**: Full fairness analysis re-run with updated models to determine whether FNR disparities persist, narrow, or disappear with better features.
@@ -86,6 +89,6 @@ Phase 26 -> 27 -> 28 -> 29
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
 | 26. Feature Engineering | 3/3 | Complete    | 2026-03-01 |
-| 27. Model Retraining | 0/? | Not started | - |
+| 27. Model Retraining | 0/2 | Not started | - |
 | 28. Fairness Re-Analysis | 0/? | Not started | - |
 | 29. Interpretation & Paper Update | 0/? | Not started | - |
