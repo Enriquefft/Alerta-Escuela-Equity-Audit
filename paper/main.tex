@@ -39,7 +39,7 @@
 \maketitle
 
 \begin{abstract}
-Dropout prediction systems are proliferating across Latin America, yet their fairness properties remain unaudited. We construct a proxy dropout prediction model from publicly available ENAHO survey data (2018--2023, $N=150{,}135$) targeting the same school-age population as Peru's Alerta Escuela early warning system. We have not accessed Alerta Escuela's predictions, training data, or operational feature set; our findings characterize disparities in survey-derived dropout risk modeling, not the deployed system itself. Training five model families (logistic regression, LightGBM, XGBoost, random forest, and MLP) and auditing across language, geography, poverty, and sex dimensions, we find that the calibrated LightGBM model (test PR-AUC = 0.236, top-decile lift = 2.54$\times$) exhibits a false negative rate (FNR) of 63.3\% for Spanish-speaking students [95\% CI: 0.608, 0.656] but only 21.6\% for indigenous-language speakers [0.137, 0.310]---the majority of Spanish-speaking dropouts are missed while indigenous students are over-flagged. This FNR rank order holds across all five model families. SHAP analysis shows the model predicts through spatial-structural features rather than identity features directly. Intersectional analysis identifies urban indigenous students as a potentially high-FNR subgroup (pooled estimate 0.69, $n=167$), though small sample size limits precision (95\% CI [0.39, 0.98]); a power analysis shows that survey-based intersectional auditing requires approximately 8 ENAHO years to confirm whether FNR exceeds 0.50 for this group, demonstrating a methodological ceiling that argues for opening administrative data. Our contributions are: (1) a proxy audit framework demonstrating that independent algorithmic accountability is achievable using only public data, and (2) empirical documentation that Spanish-speaking dropouts---the demographic majority---are the group most systematically missed by survey-derived prediction. The code and data pipeline are available at an anonymized version of the GitHub repository \url{https://anonymous.4open.science/r/Alerta-Escuela-Equity-Audit-42FC/}. \\
+Dropout prediction systems are proliferating across Latin America, yet their fairness properties remain unaudited. We construct a proxy dropout prediction model from publicly available ENAHO survey data (2018--2023, $N=150{,}135$) targeting the same school-age population as Peru's Alerta Escuela early warning system. We have not accessed Alerta Escuela's predictions, training data, or operational feature set; our findings characterize disparities in survey-derived dropout risk modeling, not the deployed system itself. Training five model families (logistic regression, LightGBM, XGBoost, random forest, and MLP) and auditing across language, geography, poverty, and sex dimensions, we find that the calibrated LightGBM model (test PR-AUC = 0.236, top-decile lift = 2.54$\times$) exhibits a false negative rate (FNR) of 63.3\% for Spanish-speaking students [95\% CI: 0.608, 0.656] but only 21.6\% for indigenous-language speakers [0.137, 0.310]---the majority of Spanish-speaking dropouts are missed while indigenous students are over-flagged. This FNR rank order holds across all five model families. Expanding to 31 features with overage and interaction terms improves prediction by 9--14\% but the castellano invisibility pattern persists---the disparity is structural, not a feature artifact. SHAP analysis shows the model predicts through spatial-structural features rather than identity features directly. Intersectional analysis identifies urban indigenous students as a potentially high-FNR subgroup (pooled estimate 0.69, $n=167$), though small sample size limits precision (95\% CI [0.39, 0.98]); a power analysis shows that survey-based intersectional auditing requires approximately 8 ENAHO years to confirm whether FNR exceeds 0.50 for this group, demonstrating a methodological ceiling that argues for opening administrative data. Our contributions are: (1) a proxy audit framework demonstrating that independent algorithmic accountability is achievable using only public data, and (2) empirical documentation that Spanish-speaking dropouts---the demographic majority---are the group most systematically missed by survey-derived prediction. The code and data pipeline are available at an anonymized version of the GitHub repository \url{https://anonymous.4open.science/r/Alerta-Escuela-Equity-Audit-42FC/}. \\
 
 {\parindent0pt
 \textbf{Keywords:} educational equity, dropout prediction, algorithmic fairness, proxy audit, Peru, ENAHO, early warning system
@@ -130,7 +130,7 @@ We merge district-level spatial features: census literacy and population z-score
 
 \subsection{Feature Engineering}
 
-We engineer 25 features organized into three categories: \emph{individual demographics} (8 features: age, sex, nationality, mother tongue dummies), \emph{household characteristics} (8 features: parent education, poverty index, poverty quintile, working status, household size, birthplace match), and \emph{district-level spatial indicators} (9 features: nightlight intensity z-score, census literacy and population z-scores, administrative completion rates, historical dropout rate). Table~\ref{tab:lr_coefficients} (Appendix~\ref{sec:appendix_tables}) lists all 25 features with their logistic regression coefficients. Nightlight z-score nulls (4.1\%) are imputed with 0.0 \cite{macnell2023implementing}; poverty quintiles are constructed using FACTOR07-weighted quantiles.
+We engineer 25 features organized into three categories: \emph{individual demographics} (8 features: age, sex, nationality, mother tongue dummies), \emph{household characteristics} (8 features: parent education, poverty index, poverty quintile, working status, household size, birthplace match), and \emph{district-level spatial indicators} (9 features: nightlight intensity z-score, census literacy and population z-scores, administrative completion rates, historical dropout rate). Table~\ref{tab:lr_coefficients} (Appendix~\ref{sec:appendix_tables}) lists all 25 features with their logistic regression coefficients. Nightlight z-score nulls (4.1\%) are imputed with 0.0 \cite{macnell2023implementing}; poverty quintiles are constructed using FACTOR07-weighted quantiles. As a robustness check, we extend this feature set to 31 features by adding overage-for-grade (years above expected age for enrollment level), an overage binary indicator, and four interaction terms (age $\times$ working status, age $\times$ poverty index, rural $\times$ parental education, secondary-age $\times$ household income). These features are motivated by education literature on age-grade distortion as a dropout precursor and the compounding effect of simultaneous risk factors.
 
 \subsection{Model Selection and Training}
 
@@ -151,7 +151,7 @@ We use fairlearn \cite{bird2020fairlearn} to compute disaggregated metrics acros
 % =============================================================================
 
 \begin{table}[htbp]
-  \caption{Model Performance Comparison Across Five Families (Survey-Weighted Metrics)}\vspace*{1ex}
+  \caption{Model Performance Comparison Across Five Families (Survey-Weighted Metrics). The 31f column shows validation PR-AUC after adding 6 overage and interaction features.}\vspace*{1ex}
   \label{tab:models}
   \input{tables/table_04_models.tex}
 \end{table}
@@ -159,6 +159,10 @@ We use fairlearn \cite{bird2020fairlearn} to compute disaggregated metrics acros
 Near-identical PR-AUC across three tree-based ensembles (Table~\ref{tab:models}) confirms fairness findings reflect data structure, not model artifacts. MLP's lower PR-AUC (0.238) is typical for structured tabular data \cite{ke2017lightgbm}. The calibrated LightGBM achieves test PR-AUC of 0.236, with a validation--test gap of 0.023---well within the 0.07 threshold indicating adequate generalization. Calibration reduces the test Brier score by 40\% (0.186 to 0.112), confirming that Platt scaling is essential for probability-based decisions.
 
 Indigenous language variables dominate the linear model (other-indigenous OR=2.20; Table~\ref{tab:lr_coefficients}, Appendix~\ref{sec:appendix_tables}), with zero overlap in top-5 features between linear and tree-based models---feature ``importance'' depends on model family.
+
+\subsection{Feature Robustness}
+
+Expanding the feature set from 25 to 31 variables---adding overage-for-grade and interaction features---improves all five models' validation PR-AUC by 9--14\% (Table~\ref{tab:prauc_comparison}, Appendix~\ref{sec:appendix_tables}). The v2 LightGBM achieves validation PR-AUC of 0.291 and test PR-AUC of 0.257. Despite improved prediction, the FNR rank order across language groups is identical in both feature sets and all five model families (Table~\ref{tab:crossmodel_fnr}): castellano speakers remain the most-missed group in all ten model instances. This is the ``persist'' scenario: castellano FNR increases slightly from 0.633 to 0.663 (+4.7\%), demonstrating that the disparity is structural---better features improve prediction overall but do not resolve the castellano invisibility pattern.
 
 \subsection{Predictive Validity}
 \label{sec:predictive_validity}
@@ -254,6 +258,8 @@ SHAP analysis reveals that nightlight intensity, district-level dropout rates, a
 
 Feature ablation confirms this mechanism: removing district-level features reduces castellano FNR from 0.633 to 0.317, while the individual-only model slightly increases it to 0.649 (Table~\ref{tab:ablation}, Appendix~\ref{sec:appendix_tables}). Castellano speakers have the highest FNR in all three variants, confirming their invisibility is not an artifact of a particular feature set.
 
+A second robustness check reinforces this conclusion: expanding the feature set from 25 to 31 variables---adding overage-for-grade and interaction features motivated by education dropout literature---improves all five models' PR-AUC by 9--14\% but slightly \emph{increases} castellano FNR from 0.633 to 0.663. That better prediction does not reduce the FNR gap, and indeed marginally widens it, demonstrates that the castellano invisibility pattern is a structural consequence of spatial proxy reliance, not a feature-engineering artifact.
+
 These findings suggest group-specific threshold adjustment could reduce castellano invisibility, and supplementary identification mechanisms could address the urban indigenous blind spot---though both approaches redistribute rather than eliminate errors, and their implementation requires consideration of operational costs and community consent \cite{mcmahon2020reenvisioning}.
 
 We privilege FNR because a missed dropout represents irreversible harm. Equalizing FNR across language groups would require lowering the threshold for Spanish speakers, increasing their FPR. Whether this trade-off is acceptable depends on intervention cost: a teacher notification justifies elevated FPR; social worker home visits may not \cite{mcmahon2020reenvisioning,chouldechova2017fair}. The current model implicitly prioritizes low FPR for the majority at the cost of rendering their dropouts invisible.
@@ -270,7 +276,9 @@ Third, the 2020 wave (phone interviews, $\sim$13,755 observations, 52\% null att
 
 Fourth, intersectional subgroups have small samples: pooling val+test yields $n=167$ urban other-indigenous students (FNR=0.69, 95\% CI [0.39, 0.98]). A power analysis shows confirming FNR $>$ 0.50 requires $\sim$8 ENAHO years; detecting the gap versus castellano requires $\sim$32 years. This methodological ceiling---survey data cannot produce significant intersectional results for subgroups with $<$6 dropouts per year---argues for opening SIAGIE administrative data.
 
-Fifth, formal statistical guarantees for survey-weighted gradient boosting under complex designs remain an active research area \cite{macnell2023implementing}.
+Fifth, ENAHO's rotating panel design limits longitudinal analysis: only 22.0\% of school-age observations could be linked across consecutive waves (18.9\% effective rate after quality filtering), insufficient for constructing reliable trajectory features such as income changes or sibling dropout events. This constrains our feature space to cross-sectional variables and confirms a methodological limitation of survey-based dropout modeling that administrative data would resolve.
+
+Sixth, formal statistical guarantees for survey-weighted gradient boosting under complex designs remain an active research area \cite{macnell2023implementing}.
 
 % =============================================================================
 \section{Ethical Considerations}
@@ -284,7 +292,7 @@ Fifth, formal statistical guarantees for survey-weighted gradient boosting under
 \section{Conclusion}
 % =============================================================================
 
-This proxy equity audit of survey-derived dropout risk in Peru ($N=150{,}135$; 2018--2023) identifies Spanish-speaking students---the demographic majority---as the group most systematically missed by the model (FNR = 0.633), with suggestive evidence that urban indigenous students face even higher miss rates at the intersection of language and geography (pooled FNR = 0.69, $n=167$). These findings hold across five model families with different architectures, indicating that the disparity reflects data structure rather than algorithmic artifacts.
+This proxy equity audit of survey-derived dropout risk in Peru ($N=150{,}135$; 2018--2023) identifies Spanish-speaking students---the demographic majority---as the group most systematically missed by the model (FNR = 0.633), with suggestive evidence that urban indigenous students face even higher miss rates at the intersection of language and geography (pooled FNR = 0.69, $n=167$). These findings hold across five model families with different architectures and persist when expanding from 25 to 31 features with overage-for-grade and interaction terms (Table~\ref{tab:prauc_comparison}), confirming they reflect data structure rather than feature artifacts.
 
 The proxy audit methodology demonstrates that independent algorithmic accountability is achievable using only publicly available survey data---an approach applicable wherever direct system access is unavailable. However, models that predict primarily through spatial-structural features create predictable blind spots at demographic intersections where geographic and social profiles diverge. Feature ablation confirms that spatial features drive the castellano invisibility pattern, while the full model's combination of spatial and individual features produces the worst FNR outcome for the majority group.
 
@@ -350,7 +358,7 @@ Our power analysis reveals a methodological ceiling: survey data fundamentally c
 \end{table}
 
 \begin{table}[H]
-  \caption{False Negative Rate by Language Group Across Five Model Families. Aimara group ($n=76$) shows instability (MLP FNR=0.830); cross-architecture consistency claim is scoped to the castellano vs.\ indigenous pattern.}\vspace*{1ex}
+  \caption{False Negative Rate by Language Group Across Five Model Families. Each language group shows v1 (25 features) and v2 (31 features) results. Rank order is identical across all ten model instances. Aimara group ($n=76$) shows instability (MLP FNR=0.830); cross-architecture consistency claim is scoped to the castellano vs.\ indigenous pattern.}\vspace*{1ex}
   \label{tab:crossmodel_fnr}
   \input{tables/table_10_crossmodel_fnr.tex}
 \end{table}
@@ -359,6 +367,12 @@ Our power analysis reveals a methodological ceiling: survey data fundamentally c
   \caption{FNR by Language Group Under Feature Ablation. ``Individual only'' removes all 7 district-level spatial features; ``Spatial only'' removes all 18 individual/household features. Each variant uses its own optimal threshold (max weighted F1 on validation).}\vspace*{1ex}
   \label{tab:ablation}
   \input{tables/table_11_ablation.tex}
+\end{table}
+
+\begin{table}[H]
+  \caption{PR-AUC Before and After Feature Expansion (Validation Set, 2022)}\vspace*{1ex}
+  \label{tab:prauc_comparison}
+  \input{tables/table_12_prauc_comparison.tex}
 \end{table}
 
 \clearpage
