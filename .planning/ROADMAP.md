@@ -8,80 +8,66 @@
 - [x] **v3.1-paper-strengthening** (2026-02-17) — Bootstrap CIs, hypothesis tests, RF + MLP models, lift/calibration analysis, paper rewrite with proxy framing, review fixes. [Details](milestones/v3.1-ROADMAP.md)
 - [x] **v3.2-jedm-revision** (2026-02-18) — Paper revised to 18 pages for JEDM: pooled CI analysis, feature ablation, power analysis, page reduction. [Details](milestones/v3.2-ROADMAP.md)
 
-## Current Milestone: v4.0-model-experiments
+<details>
+<summary>v4.0-model-experiments (Phases 26-29) - SHIPPED 2026-03-01</summary>
 
-Experiment with model improvements to test whether better features strengthen or change fairness findings. Research-oriented: all outcomes (persist/narrow/disappear/no improvement) are valid and publishable.
+Experiment with model improvements to test whether better features strengthen or change fairness findings. 6 new features engineered, all 5 models retrained (+9-14% PR-AUC), castellano FNR disparity confirmed as persistent and algorithm-independent. Paper updated to 23 pages.
+
+- [x] **Phase 26: Feature Engineering** - 3/3 plans complete
+- [x] **Phase 27: Model Retraining** - 2/2 plans complete
+- [x] **Phase 28: Fairness Re-Analysis** - 2/2 plans complete
+- [x] **Phase 29: Interpretation & Paper Update** - 2/2 plans complete
+
+</details>
+
+## Current Milestone: v4.1-readability-polish
+
+Pre-submission content polish addressing anticipated JEDM reviewer concerns. Strengthen framing, tighten structure, fix compliance gaps. All work is paper-focused (paper/main.tex) except COMP-01 which requires running analysis code.
 
 ### Phases
 
 **Phase Numbering:**
-- Continues from v3.2 (Phase 26+). Phases 22-25 completed in v3.2.
+- Continues from v4.0 (Phase 30+). Phases 26-29 completed in v4.0.
 
-- [x] **Phase 26: Feature Engineering** - Build overage-for-grade, assess panel linkage feasibility, engineer interaction features (completed 2026-03-01)
-- [x] **Phase 27: Model Retraining** - Retrain all 5 model families with new features, re-calibrate, compare PR-AUC before/after (completed 2026-03-01)
-- [x] **Phase 28: Fairness Re-Analysis** - Full fairness pipeline on updated models, assess FNR disparity change, cross-architecture consistency (completed 2026-03-01)
-- [x] **Phase 29: Interpretation & Paper Update** - Interpret results per outcome scenario, update paper, document panel linkage outcome (completed 2026-03-01)
+- [ ] **Phase 30: Compliance Foundations** - Verify threshold-invariance of FNR rank order and rewrite AI declaration per JEDM format
+- [ ] **Phase 31: Framing & Literature** - Strengthen generalizability framing, consolidate contributions, connect to broader EWS literature, cite proxy audit work
+- [ ] **Phase 32: Structural Tightening** - Tighten Section 6.2, reduce cross-architecture redundancy, simplify abstract, review table necessity
 
 ### Phase Details
 
-#### Phase 26: Feature Engineering
-**Goal**: New features are computed and validated, ready for model consumption. Panel linkage feasibility is determined with a clear go/no-go decision.
-**Depends on**: v3.2 complete (existing 25-feature dataset in data/processed/)
-**Requirements**: FEAT-01, FEAT-02, FEAT-03, FEAT-04
+#### Phase 30: Compliance Foundations
+**Goal**: Paper's methodological claims are empirically verified and its AI declaration meets JEDM's section-specific format requirements.
+**Depends on**: v4.0 complete (23-page paper with v2 model results)
+**Requirements**: COMP-01, COMP-02
 **Success Criteria** (what must be TRUE):
-  1. Overage-for-grade feature computed for all 150,135 rows with zero nulls, correctly reflecting age minus expected grade age
-  2. Panel linkage rate measured and documented; if <20% linkable, trajectory features skipped and negative result recorded
-  3. If panel linkage >=20%, trajectory features (income change, sibling dropout, work transitions) computed for linkable subset
-  4. Interaction features (age x working, age x poverty, rural x parental_education, secondary_age x income) computed with zero nulls
-  5. Updated feature matrix saved as parquet with all new columns, existing gate tests still pass
-**Plans:** 3/3 plans complete
-Plans:
-- [ ] 26-01-PLAN.md — Overage-for-grade and interaction features
-- [ ] 26-02-PLAN.md — Panel linkage assessment and trajectory features
-- [ ] 26-03-PLAN.md — Feature integration, final parquet, and validation
+  1. FNR rank order (castellano > quechua > other_indigenous) is verified as invariant across a range of classification thresholds (not just the optimal threshold), with results stated in Methods Section 4.4
+  2. AI declaration names specific paper sections where AI tools were used, following JEDM's required format (not just task categories like "writing assistance")
+  3. Paper compiles without errors after both changes
+**Plans**: TBD
 
-#### Phase 27: Model Retraining
-**Goal**: All 5 model families retrained with expanded feature set, primary LightGBM re-calibrated and re-exported as ONNX, with clear before/after PR-AUC comparison.
-**Depends on**: Phase 26 (new feature matrix ready)
-**Requirements**: MODEL-01, MODEL-02, MODEL-03, MODEL-04
+#### Phase 31: Framing & Literature
+**Goal**: Paper positions the proxy audit framework as a generalizable contribution beyond the Peru case study, grounded in cross-domain proxy audit literature.
+**Depends on**: Phase 30 (threshold-invariance result informs framing language)
+**Requirements**: FRAME-01, FRAME-02, FRAME-03, FRAME-04
 **Success Criteria** (what must be TRUE):
-  1. LightGBM retrained with Optuna re-optimization using new features, best hyperparameters logged
-  2. All 5 model families (LR, LightGBM, XGBoost, RF, MLP) retrained with new feature set
-  3. Primary LightGBM re-calibrated (Platt scaling) with updated coefficients, ONNX re-exported and validated (max diff < 1e-4)
-  4. Before/after PR-AUC table produced for all 5 models showing whether new features improve prediction
-  5. model_results.json updated with new metrics (weighted PR-AUC using FACTOR07)
-**Plans:** 2/2 plans complete
-Plans:
-- [ ] 27-01-PLAN.md — Retrain LightGBM + XGBoost, re-calibrate, ONNX export
-- [ ] 27-02-PLAN.md — Retrain LR + RF + MLP, before/after PR-AUC comparison
+  1. Abstract opens with the generalizable proxy audit framework claim before introducing Peru-specific details, establishing replicability for any country with nationally representative household surveys
+  2. Introduction contribution bullets are consolidated (original 1 & 4 merged) and the surveillance-invisibility axis is elevated to the contribution list
+  3. Discussion contains a paragraph connecting spatial-feature SHAP findings to implications for any EWS using geographic/structural predictors, not limited to Peru
+  4. Proxy audit literature from outside education (criminal justice, lending, hiring) is cited or explicitly differentiated, strengthening the Related Work section
+  5. Paper compiles without errors after all framing changes
+**Plans**: TBD
 
-#### Phase 28: Fairness Re-Analysis
-**Goal**: Full fairness analysis re-run with updated models to determine whether FNR disparities persist, narrow, or disappear with better features.
-**Depends on**: Phase 27 (all 5 models retrained)
-**Requirements**: FAIR-01, FAIR-02, FAIR-03
+#### Phase 32: Structural Tightening
+**Goal**: Paper is tighter and more focused, with redundancy removed and every table earning its place.
+**Depends on**: Phase 31 (framing changes may affect section flow)
+**Requirements**: STRC-01, STRC-02, STRC-03, STRC-04
 **Success Criteria** (what must be TRUE):
-  1. Full fairness pipeline re-run on updated primary LightGBM (7 dimensions + 3 intersections, all survey-weighted)
-  2. FNR disparity change quantified: before/after comparison showing persist/narrow/disappear for castellano vs indigenous groups
-  3. Cross-architecture consistency checked across all 5 updated models (FNR rank order comparison)
-  4. Updated fairness_metrics.json exported with new results
-**Plans:** 2/2 plans complete
-Plans:
-- [ ] 28-01-PLAN.md — Backup old exports, clear caches, re-run fairness pipeline for all 5 models
-- [ ] 28-02-PLAN.md — Before/after FNR comparison export, cross-architecture consistency, gate tests
-
-#### Phase 29: Interpretation & Paper Update
-**Goal**: Results interpreted per outcome scenario and paper updated with new findings, tables, and figures. Panel linkage documented regardless of outcome.
-**Depends on**: Phase 28 (fairness re-analysis complete)
-**Requirements**: PAPER-01, PAPER-02, PAPER-03
-**Success Criteria** (what must be TRUE):
-  1. Results interpreted through correct scenario lens (persist: features confirm structural finding; narrow: features partially explain gap; disappear: previous finding was feature artifact; ceiling: no PR-AUC improvement)
-  2. Paper tables and figures updated with new model results and fairness metrics
-  3. Panel linkage outcome documented in Limitations section (whether positive or negative result)
-  4. Paper compiles without errors, narrative consistent with empirical results
-**Plans:** 2/2 plans complete
-Plans:
-- [ ] 29-01-PLAN.md — Update tables with v2 (31-feature) model results
-- [ ] 29-02-PLAN.md — Update paper narrative, add Feature Robustness subsection, document panel linkage
+  1. Section 6.2 (Other Demographic Dimensions) is either folded into 6.1 or condensed to one paragraph, eliminating standalone section bloat
+  2. Cross-architecture model comparison content appears once (in Section 5 or Section 6, not both), reducing redundancy between Sections 5.1/5.2 and 6.1
+  3. Abstract mentions v2/31-feature model in at most one clause (or removes it entirely), focusing reader attention on primary findings
+  4. All 12 tables reviewed: unnecessary tables trimmed or moved to appendix, with a clear rationale for each kept in-body
+  5. Paper compiles without errors and reads as a cohesive narrative without structural gaps from removed content
+**Plans**: TBD
 
 ### Deferred
 
@@ -90,11 +76,10 @@ Plans:
 ### Progress
 
 **Execution Order:**
-Phase 26 -> 27 -> 28 -> 29
+Phase 30 -> 31 -> 32
 
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
-| 26. Feature Engineering | 3/3 | Complete    | 2026-03-01 |
-| 27. Model Retraining | 2/2 | Complete    | 2026-03-01 |
-| 28. Fairness Re-Analysis | 2/2 | Complete    | 2026-03-01 |
-| 29. Interpretation & Paper Update | 2/2 | Complete    | 2026-03-01 |
+| 30. Compliance Foundations | 0/TBD | Not started | - |
+| 31. Framing & Literature | 0/TBD | Not started | - |
+| 32. Structural Tightening | 0/TBD | Not started | - |

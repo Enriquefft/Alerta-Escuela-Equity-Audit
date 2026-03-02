@@ -49,22 +49,22 @@ Deferred to future milestones.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FRAME-01 | — | Pending |
-| FRAME-02 | — | Pending |
-| FRAME-03 | — | Pending |
-| FRAME-04 | — | Pending |
-| STRC-01 | — | Pending |
-| STRC-02 | — | Pending |
-| STRC-03 | — | Pending |
-| STRC-04 | — | Pending |
-| COMP-01 | — | Pending |
-| COMP-02 | — | Pending |
+| COMP-01 | Phase 30 | Pending |
+| COMP-02 | Phase 30 | Pending |
+| FRAME-01 | Phase 31 | Pending |
+| FRAME-02 | Phase 31 | Pending |
+| FRAME-03 | Phase 31 | Pending |
+| FRAME-04 | Phase 31 | Pending |
+| STRC-01 | Phase 32 | Pending |
+| STRC-02 | Phase 32 | Pending |
+| STRC-03 | Phase 32 | Pending |
+| STRC-04 | Phase 32 | Pending |
 
 **Coverage:**
 - v4.1 requirements: 10 total
-- Mapped to phases: 0
-- Unmapped: 10 (awaiting roadmap)
+- Mapped to phases: 10
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-01*
-*Last updated: 2026-03-01 after initial definition*
+*Last updated: 2026-03-01 after roadmap creation*

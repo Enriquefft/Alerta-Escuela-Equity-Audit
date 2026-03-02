@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v4.1
 milestone_name: readability-polish
-status: defining_requirements
+status: ready_to_plan
 last_updated: "2026-03-01"
 progress:
-  total_phases: 0
+  total_phases: 3
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -18,14 +18,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-01)
 
 **Core value:** The fairness audit is the product. Models exist to be audited, not to achieve SOTA.
-**Current focus:** v4.1-readability-polish — pre-submission content polish for JEDM
+**Current focus:** v4.1-readability-polish — Phase 30 (Compliance Foundations) ready to plan
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 30 of 32 (Compliance Foundations)
 Plan: —
-Status: Defining requirements
-Last activity: 2026-03-01 — Milestone v4.1 started
+Status: Ready to plan
+Last activity: 2026-03-01 — Roadmap created for v4.1
+
+Progress: [░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
@@ -42,8 +44,10 @@ Last activity: 2026-03-01 — Milestone v4.1 started
 
 ### Decisions
 
+- [v4.1]: All work is paper-focused (paper/main.tex), no pipeline/code changes except COMP-01 (threshold-invariance verification)
+- [v4.1]: COMP-01 runs first — result informs Methods text and framing language
+- [v4.1]: FRAME-04 needs web research for proxy audit literature outside education
 - [v4.1]: Zenodo archival deferred — handled separately outside GSD
-- [v4.1]: All work is paper-focused (paper/main.tex), no pipeline/code changes except threshold-invariance verification
 
 ### Pending Todos
 
@@ -56,5 +60,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Milestone v4.1 initialization
+Stopped at: Roadmap created for v4.1, ready to plan Phase 30
 Resume file: None
