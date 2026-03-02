@@ -82,6 +82,6 @@ Phase 30 -> 31 -> 32
 
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
-| 30. Compliance Foundations | 1/1 | Complete   | 2026-03-02 |
+| 30. Compliance Foundations | 1/1 | Complete    | 2026-03-02 |
 | 31. Framing & Literature | 0/TBD | Not started | - |
 | 32. Structural Tightening | 0/TBD | Not started | - |
