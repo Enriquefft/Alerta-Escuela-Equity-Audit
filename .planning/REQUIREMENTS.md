@@ -3,76 +3,68 @@
 **Defined:** 2026-03-01
 **Core Value:** The fairness audit is the product. Models exist to be audited, not to achieve SOTA.
 
-## v4.0 Requirements
+## v4.1 Requirements
 
-Requirements for model experimentation milestone. Each maps to roadmap phases.
+Requirements for readability & content polish milestone. Pre-submission improvements addressing anticipated JEDM reviewer concerns.
 
-### Feature Engineering
+### Framing
 
-- [x] **FEAT-01**: Construct overage-for-grade feature from age and enrollment level (Module 300)
-- [x] **FEAT-02**: Assess ENAHO panel linkage feasibility (% of sample linkable across waves)
-- [x] **FEAT-03**: If panel linkage >40%, build trajectory features (income change, sibling dropout, work transitions)
-- [x] **FEAT-04**: Engineer interaction features (age x working, age x poverty, rural x parental_education, secondary_age x income)
+- [ ] **FRAME-01**: Abstract leads with generalizability claim before Peru-specific details, establishing the proxy audit framework as replicable in any country with nationally representative household surveys
+- [ ] **FRAME-02**: Introduction contribution bullets consolidated (merge 1 & 4), surveillance-invisibility axis elevated to contribution list
+- [ ] **FRAME-03**: Discussion paragraph added connecting spatial-feature findings to any EWS using geographic/structural features (not Peru-specific)
+- [ ] **FRAME-04**: Proxy audit literature outside education checked and cited or differentiated (criminal justice, lending, hiring)
 
-### Model Training
+### Structure
 
-- [x] **MODEL-01**: Retrain LightGBM with new features, re-optimize with Optuna
-- [x] **MODEL-02**: Retrain all 5 model families (LR, LightGBM, XGBoost, RF, MLP) with new features
-- [x] **MODEL-03**: Re-calibrate primary LightGBM (Platt scaling) and re-export ONNX
-- [x] **MODEL-04**: Compare PR-AUC before/after for each model family
+- [ ] **STRC-01**: Section 6.2 (Other Demographic Dimensions) tightened — folded into 6.1 or condensed to one paragraph
+- [ ] **STRC-02**: Cross-architecture redundancy between Sections 5.1/5.2 and 6.1 reduced
+- [ ] **STRC-03**: Abstract simplified — v2 mention removed or shortened to one clause
+- [ ] **STRC-04**: Tables reviewed — unnecessary tables trimmed or moved to appendix (currently 12 total)
 
-### Fairness Analysis
+### Compliance
 
-- [x] **FAIR-01**: Re-run full fairness pipeline with updated primary model
-- [x] **FAIR-02**: Assess whether FNR disparity persists, narrows, or disappears
-- [x] **FAIR-03**: Check cross-architecture consistency with all 5 updated models
-
-### Interpretation & Paper
-
-- [x] **PAPER-01**: Interpret results per outcome scenario (persist/narrow/disappear/ceiling)
-- [x] **PAPER-02**: Update paper tables, figures, and text with new results
-- [x] **PAPER-03**: Document panel linkage outcome (positive or negative) in Limitations
+- [ ] **COMP-01**: FNR rank order verified as threshold-invariant across range of thresholds, stated explicitly in Methods Section 4.4
+- [ ] **COMP-02**: AI declaration rewritten to name specific paper sections per JEDM format (not just task categories)
 
 ## Future Requirements
 
-### Media & Outreach
+Deferred to future milestones.
 
-- **MEDIA-01**: Press materials (summaries, blog posts, pitch emails in ES/EN)
-- **MEDIA-02**: Pitch media outlets
+### Submission
+
+- **SUBM-01**: Code archived on Zenodo with DOI
+- **SUBM-02**: Paper submitted to JEDM via portal
+- **SUBM-03**: Press & media materials prepared (ES/EN)
 
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| Bias mitigation / debiasing | Audit scope only — not building corrective models |
-| Deep learning beyond MLP | Tabular data, diminishing returns past tree models + MLP |
-| SIAGIE data integration | No access — documented as limitation |
-| New fairness dimensions | Existing 7 dims + 3 intersections sufficient |
+| New analysis or model changes | v4.0 analysis is final; this milestone is content-only |
+| Zenodo archival | Deferred — handle separately outside GSD |
+| JEDM submission | Deferred — after polish is complete |
+| Additional figures | Current figure set is sufficient |
 
 ## Traceability
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FEAT-01 | Phase 26 | Complete |
-| FEAT-02 | Phase 26 | Complete |
-| FEAT-03 | Phase 26 | Complete |
-| FEAT-04 | Phase 26 | Complete |
-| MODEL-01 | Phase 27 | Complete |
-| MODEL-02 | Phase 27 | Complete |
-| MODEL-03 | Phase 27 | Complete |
-| MODEL-04 | Phase 27 | Complete |
-| FAIR-01 | Phase 28 | Complete |
-| FAIR-02 | Phase 28 | Complete |
-| FAIR-03 | Phase 28 | Complete |
-| PAPER-01 | Phase 29 | Complete |
-| PAPER-02 | Phase 29 | Complete |
-| PAPER-03 | Phase 29 | Complete |
+| FRAME-01 | — | Pending |
+| FRAME-02 | — | Pending |
+| FRAME-03 | — | Pending |
+| FRAME-04 | — | Pending |
+| STRC-01 | — | Pending |
+| STRC-02 | — | Pending |
+| STRC-03 | — | Pending |
+| STRC-04 | — | Pending |
+| COMP-01 | — | Pending |
+| COMP-02 | — | Pending |
 
 **Coverage:**
-- v4.0 requirements: 14 total
-- Mapped to phases: 14
-- Unmapped: 0
+- v4.1 requirements: 10 total
+- Mapped to phases: 0
+- Unmapped: 10 (awaiting roadmap)
 
 ---
 *Requirements defined: 2026-03-01*
-*Last updated: 2026-03-01 after roadmap creation*
+*Last updated: 2026-03-01 after initial definition*
