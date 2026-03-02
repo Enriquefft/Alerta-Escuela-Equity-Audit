@@ -99,7 +99,7 @@ The features available in ENAHO differ substantially from SIAGIE: our proxy mode
 We define dropout as a binary outcome: a child of school age who was enrolled in the previous academic year but is not currently attending, following MINEDU's operational definition \cite{minedu2023alerta,inei2023enaho}. The 2020 wave (COVID-19 phone interviews) contributes a reduced sample of approximately 13,755 observations with 52\% null attendance records, which were dropped.
 
 \begin{table}[htbp]
-  \caption{Sample Description by Demographic Dimensions}\vspace*{1ex}
+  \caption{Sample Description by Demographic Dimensions.}\vspace*{1ex}
   \label{tab:sample}
   \input{tables/table_01_sample.tex}
 \end{table}
@@ -107,7 +107,7 @@ We define dropout as a binary outcome: a child of school age who was enrolled in
 The sample is predominantly Spanish-speaking (approximately 84\%), with indigenous-language speakers comprising Quechua, Aymara, and other indigenous groups. Urban residents constitute approximately 65\% of observations. The sample spans all three major geographic regions: Costa (coast), Sierra (highlands), and Selva (Amazon lowlands).
 
 \begin{table}[htbp]
-  \caption{Weighted Dropout Rates by Language Group}\vspace*{1ex}
+  \caption{Weighted Dropout Rates by Language Group.}\vspace*{1ex}
   \label{tab:language}
   \input{tables/table_02_language.tex}
 \end{table}
@@ -115,7 +115,7 @@ The sample is predominantly Spanish-speaking (approximately 84\%), with indigeno
 Table~\ref{tab:language} reveals substantial disparities: Otros ind\'{i}genas (0.219) and Awajun (0.205) face dropout rates 34\% higher than Castellano (0.153). For the fairness analysis, Ashaninka and Awajun are grouped under ``Otros ind\'{i}genas'' and 43 Extranjero students are excluded, accounting for the difference between $n=25{,}635$ (test set) and $n=25{,}592$ (Table~\ref{tab:fairness_language}).
 
 \begin{table}[htbp]
-  \caption{Weighted Dropout Rates by Region and Poverty Quintile}\vspace*{1ex}
+  \caption{Weighted Dropout Rates by Region and Poverty Quintile.}\vspace*{1ex}
   \label{tab:region_poverty}
   \input{tables/table_03_region_poverty.tex}
 \end{table}
@@ -127,6 +127,8 @@ We merge district-level spatial features: census literacy and population z-score
 % =============================================================================
 \section{Methods}
 % =============================================================================
+
+Our methodology proceeds in four stages: feature engineering from ENAHO survey variables, model training with temporal splitting, probability calibration, and fairness evaluation with SHAP interpretability.
 
 \subsection{Feature Engineering}
 
@@ -218,7 +220,7 @@ Language dominates: region shows FNR variation driven by spatial profiles, pover
 \subsection{Intersectional Analysis}
 
 \begin{table}[htbp]
-  \caption{Intersection Analysis: Language $\times$ Rurality}\vspace*{1ex}
+  \caption{Intersection Analysis: Language $\times$ Rurality.}\vspace*{1ex}
   \label{tab:intersection}
   \input{tables/table_07_intersection.tex}
 \end{table}
@@ -230,7 +232,7 @@ Urban indigenous students ``break the spatial profile'': they live in areas with
 \subsection{SHAP Interpretability}
 
 \begin{table}[htbp]
-  \caption{SHAP Feature Importance (Top 15)}\vspace*{1ex}
+  \caption{SHAP Feature Importance (Top 15).}\vspace*{1ex}
   \label{tab:shap}
   \input{tables/table_08_shap.tex}
 \end{table}
@@ -243,7 +245,7 @@ Urban indigenous students ``break the spatial profile'': they live in areas with
   \label{fig:shap_bar}
 \end{figure}
 
-Table~\ref{tab:shap} and Figure~\ref{fig:shap_bar} reveal how the model makes predictions, directly addressing RQ2. The top five SHAP features---age, nightlight z-score, working status, census literacy z-score, and poverty index z-score---are all spatial-structural variables. Identity features contribute minimally: the sex indicator (es\_mujer) ranks 16th out of 25 features with a mean absolute SHAP value of only 0.003, and the nationality indicator (es\_peruano) ranks 25th with effectively zero contribution, consistent with the $n=27$ non-Peruvian sample producing no learnable signal.
+Table~\ref{tab:shap} and Figure~\ref{fig:shap_bar} reveal how the model makes predictions, directly addressing RQ2 (see also Figure~\ref{fig:shap_beeswarm} in Appendix~\ref{sec:appendix_figures} for the full feature-value distribution). The top five SHAP features---age, nightlight z-score, working status, census literacy z-score, and poverty index z-score---are all spatial-structural variables. Identity features contribute minimally: the sex indicator (es\_mujer) ranks 16th out of 25 features with a mean absolute SHAP value of only 0.003, and the nationality indicator (es\_peruano) ranks 25th with effectively zero contribution, consistent with the $n=27$ non-Peruvian sample producing no learnable signal.
 
 The top 5 SHAP features have zero overlap with the top 5 logistic regression features (dominated by indigenous language dummies): where logistic regression assigns large coefficients to identity features, LightGBM achieves similar discrimination through correlated spatial-structural features. The model encodes structural inequities without using identity features directly---removing protected attributes would not mitigate the documented disparities.
 
@@ -251,8 +253,6 @@ The top 5 SHAP features have zero overlap with the top 5 logistic regression fea
 \section{Discussion}
 \label{sec:discussion}
 % =============================================================================
-
-\subsection{The Spatial Proxy Mechanism}
 
 SHAP analysis reveals that nightlight intensity, district-level dropout rates, and census literacy rates collectively encode the spatial concentration of disadvantage, creating systematic blind spots for populations that do not match spatial stereotypes. Urban indigenous students exemplify this failure: they reside in areas with favorable spatial indicators yet face educational barriers comparable to their rural counterparts. This extends the finding of \citeN{perdomo2023difficult} that structural features predict dropout well by showing that reliance on such features creates predictable fairness failures at demographic intersections.
 
@@ -284,9 +284,11 @@ Sixth, formal statistical guarantees for survey-weighted gradient boosting under
 \section{Ethical Considerations}
 % =============================================================================
 
-\paragraph{Positionality.} The author is Peruvian, affiliated with UTEC and Genera (an edtech startup). I am not from the indigenous communities most affected by the disparities documented here; this work should be understood as an outsider's technical audit rather than a community-centered assessment.
+We address positionality and data ethics considerations relevant to this audit.
 
-\paragraph{Data Ethics.} This study uses publicly available, de-identified survey data (ENAHO) released by INEI for research purposes. No individual students can be identified from the analysis, and no direct human subjects interaction was involved. The analysis operates exclusively on aggregate patterns in survey-weighted data.
+\paragraph{Positionality} The author is Peruvian, affiliated with UTEC and Genera (an edtech startup). I am not from the indigenous communities most affected by the disparities documented here; this work should be understood as an outsider's technical audit rather than a community-centered assessment.
+
+\paragraph{Data Ethics} This study uses publicly available, de-identified survey data (ENAHO) released by INEI for research purposes. No individual students can be identified from the analysis, and no direct human subjects interaction was involved. The analysis operates exclusively on aggregate patterns in survey-weighted data.
 
 % =============================================================================
 \section{Conclusion}
@@ -346,7 +348,7 @@ Our power analysis reveals a methodological ceiling: survey data fundamentally c
 % =============================================================================
 
 \begin{table}[H]
-  \caption{Logistic Regression Coefficients (All 25 Features)}\vspace*{1ex}
+  \caption{Logistic Regression Coefficients (All 25 Features).}\vspace*{1ex}
   \label{tab:lr_coefficients}
   \input{tables/table_05_lr_coefficients.tex}
 \end{table}
@@ -370,7 +372,7 @@ Our power analysis reveals a methodological ceiling: survey data fundamentally c
 \end{table}
 
 \begin{table}[H]
-  \caption{PR-AUC Before and After Feature Expansion (Validation Set, 2022)}\vspace*{1ex}
+  \caption{PR-AUC Before and After Feature Expansion (Validation Set, 2022).}\vspace*{1ex}
   \label{tab:prauc_comparison}
   \input{tables/table_12_prauc_comparison.tex}
 \end{table}
