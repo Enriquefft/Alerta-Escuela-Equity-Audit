@@ -148,6 +148,8 @@ We apply Platt scaling \cite{platt1999probabilistic} to the LightGBM model's raw
 
 We use fairlearn \cite{bird2020fairlearn} to compute disaggregated metrics across seven demographic dimensions and three intersections, operationalizing the ``slice analysis'' of \citeN{baker2022algorithmic}. For each subgroup we report FNR, FPR, precision, and PR-AUC with survey weights. We privilege FNR as the primary fairness metric because FNR disparities indicate which populations are rendered invisible to the EWS, and complement it with FPR to capture the surveillance--invisibility trade-off predicted by the impossibility theorem of \citeN{chouldechova2017fair}. SHAP TreeExplainer \cite{lundberg2020local} decomposes predictions into feature-level contributions on the raw LightGBM model; interaction values use a 1,000-row test subsample.
 
+To verify that FNR disparities are not artifacts of threshold selection, we sweep classification thresholds from 0.05 to 0.40 (the operationally meaningful range; calibrated probabilities reach a maximum of 0.48). Castellano speakers have the highest FNR at all thresholds from 0.05 through 0.20, including the optimal threshold of 0.185 (Table~\ref{tab:threshold_sweep}, Appendix~\ref{sec:appendix_tables}). At higher thresholds (0.25--0.40), where the compressed probability ceiling leaves little discriminative range, otros ind\'{i}genas overtakes castellano---but all groups exceed 0.70 FNR in this range.\footnote{Aimara ($n=76$) shows rank instability at extreme thresholds due to small sample size.}
+
 % =============================================================================
 \section{Results}
 % =============================================================================
@@ -302,7 +304,14 @@ Our power analysis reveals a methodological ceiling: survey data fundamentally c
 
 \section*{Declaration of Generative AI Software Tools in the Writing Process}
 
-\emph{During the preparation of this work, the author used Claude (Anthropic) in the sections covering data pipeline implementation, figure generation, and editorial refinement in order to accelerate code development and improve manuscript clarity. After using this tool, the author reviewed and edited the content as needed and takes full responsibility for the content of the publication}.
+During the preparation of this work, the author used Claude Code (Anthropic) for the following:
+\begin{itemize}
+  \item \textbf{Section 3 (Data) and Section 4 (Methods):} Data pipeline code---ENAHO extraction, cleaning, feature engineering, and model training scripts.
+  \item \textbf{Section 5 (Results) and Section 6 (Fairness Analysis):} Analysis code---fairness metrics computation, SHAP analysis, bootstrap confidence intervals, and threshold-invariance verification.
+  \item \textbf{Section 5, Section 6, and Appendix A:} Figure and table generation scripts.
+  \item \textbf{All sections:} Editorial refinement of prose for clarity and concision.
+\end{itemize}
+After using this tool, the author reviewed and edited all content and takes full responsibility for the content of the publication.
 
 % =============================================================================
 \appendix
@@ -375,6 +384,13 @@ Our power analysis reveals a methodological ceiling: survey data fundamentally c
   \caption{PR-AUC Before and After Feature Expansion (Validation Set, 2022).}\vspace*{1ex}
   \label{tab:prauc_comparison}
   \input{tables/table_12_prauc_comparison.tex}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{FNR Rank Order Across Classification Thresholds (v2, 31 features). Castellano speakers have the highest FNR (rank 1) at all operationally meaningful thresholds (0.05--0.20).}\vspace*{1ex}
+  \label{tab:threshold_sweep}
+  \input{tables/table_13_threshold_sweep.tex}
 \end{table}
 
 \clearpage
