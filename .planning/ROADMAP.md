@@ -29,7 +29,7 @@ Pre-submission content polish addressing anticipated JEDM reviewer concerns. Str
 **Phase Numbering:**
 - Continues from v4.0 (Phase 30+). Phases 26-29 completed in v4.0.
 
-- [ ] **Phase 30: Compliance Foundations** - Verify threshold-invariance of FNR rank order and rewrite AI declaration per JEDM format
+- [x] **Phase 30: Compliance Foundations** - Verify threshold-invariance of FNR rank order and rewrite AI declaration per JEDM format (completed 2026-03-02)
 - [ ] **Phase 31: Framing & Literature** - Strengthen generalizability framing, consolidate contributions, connect to broader EWS literature, cite proxy audit work
 - [ ] **Phase 32: Structural Tightening** - Tighten Section 6.2, reduce cross-architecture redundancy, simplify abstract, review table necessity
 
@@ -43,7 +43,7 @@ Pre-submission content polish addressing anticipated JEDM reviewer concerns. Str
   1. FNR rank order (castellano > quechua > other_indigenous) is verified as invariant across a range of classification thresholds (not just the optimal threshold), with results stated in Methods Section 4.4
   2. AI declaration names specific paper sections where AI tools were used, following JEDM's required format (not just task categories like "writing assistance")
   3. Paper compiles without errors after both changes
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
 - [ ] 30-01-PLAN.md — Threshold sweep analysis + paper compliance updates (Methods 4.4 + AI declaration)
 
@@ -82,6 +82,6 @@ Phase 30 -> 31 -> 32
 
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
-| 30. Compliance Foundations | 0/1 | Not started | - |
+| 30. Compliance Foundations | 1/1 | Complete   | 2026-03-02 |
 | 31. Framing & Literature | 0/TBD | Not started | - |
 | 32. Structural Tightening | 0/TBD | Not started | - |

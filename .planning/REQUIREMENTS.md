@@ -23,8 +23,8 @@ Requirements for readability & content polish milestone. Pre-submission improvem
 
 ### Compliance
 
-- [ ] **COMP-01**: FNR rank order verified as threshold-invariant across range of thresholds, stated explicitly in Methods Section 4.4
-- [ ] **COMP-02**: AI declaration rewritten to name specific paper sections per JEDM format (not just task categories)
+- [x] **COMP-01**: FNR rank order verified as threshold-invariant across range of thresholds, stated explicitly in Methods Section 4.4
+- [x] **COMP-02**: AI declaration rewritten to name specific paper sections per JEDM format (not just task categories)
 
 ## Future Requirements
 
@@ -49,8 +49,8 @@ Deferred to future milestones.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| COMP-01 | Phase 30 | Pending |
-| COMP-02 | Phase 30 | Pending |
+| COMP-01 | Phase 30 | Complete |
+| COMP-02 | Phase 30 | Complete |
 | FRAME-01 | Phase 31 | Pending |
 | FRAME-02 | Phase 31 | Pending |
 | FRAME-03 | Phase 31 | Pending |
