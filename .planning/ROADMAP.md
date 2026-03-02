@@ -43,7 +43,9 @@ Pre-submission content polish addressing anticipated JEDM reviewer concerns. Str
   1. FNR rank order (castellano > quechua > other_indigenous) is verified as invariant across a range of classification thresholds (not just the optimal threshold), with results stated in Methods Section 4.4
   2. AI declaration names specific paper sections where AI tools were used, following JEDM's required format (not just task categories like "writing assistance")
   3. Paper compiles without errors after both changes
-**Plans**: TBD
+**Plans:** 1 plan
+Plans:
+- [ ] 30-01-PLAN.md — Threshold sweep analysis + paper compliance updates (Methods 4.4 + AI declaration)
 
 #### Phase 31: Framing & Literature
 **Goal**: Paper positions the proxy audit framework as a generalizable contribution beyond the Peru case study, grounded in cross-domain proxy audit literature.
@@ -80,6 +82,6 @@ Phase 30 -> 31 -> 32
 
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
-| 30. Compliance Foundations | 0/TBD | Not started | - |
+| 30. Compliance Foundations | 0/1 | Not started | - |
 | 31. Framing & Literature | 0/TBD | Not started | - |
 | 32. Structural Tightening | 0/TBD | Not started | - |
