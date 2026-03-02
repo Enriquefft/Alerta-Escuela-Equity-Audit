@@ -1,14 +1,14 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: unknown
-last_updated: "2026-03-01T23:22:13.806Z"
+milestone: v4.1
+milestone_name: readability-polish
+status: defining_requirements
+last_updated: "2026-03-01"
 progress:
-  total_phases: 28
-  completed_phases: 17
-  total_plans: 39
-  completed_plans: 26
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
 ---
 
 # Project State
@@ -18,16 +18,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-01)
 
 **Core value:** The fairness audit is the product. Models exist to be audited, not to achieve SOTA.
-**Current focus:** v4.0-model-experiments, Phase 29 in progress (interpretation/paper update)
+**Current focus:** v4.1-readability-polish — pre-submission content polish for JEDM
 
 ## Current Position
 
-Phase: 29 — Interpretation Paper Update (4 of 4 in v4.0)
-Plan: 02 of 2 complete
-Status: Paper narrative updated with v2 robustness, persist interpretation, panel linkage
-Last activity: 2026-03-01 — Completed 29-02 (Paper Narrative Update)
-
-Progress: [################] 100%
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-03-01 — Milestone v4.1 started
 
 ## Performance Metrics
 
@@ -40,50 +38,12 @@ Progress: [################] 100%
 - v4.0: 9 plans (Phase 26: 3, Phase 27: 2, Phase 28: 2, Phase 29: 2)
 - Total: 40 plans completed
 
-| Phase | Plan | Duration | Tasks | Files |
-|-------|------|----------|-------|-------|
-| 22    | 01   | ~36 min  | 5     | 26    |
-| 23    | 01   | ~8 min   | 13    | 3     |
-| 24    | 01   | ~8 min   | 5     | 2     |
-| 25    | 01   | ~10 min  | 9     | 1     |
-| 26    | 01   | ~7 min   | 2     | 3     |
-| 26    | 02   | ~4 min   | 2     | 3     |
-| 26    | 03   | ~7 min   | 2     | 2     |
-| 27    | 01   | ~7 min   | 2     | 11    |
-| 27    | 02   | ~80 min  | 2     | 8     |
-| 28    | 01   | ~124 min | 3     | 9     |
-| 28    | 02   | ~3 min   | 2     | 2     |
-| 29    | 01   | ~1 min   | 2     | 3     |
-| 29    | 02   | ~2 min   | 2     | 2     |
-
 ## Accumulated Context
 
 ### Decisions
 
-- [v4.0]: Research-oriented milestone — all outcomes valid and publishable
-- [v4.0]: Panel linkage threshold: <20% linkable = skip trajectory features, document as negative result
-- [v4.0]: Phase structure: features -> models -> fairness -> paper (linear dependency chain)
-- [26-02]: Panel linkage effective rate 18.9% (raw 22.0% * quality 85.9%) — below 20% threshold, skip trajectory features
-- [26-02]: Negative result documented as publishable finding for JEDM Limitations section
-- [26-01]: Used P301A + P301B for grade derivation (P308A codes levels, not grades)
-- [26-01]: Overage imputed with median by age group; interaction features as raw products
-- [26-01]: Overage baseline: mean=1.85, 64.7% overage rate; 31 total MODEL_FEATURES
-- [26-03]: Final feature matrix: 31 features, 150,135 rows, zero nulls; trajectory features excluded (linkage skip)
-- [26-03]: All spatial z-score features now imputed with 0.0 to ensure zero nulls in model features
-- [27-01]: No code changes needed for 25->31 feature expansion; MODEL_FEATURES dynamic import worked seamlessly
-- [27-01]: New Platt A=-8.156711, B=5.069181; LightGBM val PR-AUC 0.2908 (+11.2% over 25-feature model)
-- [27-02]: All 5 models improved with 31 features: LR +14.3%, LightGBM +11.4%, XGBoost +9.9%, RF +9.4%, MLP +12.5%
-- [27-02]: Created retrain_all.py orchestration script for safe baseline.py overwrite handling
-- [28-01]: Updated calibration_note from 0.431 to 0.476 max calibrated prob (new Platt params)
-- [28-01]: Castellano FNR 0.663 consistent across all 5 models (0.607-0.663), confirming algorithm-independence
-- [28-02]: Castellano FNR disparity classified as "persist" -- gap 0.6531 > 0.20 with rank order preserved
-- [28-02]: Cross-architecture FNR rank order identical in all 5 models: castellano > quechua > other_indigenous
-- [28-02]: Castellano FNR slightly increased 0.633 -> 0.663 (+4.7%) with 31-feature model
-- [Phase 29]: Used multirow layout in Table 10 for v1/v2 FNR comparison (clearer than 10-column approach)
-- [Phase 29]: Table 04 keeps test/Brier/BSS as v1 values; v2 column is robustness check only
-- [29-02]: V1 remains primary throughout paper; v2 presented as robustness confirmation only
-- [29-02]: Removed multirow dependency from Table 10 (multirow.sty unavailable in Nix TeX)
-- [29-02]: Panel linkage documented as fifth limitation; existing fifth renumbered to sixth
+- [v4.1]: Zenodo archival deferred — handled separately outside GSD
+- [v4.1]: All work is paper-focused (paper/main.tex), no pipeline/code changes except threshold-invariance verification
 
 ### Pending Todos
 
@@ -96,5 +56,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Completed 29-02-PLAN.md
+Stopped at: Milestone v4.1 initialization
 Resume file: None
