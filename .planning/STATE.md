@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 32-02-PLAN.md (remove ENAHO vs SIAGIE table)
-last_updated: "2026-03-05T06:20:00.000Z"
-last_activity: 2026-03-05 — Completed 31-03-PLAN.md
+stopped_at: Completed 32-01-PLAN.md (fold Section 6.2 into 6.1)
+last_updated: "2026-03-05T06:39:27.050Z"
+last_activity: 2026-03-05 — Completed 32-02-PLAN.md
 progress:
   total_phases: 3
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 6
   completed_plans: 6
   percent: 100
@@ -18,19 +18,15 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-03-01)
+See: .planning/PROJECT.md (updated 2026-03-05)
 
 **Core value:** The fairness audit is the product. Models exist to be audited, not to achieve SOTA.
-**Current focus:** v4.1-readability-polish — Phase 30 complete, Phase 31 next
+**Current focus:** v4.1 COMPLETE — planning next milestone (/gsd:new-milestone for JEDM submission)
 
 ## Current Position
 
-Phase: 32 of 32 (Structural Tightening)
-Plan: 2 of 2 (COMPLETE)
-Status: Phase 32 COMPLETE — all 2 plans done
-Last activity: 2026-03-05 — Completed 32-02-PLAN.md
-
-Progress: [██████████] 100%
+Milestone: v4.1-readability-polish — COMPLETE (2026-03-05)
+All 3 phases, 6 plans done. Milestone archived.
 
 ## Performance Metrics
 
@@ -41,26 +37,17 @@ Progress: [██████████] 100%
 - v3.1: 7 plans (Phase 16: 1, Phase 17: 2, Phase 18: 3, Phase 19: 1)
 - v3.2: 4 plans (Phase 22: 1, Phase 23: 1, Phase 24: 1, Phase 25: 1)
 - v4.0: 9 plans (Phase 26: 3, Phase 27: 2, Phase 28: 2, Phase 29: 2)
-- v4.1: 1 plan (Phase 30: 1)
-- v4.1: 4 plans (Phase 30: 1, Phase 31: 3)
-- Total: 45 plans completed
+- v4.1: 6 plans (Phase 30: 1, Phase 31: 3, Phase 32: 2)
+- Total: 51 plans completed
 
 ## Accumulated Context
 
 ### Decisions
 
-- [v4.1]: All work is paper-focused (paper/main.tex), no pipeline/code changes except COMP-01 (threshold-invariance verification)
-- [v4.1]: COMP-01 runs first — result informs Methods text and framing language
-- [v4.1]: FRAME-04 needs web research for proxy audit literature outside education
-- [v4.1]: Zenodo archival deferred — handled separately outside GSD
-- [30-01]: Castellano highest FNR at all operational thresholds (0.05-0.20); at 0.25+ other_indigenous overtakes due to probability ceiling compression
-- [30-01]: v1/v2 comparison uses same raw probs with different Platt params since v1 model no longer exists
-- [Phase 31-01]: Used \citeN{} in footnote (not \citep{}/\citet{}) — acmtrans bibliographystyle defines \citeN but not natbib commands
-- [Phase 31-02]: FRAME-01: Abstract now leads with generalizable household-survey proxy audit claim; Peru as empirical instance not endpoint
-- [Phase 31-02]: FRAME-02: 4 contribution bullets merged to 3; merged bullet leads with replicability; surveillance-invisibility axis named in bullet 2
-- [Phase 31]: FRAME-03: EWS generalization paragraph inserted in Discussion, turning Peru finding into general EWS design paradigm warning
-- [Phase 32-01]: Absorbed former 6.2 paragraph into end of 6.1; cross-arch sentence was absent from Section 6.1 (only in Abstract); age sentence dropped as redundant
-- [Phase 32-02]: Removed tab:enaho_siagie appendix table block and two in-text parenthetical refs; physical .tex file preserved on disk; appendix now 5 tables
+- [v4.1]: Proxy audit framing now leads abstract — Peru as empirical instance, not endpoint
+- [v4.1]: FNR rank order threshold-invariant at 0.05–0.20 (confirmed; other_indigenous overtakes at 0.25+ due to prob ceiling)
+- [v4.1]: \citeN{} for acmtrans footnote citations (not \citep{}/\citet{})
+- [v4.1]: Appendix reduced to 5 tables; tab:enaho_siagie .tex file preserved on disk
 
 ### Pending Todos
 
@@ -72,6 +59,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-05T06:13:46.687Z
-Stopped at: Completed 32-01-PLAN.md (fold Section 6.2 into 6.1)
+Last session: 2026-03-05
+Stopped at: Milestone v4.1 complete — archived
 Resume file: None
