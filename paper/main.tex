@@ -93,7 +93,7 @@ Dropout early warning systems have matured from the indicator-based approach of 
 
 Because SIAGIE administrative data is not publicly accessible, we use ENAHO survey data as a proxy. ENAHO is a nationally representative household survey with stratified sampling and survey weights (FACTOR07); we extract Modules 200 (demographics) and 300 (education) for school-age children aged 6--17 across 2018--2023, yielding 150,135 individual-year observations.
 
-The features available in ENAHO differ substantially from SIAGIE: our proxy model lacks daily attendance records, grade history, and multi-year student trajectories (Table~\ref{tab:enaho_siagie}, Appendix~\ref{sec:appendix_tables}). However, the survey dimensions available---mother tongue, poverty, geography---are precisely those needed to study equity disparities.
+The features available in ENAHO differ substantially from SIAGIE: our proxy model lacks daily attendance records, grade history, and multi-year student trajectories. However, the survey dimensions available---mother tongue, poverty, geography---are precisely those needed to study equity disparities.
 
 We define dropout as a binary outcome: a child of school age who was enrolled in the previous academic year but is not currently attending, following MINEDU's operational definition \cite{minedu2023alerta,inei2023enaho}. The 2020 wave (COVID-19 phone interviews) contributes a reduced sample of approximately 13,755 observations with 52\% null attendance records, which were dropped.
 
@@ -269,7 +269,7 @@ We privilege FNR because a missed dropout represents irreversible harm. Equalizi
 \section{Limitations}
 % =============================================================================
 
-This paper audits a proxy model, not the actual Alerta Escuela system (Table~\ref{tab:enaho_siagie}, Appendix~\ref{sec:appendix_tables}).
+This paper audits a proxy model, not the actual Alerta Escuela system.
 
 Second, ENAHO's mother tongue variable (P300) captures language by self-report. Bilingual speakers may report Spanish as their mother tongue, potentially undercounting indigenous-language prevalence and understating the disparities we document. The true magnitude of language-based prediction disparities may be larger than our estimates.
 
@@ -359,12 +359,6 @@ After using this tool, the author reviewed and edited all content and takes full
   \caption{Logistic Regression Coefficients (All 25 Features).}\vspace*{1ex}
   \label{tab:lr_coefficients}
   \input{tables/table_05_lr_coefficients.tex}
-\end{table}
-
-\begin{table}[H]
-  \caption[ENAHO vs.\ SIAGIE Feature Availability]{ENAHO vs.\ SIAGIE Feature Availability. SIAGIE columns are inferred from public documentation \cite{minedu2023alerta,minedu2022estadistica}; we have not accessed SIAGIE records directly.}\vspace*{1ex}
-  \label{tab:enaho_siagie}
-  \input{tables/table_09_enaho_siagie.tex}
 \end{table}
 
 \begin{table}[H]
