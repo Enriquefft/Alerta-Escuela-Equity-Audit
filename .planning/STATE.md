@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 32-01-PLAN.md (fold Section 6.2 into 6.1)
-last_updated: "2026-03-05T06:13:46.691Z"
+stopped_at: Completed 32-02-PLAN.md (remove ENAHO vs SIAGIE table)
+last_updated: "2026-03-05T06:20:00.000Z"
 last_activity: 2026-03-05 — Completed 31-03-PLAN.md
 progress:
   total_phases: 3
   completed_phases: 2
   total_plans: 6
-  completed_plans: 5
-  percent: 70
+  completed_plans: 6
+  percent: 100
 ---
 
 # Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-03-01)
 
 ## Current Position
 
-Phase: 31 of 32 (Framing Literature)
-Plan: 3 of 3 (COMPLETE)
-Status: Phase 31 COMPLETE — all 3 plans done
-Last activity: 2026-03-05 — Completed 31-03-PLAN.md
+Phase: 32 of 32 (Structural Tightening)
+Plan: 2 of 2 (COMPLETE)
+Status: Phase 32 COMPLETE — all 2 plans done
+Last activity: 2026-03-05 — Completed 32-02-PLAN.md
 
-Progress: [███████░░░] 70%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -60,6 +60,7 @@ Progress: [███████░░░] 70%
 - [Phase 31-02]: FRAME-02: 4 contribution bullets merged to 3; merged bullet leads with replicability; surveillance-invisibility axis named in bullet 2
 - [Phase 31]: FRAME-03: EWS generalization paragraph inserted in Discussion, turning Peru finding into general EWS design paradigm warning
 - [Phase 32-01]: Absorbed former 6.2 paragraph into end of 6.1; cross-arch sentence was absent from Section 6.1 (only in Abstract); age sentence dropped as redundant
+- [Phase 32-02]: Removed tab:enaho_siagie appendix table block and two in-text parenthetical refs; physical .tex file preserved on disk; appendix now 5 tables
 
 ### Pending Todos
 

@@ -31,7 +31,7 @@ Pre-submission content polish addressing anticipated JEDM reviewer concerns. Str
 
 - [x] **Phase 30: Compliance Foundations** - Verify threshold-invariance of FNR rank order and rewrite AI declaration per JEDM format (completed 2026-03-02)
 - [x] **Phase 31: Framing & Literature** - Strengthen generalizability framing, consolidate contributions, connect to broader EWS literature, cite proxy audit work (completed 2026-03-05)
-- [ ] **Phase 32: Structural Tightening** - Tighten Section 6.2, reduce cross-architecture redundancy, simplify abstract, review table necessity
+- [x] **Phase 32: Structural Tightening** - Tighten Section 6.2, reduce cross-architecture redundancy, simplify abstract, review table necessity (completed 2026-03-05)
 
 ### Phase Details
 
@@ -73,7 +73,7 @@ Plans:
   3. Abstract mentions v2/31-feature model in at most one clause (or removes it entirely), focusing reader attention on primary findings
   4. All 12 tables reviewed: unnecessary tables trimmed or moved to appendix, with a clear rationale for each kept in-body
   5. Paper compiles without errors and reads as a cohesive narrative without structural gaps from removed content
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 Plans:
 - [ ] 32-01-PLAN.md — Fold Section 6.2 into 6.1 and remove cross-arch duplicate sentence (STRC-01, STRC-02, STRC-03)
 - [ ] 32-02-PLAN.md — Remove tab:enaho_siagie table block and all in-text references (STRC-04)
@@ -91,4 +91,4 @@ Phase 30 -> 31 -> 32
 |-------|---------------|--------|-----------|
 | 30. Compliance Foundations | 1/1 | Complete    | 2026-03-02 |
 | 31. Framing & Literature | 3/3 | Complete    | 2026-03-05 |
-| 32. Structural Tightening | 1/2 | In Progress|  |
+| 32. Structural Tightening | 2/2 | Complete   | 2026-03-05 |
