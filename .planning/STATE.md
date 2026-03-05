@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 31-02-PLAN.md (abstract restructure + contribution bullet consolidation)
-last_updated: "2026-03-05T05:19:00.001Z"
-last_activity: 2026-03-05 — Completed 31-01-PLAN.md
+stopped_at: Completed 31-03-PLAN.md (EWS generalization paragraph in Discussion)
+last_updated: "2026-03-05T05:22:22.526Z"
+last_activity: 2026-03-05 — Completed 31-02-PLAN.md
 progress:
   total_phases: 3
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 4
-  completed_plans: 3
-  percent: 65
+  completed_plans: 4
+  percent: 67
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-01)
 ## Current Position
 
 Phase: 31 of 32 (Framing Literature)
-Plan: 2 of 3 (COMPLETE)
-Status: Phase 31 plan 02 complete
-Last activity: 2026-03-05 — Completed 31-02-PLAN.md
+Plan: 3 of 3 (COMPLETE)
+Status: Phase 31 COMPLETE — all 3 plans done
+Last activity: 2026-03-05 — Completed 31-03-PLAN.md
 
-Progress: [███████░░░] 67%
+Progress: [███████░░░] 70%
 
 ## Performance Metrics
 
@@ -42,8 +42,8 @@ Progress: [███████░░░] 67%
 - v3.2: 4 plans (Phase 22: 1, Phase 23: 1, Phase 24: 1, Phase 25: 1)
 - v4.0: 9 plans (Phase 26: 3, Phase 27: 2, Phase 28: 2, Phase 29: 2)
 - v4.1: 1 plan (Phase 30: 1)
-- v4.1: 2 plans (Phase 31: 1 so far)
-- Total: 42 plans completed
+- v4.1: 4 plans (Phase 30: 1, Phase 31: 3)
+- Total: 45 plans completed
 
 ## Accumulated Context
 
@@ -58,6 +58,7 @@ Progress: [███████░░░] 67%
 - [Phase 31-01]: Used \citeN{} in footnote (not \citep{}/\citet{}) — acmtrans bibliographystyle defines \citeN but not natbib commands
 - [Phase 31-02]: FRAME-01: Abstract now leads with generalizable household-survey proxy audit claim; Peru as empirical instance not endpoint
 - [Phase 31-02]: FRAME-02: 4 contribution bullets merged to 3; merged bullet leads with replicability; surveillance-invisibility axis named in bullet 2
+- [Phase 31]: FRAME-03: EWS generalization paragraph inserted in Discussion, turning Peru finding into general EWS design paradigm warning
 
 ### Pending Todos
 
@@ -69,6 +70,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-05T05:18:59.997Z
-Stopped at: Completed 31-02-PLAN.md (abstract restructure + contribution bullet consolidation)
+Last session: 2026-03-05T05:22:22.522Z
+Stopped at: Completed 31-03-PLAN.md (EWS generalization paragraph in Discussion)
 Resume file: None

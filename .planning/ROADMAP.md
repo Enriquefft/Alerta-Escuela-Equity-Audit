@@ -30,7 +30,7 @@ Pre-submission content polish addressing anticipated JEDM reviewer concerns. Str
 - Continues from v4.0 (Phase 30+). Phases 26-29 completed in v4.0.
 
 - [x] **Phase 30: Compliance Foundations** - Verify threshold-invariance of FNR rank order and rewrite AI declaration per JEDM format (completed 2026-03-02)
-- [ ] **Phase 31: Framing & Literature** - Strengthen generalizability framing, consolidate contributions, connect to broader EWS literature, cite proxy audit work
+- [x] **Phase 31: Framing & Literature** - Strengthen generalizability framing, consolidate contributions, connect to broader EWS literature, cite proxy audit work (completed 2026-03-05)
 - [ ] **Phase 32: Structural Tightening** - Tighten Section 6.2, reduce cross-architecture redundancy, simplify abstract, review table necessity
 
 ### Phase Details
@@ -57,7 +57,7 @@ Plans:
   3. Discussion contains a paragraph connecting spatial-feature SHAP findings to implications for any EWS using geographic/structural predictors, not limited to Peru
   4. Proxy audit literature from outside education (criminal justice, lending, hiring) is cited or explicitly differentiated, strengthening the Related Work section
   5. Paper compiles without errors after all framing changes
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 Plans:
 - [ ] 31-01-PLAN.md — Add proxy audit bib entries (Obermeyer, Adler, Sandvig) + Related Work footnote (FRAME-04)
 - [ ] 31-02-PLAN.md — Abstract restructure + contribution bullets consolidation (FRAME-01, FRAME-02)
@@ -87,5 +87,5 @@ Phase 30 -> 31 -> 32
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
 | 30. Compliance Foundations | 1/1 | Complete    | 2026-03-02 |
-| 31. Framing & Literature | 2/3 | In Progress|  |
+| 31. Framing & Literature | 3/3 | Complete   | 2026-03-05 |
 | 32. Structural Tightening | 0/TBD | Not started | - |
