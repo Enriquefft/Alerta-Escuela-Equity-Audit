@@ -16,9 +16,9 @@ Requirements for readability & content polish milestone. Pre-submission improvem
 
 ### Structure
 
-- [ ] **STRC-01**: Section 6.2 (Other Demographic Dimensions) tightened — folded into 6.1 or condensed to one paragraph
-- [ ] **STRC-02**: Cross-architecture redundancy between Sections 5.1/5.2 and 6.1 reduced
-- [ ] **STRC-03**: Abstract simplified — v2 mention removed or shortened to one clause
+- [x] **STRC-01**: Section 6.2 (Other Demographic Dimensions) tightened — folded into 6.1 or condensed to one paragraph
+- [x] **STRC-02**: Cross-architecture redundancy between Sections 5.1/5.2 and 6.1 reduced
+- [x] **STRC-03**: Abstract simplified — v2 mention removed or shortened to one clause
 - [ ] **STRC-04**: Tables reviewed — unnecessary tables trimmed or moved to appendix (currently 12 total)
 
 ### Compliance
@@ -55,9 +55,9 @@ Deferred to future milestones.
 | FRAME-02 | Phase 31 | Complete |
 | FRAME-03 | Phase 31 | Complete |
 | FRAME-04 | Phase 31 | Complete |
-| STRC-01 | Phase 32 | Pending |
-| STRC-02 | Phase 32 | Pending |
-| STRC-03 | Phase 32 | Pending |
+| STRC-01 | Phase 32 | Complete |
+| STRC-02 | Phase 32 | Complete |
+| STRC-03 | Phase 32 | Complete |
 | STRC-04 | Phase 32 | Pending |
 
 **Coverage:**

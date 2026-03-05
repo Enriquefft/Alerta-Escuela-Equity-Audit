@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 31-03-PLAN.md (EWS generalization paragraph in Discussion)
-last_updated: "2026-03-05T05:22:22.526Z"
-last_activity: 2026-03-05 — Completed 31-02-PLAN.md
+stopped_at: Completed 32-01-PLAN.md (fold Section 6.2 into 6.1)
+last_updated: "2026-03-05T06:13:46.691Z"
+last_activity: 2026-03-05 — Completed 31-03-PLAN.md
 progress:
   total_phases: 3
   completed_phases: 2
-  total_plans: 4
-  completed_plans: 4
-  percent: 67
+  total_plans: 6
+  completed_plans: 5
+  percent: 70
 ---
 
 # Project State
@@ -59,6 +59,7 @@ Progress: [███████░░░] 70%
 - [Phase 31-02]: FRAME-01: Abstract now leads with generalizable household-survey proxy audit claim; Peru as empirical instance not endpoint
 - [Phase 31-02]: FRAME-02: 4 contribution bullets merged to 3; merged bullet leads with replicability; surveillance-invisibility axis named in bullet 2
 - [Phase 31]: FRAME-03: EWS generalization paragraph inserted in Discussion, turning Peru finding into general EWS design paradigm warning
+- [Phase 32-01]: Absorbed former 6.2 paragraph into end of 6.1; cross-arch sentence was absent from Section 6.1 (only in Abstract); age sentence dropped as redundant
 
 ### Pending Todos
 
@@ -70,6 +71,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-05T05:22:22.522Z
-Stopped at: Completed 31-03-PLAN.md (EWS generalization paragraph in Discussion)
+Last session: 2026-03-05T06:13:46.687Z
+Stopped at: Completed 32-01-PLAN.md (fold Section 6.2 into 6.1)
 Resume file: None
