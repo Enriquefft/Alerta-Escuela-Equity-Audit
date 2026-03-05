@@ -57,7 +57,7 @@ Plans:
   3. Discussion contains a paragraph connecting spatial-feature SHAP findings to implications for any EWS using geographic/structural predictors, not limited to Peru
   4. Proxy audit literature from outside education (criminal justice, lending, hiring) is cited or explicitly differentiated, strengthening the Related Work section
   5. Paper compiles without errors after all framing changes
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 Plans:
 - [ ] 31-01-PLAN.md — Add proxy audit bib entries (Obermeyer, Adler, Sandvig) + Related Work footnote (FRAME-04)
 - [ ] 31-02-PLAN.md — Abstract restructure + contribution bullets consolidation (FRAME-01, FRAME-02)
@@ -87,5 +87,5 @@ Phase 30 -> 31 -> 32
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
 | 30. Compliance Foundations | 1/1 | Complete    | 2026-03-02 |
-| 31. Framing & Literature | 0/3 | Not started | - |
+| 31. Framing & Literature | 1/3 | In Progress|  |
 | 32. Structural Tightening | 0/TBD | Not started | - |

@@ -12,7 +12,7 @@ Requirements for readability & content polish milestone. Pre-submission improvem
 - [ ] **FRAME-01**: Abstract leads with generalizability claim before Peru-specific details, establishing the proxy audit framework as replicable in any country with nationally representative household surveys
 - [ ] **FRAME-02**: Introduction contribution bullets consolidated (merge 1 & 4), surveillance-invisibility axis elevated to contribution list
 - [ ] **FRAME-03**: Discussion paragraph added connecting spatial-feature findings to any EWS using geographic/structural features (not Peru-specific)
-- [ ] **FRAME-04**: Proxy audit literature outside education checked and cited or differentiated (criminal justice, lending, hiring)
+- [x] **FRAME-04**: Proxy audit literature outside education checked and cited or differentiated (criminal justice, lending, hiring)
 
 ### Structure
 
@@ -54,7 +54,7 @@ Deferred to future milestones.
 | FRAME-01 | Phase 31 | Pending |
 | FRAME-02 | Phase 31 | Pending |
 | FRAME-03 | Phase 31 | Pending |
-| FRAME-04 | Phase 31 | Pending |
+| FRAME-04 | Phase 31 | Complete |
 | STRC-01 | Phase 32 | Pending |
 | STRC-02 | Phase 32 | Pending |
 | STRC-03 | Phase 32 | Pending |

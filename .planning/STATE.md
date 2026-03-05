@@ -2,13 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-last_updated: "2026-03-02T04:01:14.652Z"
+status: completed
+stopped_at: Completed 31-01-PLAN.md (proxy audit bib entries + Related Work footnote)
+last_updated: "2026-03-05T05:15:53.544Z"
+last_activity: 2026-03-02 — Completed 30-01-PLAN.md
 progress:
-  total_phases: 29
-  completed_phases: 18
-  total_plans: 40
-  completed_plans: 27
+  total_phases: 3
+  completed_phases: 1
+  total_plans: 4
+  completed_plans: 2
+  percent: 33
 ---
 
 # Project State
@@ -22,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-03-01)
 
 ## Current Position
 
-Phase: 30 of 32 (Compliance Foundations)
-Plan: 1 of 1 (COMPLETE)
-Status: Phase 30 plans complete
-Last activity: 2026-03-02 — Completed 30-01-PLAN.md
+Phase: 31 of 32 (Framing Literature)
+Plan: 1 of 3 (COMPLETE)
+Status: Phase 31 plan 01 complete
+Last activity: 2026-03-05 — Completed 31-01-PLAN.md
 
-Progress: [███░░░░░░░] 33%
+Progress: [███████░░░] 65%
 
 ## Performance Metrics
 
@@ -39,7 +42,8 @@ Progress: [███░░░░░░░] 33%
 - v3.2: 4 plans (Phase 22: 1, Phase 23: 1, Phase 24: 1, Phase 25: 1)
 - v4.0: 9 plans (Phase 26: 3, Phase 27: 2, Phase 28: 2, Phase 29: 2)
 - v4.1: 1 plan (Phase 30: 1)
-- Total: 41 plans completed
+- v4.1: 2 plans (Phase 31: 1 so far)
+- Total: 42 plans completed
 
 ## Accumulated Context
 
@@ -51,6 +55,7 @@ Progress: [███░░░░░░░] 33%
 - [v4.1]: Zenodo archival deferred — handled separately outside GSD
 - [30-01]: Castellano highest FNR at all operational thresholds (0.05-0.20); at 0.25+ other_indigenous overtakes due to probability ceiling compression
 - [30-01]: v1/v2 comparison uses same raw probs with different Platt params since v1 model no longer exists
+- [Phase 31-01]: Used \citeN{} in footnote (not \citep{}/\citet{}) — acmtrans bibliographystyle defines \citeN but not natbib commands
 
 ### Pending Todos
 
@@ -62,6 +67,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-02
-Stopped at: Completed 30-01-PLAN.md (threshold sweep + paper compliance)
+Last session: 2026-03-05T05:15:53.538Z
+Stopped at: Completed 31-01-PLAN.md (proxy audit bib entries + Related Work footnote)
 Resume file: None
