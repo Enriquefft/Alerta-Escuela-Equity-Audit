@@ -1,6 +1,6 @@
 # Milestones
 
-## v4.1 readability-polish (Shipped: 2026-03-05)
+## v4.1 readability-polish (Shipped: 2026-03-05) — Public release: v1.0
 
 **Phases completed:** 3 phases (30–32), 6 plans
 **Git range:** `feat(30-01)` → `feat(32-02)`

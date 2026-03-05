@@ -108,6 +108,16 @@ All in `data/exports/`: findings.json, fairness_metrics.json, shap_values.json, 
 - Bias mitigation experiments
 - Censo Escolar school-level features
 
+## Versioning Convention
+
+**GSD milestones** (`v1.0`–`v4.1`+) track internal development cycles and iterate freely.
+**Public GitHub releases** use independent semantic versioning anchored to external significance.
+When a GSD milestone warrants a public release, the mapping is recorded in MILESTONES.md.
+
+| GSD Milestone | Public Release | Notes |
+|---------------|---------------|-------|
+| v4.1-readability-polish | v1.0 | First public release — paper ready for JEDM |
+
 ## Constraints
 
 - **Tech stack**: Python 3.12, polars (primary), sklearn/lightgbm/xgboost/fairlearn/shap, Nix flakes + uv — locked
