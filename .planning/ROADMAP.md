@@ -73,7 +73,10 @@ Plans:
   3. Abstract mentions v2/31-feature model in at most one clause (or removes it entirely), focusing reader attention on primary findings
   4. All 12 tables reviewed: unnecessary tables trimmed or moved to appendix, with a clear rationale for each kept in-body
   5. Paper compiles without errors and reads as a cohesive narrative without structural gaps from removed content
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 32-01-PLAN.md — Fold Section 6.2 into 6.1 and remove cross-arch duplicate sentence (STRC-01, STRC-02, STRC-03)
+- [ ] 32-02-PLAN.md — Remove tab:enaho_siagie table block and all in-text references (STRC-04)
 
 ### Deferred
 
@@ -87,5 +90,5 @@ Phase 30 -> 31 -> 32
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
 | 30. Compliance Foundations | 1/1 | Complete    | 2026-03-02 |
-| 31. Framing & Literature | 3/3 | Complete   | 2026-03-05 |
-| 32. Structural Tightening | 0/TBD | Not started | - |
+| 31. Framing & Literature | 3/3 | Complete    | 2026-03-05 |
+| 32. Structural Tightening | 0/2 | Not started | - |
