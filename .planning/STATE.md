@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 31-01-PLAN.md (proxy audit bib entries + Related Work footnote)
-last_updated: "2026-03-05T05:15:53.544Z"
-last_activity: 2026-03-02 — Completed 30-01-PLAN.md
+stopped_at: Completed 31-02-PLAN.md (abstract restructure + contribution bullet consolidation)
+last_updated: "2026-03-05T05:19:00.001Z"
+last_activity: 2026-03-05 — Completed 31-01-PLAN.md
 progress:
   total_phases: 3
   completed_phases: 1
   total_plans: 4
-  completed_plans: 2
-  percent: 33
+  completed_plans: 3
+  percent: 65
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-01)
 ## Current Position
 
 Phase: 31 of 32 (Framing Literature)
-Plan: 1 of 3 (COMPLETE)
-Status: Phase 31 plan 01 complete
-Last activity: 2026-03-05 — Completed 31-01-PLAN.md
+Plan: 2 of 3 (COMPLETE)
+Status: Phase 31 plan 02 complete
+Last activity: 2026-03-05 — Completed 31-02-PLAN.md
 
-Progress: [███████░░░] 65%
+Progress: [███████░░░] 67%
 
 ## Performance Metrics
 
@@ -56,6 +56,8 @@ Progress: [███████░░░] 65%
 - [30-01]: Castellano highest FNR at all operational thresholds (0.05-0.20); at 0.25+ other_indigenous overtakes due to probability ceiling compression
 - [30-01]: v1/v2 comparison uses same raw probs with different Platt params since v1 model no longer exists
 - [Phase 31-01]: Used \citeN{} in footnote (not \citep{}/\citet{}) — acmtrans bibliographystyle defines \citeN but not natbib commands
+- [Phase 31-02]: FRAME-01: Abstract now leads with generalizable household-survey proxy audit claim; Peru as empirical instance not endpoint
+- [Phase 31-02]: FRAME-02: 4 contribution bullets merged to 3; merged bullet leads with replicability; surveillance-invisibility axis named in bullet 2
 
 ### Pending Todos
 
@@ -67,6 +69,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-05T05:15:53.538Z
-Stopped at: Completed 31-01-PLAN.md (proxy audit bib entries + Related Work footnote)
+Last session: 2026-03-05T05:18:59.997Z
+Stopped at: Completed 31-02-PLAN.md (abstract restructure + contribution bullet consolidation)
 Resume file: None
