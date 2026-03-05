@@ -1,7 +1,7 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
+milestone: v4.1
+milestone_name: readability-polish
 status: completed
 stopped_at: Completed 32-01-PLAN.md (fold Section 6.2 into 6.1)
 last_updated: "2026-03-05T06:39:27.050Z"
